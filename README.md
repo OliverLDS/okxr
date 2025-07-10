@@ -16,7 +16,7 @@
 
 ```r
 # install.packages("devtools")
-devtools::install_github("yourusername/okxr")
+devtools::install_github("OliverLDS/okxr")
 ```
 
 ## Setup
