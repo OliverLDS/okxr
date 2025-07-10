@@ -1,0 +1,14 @@
+Package: okxr
+Title: OKX API Wrapper for R
+Version: 0.1.0
+Authors@R: person('Oliver', 'Lee', email = 'you@email.com', role = c('aut', 'cre'))
+Description: A lightweight wrapper around the OKX REST API for market, trade, account, and asset endpoints.
+License: MIT
+Encoding: UTF-8
+LazyData: true
+Imports:
+    httr,
+    jsonlite,
+    digest,
+    base64enc
+RoxygenNote: 7.2.3
