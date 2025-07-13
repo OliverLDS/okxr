@@ -18,6 +18,25 @@ get_trade_order <- function(inst_id, ord_id = NULL, cl_ord_id = NULL, config, tz
   if (is.null(ord_id) && is.null(cl_ord_id)) {
     stop("Either 'ord_id' or 'cl_ord_id' must be provided.")
   }
-  query_id <- if (!is.null(ord_id)) ord_id else cl_ord_id
-  .gets$trade_order(instId = inst_id, ordId = query_id, config = config, tz = tz)
+  query_string <- ifelse(!is.null(ord_id),
+    sprintf("?instId=%s&ordId=%s", inst_id, ord_id),
+    sprintf("?instId=%s&clOrdId=%s", inst_id, cl_ord_id)
+  )
+  .gets$trade_order(query_string = query_string, config = config, tz = tz)
 }
+
+#' Get All Pending Trade Orders
+#'
+#' Retrieves all open (unfilled) trade orders from the OKX account.
+#'
+#' @param config A list containing API credentials: \code{api_key}, \code{secret_key}, and \code{passphrase}.
+#' @param tz Timezone used for timestamp parsing (e.g., \code{"Asia/Hong_Kong"}).
+#'
+#' @return A \code{data.frame} containing details of all currently pending trade orders.
+#'
+#' @export
+gets_trade_orders_pending <- function(config, tz) {
+  query_string <- ""
+  .gets$trade_orders_pending(query_string = query_string, config = config, tz = tz)
+}
+

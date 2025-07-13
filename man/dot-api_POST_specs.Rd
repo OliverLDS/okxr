@@ -3,8 +3,10 @@
 \docType{data}
 \name{.api_POST_specs}
 \alias{.api_POST_specs}
-\title{POST API Specifications for OKX}
+\title{OKX POST API Specifications}
 \format{
+A named list of endpoint specifications.
+
 A list with keys: \code{okx_path}, \code{schema}, \code{mode}
 Specification for cancelling an order (`/api/v5/trade/cancel-order`)
 
@@ -16,7 +18,13 @@ A list with keys: \code{okx_path}, \code{schema}, \code{mode}
 .api_POST_specs
 }
 \description{
-Internal list containing POST endpoint configurations.
+Internal list defining OKX POST endpoint configurations.
+}
+\details{
+Each entry is a list containing:
+- `okx_path`: Endpoint path.
+- `parser_schema`: Data frame describing the expected fields, their formal names, and types.
+- `parser_mode`: Indicates whether to parse by name or position.
 }
 \section{Endpoint}{
 

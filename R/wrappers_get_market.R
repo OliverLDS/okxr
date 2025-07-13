@@ -14,7 +14,8 @@
 #'
 #' @export
 get_market_candles <- function(inst_id, bar, limit = 100L, config, tz = "Asia/Hong_Kong") {
-  .gets$market_candles(inst_id = inst_id, bar = bar, limit = limit, config = config, tz = tz)
+  query_string <- sprintf("?instId=%s&bar=%s&limit=%d", inst_id, bar, limit)
+  .gets$market_candles(query_string = query_string, config = config, tz = tz)
 }
 
 #' Get historical market candles
@@ -32,7 +33,13 @@ get_market_candles <- function(inst_id, bar, limit = 100L, config, tz = "Asia/Ho
 #'
 #' @export
 get_market_history_candles <- function(inst_id, bar, before = NULL, limit = 100L, config, tz = "Asia/Hong_Kong") {
-  .gets$market_history_candles(inst_id = inst_id, bar = bar, before = before, limit = limit, config = config, tz = tz)
+  if (is.null(before)) {
+    query_string <- sprintf("?instId=%s&bar=%s&limit=%d", inst_id, bar, limit)
+  } else {
+    before_ms <- as.numeric(as.POSIXct(before, format = "%Y-%m-%d %H:%M:%S", tz = tz)) * 1000
+    query_string <- sprintf("?instId=%s&bar=%s&after=%.0f&limit=%d", inst_id, bar, before_ms, limit) # NOTE: OKX uses 'after=' to mean 'return data BEFORE this time'
+  }
+  .gets$market_history_candles(query_string = query_string, config = config, tz = tz)
 }
 
 #' Get current mark price
@@ -48,5 +55,6 @@ get_market_history_candles <- function(inst_id, bar, before = NULL, limit = 100L
 #'
 #' @export
 get_public_mark_price <- function(inst_id, inst_type = "SWAP", config, tz = "Asia/Hong_Kong") {
-  .gets$public_mark_price(inst_id = inst_id, inst_type = inst_type, config = config, tz = tz)
+  query_string <- sprintf("?instType=%s&instId=%s", inst_type, inst_id)
+  .gets$public_mark_price(query_string = query_string, config = config, tz = tz)
 }

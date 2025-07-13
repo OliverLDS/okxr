@@ -3,84 +3,76 @@
 \docType{data}
 \name{.api_GET_specs}
 \alias{.api_GET_specs}
-\title{GET API Specifications for OKX}
+\title{OKX GET API Specifications}
 \format{
-An object of class \code{list} of length 11.
+A named list of endpoint specifications.
+
+A list with keys: \code{okx_path}, \code{parser_schema}, \code{parser_mode}
+Specification for asset balances (`/api/v5/asset/balances`)
+
+Retrieves the balances of all assets in the account.
+Specification for deposit history (`/api/v5/asset/deposit-history`)
+
+Retrieves the history of asset deposits.
+Specification for withdrawal history (`/api/v5/asset/withdrawal-history`)
+
+Retrieves the history of asset withdrawals.
+Specification for account balance (`/api/v5/account/balance`)
+
+Retrieves the account-level margin and equity details.
+Specification for account positions (`/api/v5/account/positions`)
+
+Retrieves all open positions under the account.
+Specification for position history (`/api/v5/account/positions-history`)
+
+Retrieves historical position information.
+Specification for leverage info (`/api/v5/account/leverage-info`)
+
+Retrieves leverage settings for a specific instrument and margin mode.
+Specification for recent market candlesticks (`/api/v5/market/candles`)
+
+Fetches latest candlestick data for a given instrument and time bar.
+Specification for historical candlesticks (`/api/v5/market/history-candles`)
+
+Fetches historical candlestick data before a specific timestamp.
+Specification for mark price (`/api/v5/public/mark-price`)
+
+Retrieves the current mark price for an instrument.
 }
 \usage{
 .api_GET_specs
 }
 \description{
-Internal list containing GET endpoint configurations.
+Internal list defining OKX GET endpoint configurations.
 }
-\keyword{(`/api/v5/account/balance`)}
-\keyword{(`/api/v5/account/leverage-info`)}
-\keyword{(`/api/v5/account/positions-history`)}
-\keyword{(`/api/v5/account/positions`)}
-\keyword{(`/api/v5/asset/balances`)}
-\keyword{(`/api/v5/asset/deposit-history`)}
-\keyword{(`/api/v5/asset/withdrawal-history`)}
-\keyword{(`/api/v5/market/candles`)}
-\keyword{(`/api/v5/market/history-candles`)}
-\keyword{(`/api/v5/public/mark-price`)}
+\details{
+Each entry is a list containing:
+- `okx_path`: Endpoint path.
+- `parser_schema`: Data frame describing the expected fields, their formal names, and types.
+- `parser_mode`: Indicates whether to parse by name or position.
+}
+\section{Endpoint}{
+
+\code{/api/v5/trade/orders-pending}
+}
+
 \keyword{(`/api/v5/trade/order`)}
-\keyword{Fetches}
+\keyword{(`/api/v5/trade/orders-pending`)}
+\keyword{(unfilled)}
 \keyword{ID.}
 \keyword{Retrieves}
 \keyword{Specification}
 \keyword{a}
-\keyword{account}
-\keyword{account-level}
 \keyword{account.}
 \keyword{all}
-\keyword{an}
-\keyword{and}
-\keyword{asset}
-\keyword{assets}
-\keyword{balance}
-\keyword{balances}
-\keyword{bar.}
-\keyword{before}
 \keyword{by}
-\keyword{candlestick}
-\keyword{candlesticks}
-\keyword{current}
-\keyword{data}
-\keyword{deposit}
-\keyword{deposits.}
 \keyword{details}
-\keyword{details.}
-\keyword{equity}
 \keyword{for}
 \keyword{getting}
-\keyword{given}
-\keyword{historical}
-\keyword{history}
-\keyword{in}
-\keyword{info}
-\keyword{information.}
-\keyword{instrument}
-\keyword{instrument.}
 \keyword{internal}
-\keyword{latest}
-\keyword{leverage}
-\keyword{margin}
-\keyword{mark}
-\keyword{market}
-\keyword{mode.}
-\keyword{of}
 \keyword{open}
 \keyword{order}
-\keyword{position}
-\keyword{positions}
-\keyword{price}
-\keyword{recent}
-\keyword{settings}
+\keyword{orders}
+\keyword{pending}
 \keyword{single}
-\keyword{specific}
 \keyword{the}
-\keyword{time}
-\keyword{timestamp.}
-\keyword{under}
-\keyword{withdrawal}
-\keyword{withdrawals.}

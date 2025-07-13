@@ -6,7 +6,7 @@
 
 * 🔐 Secure HMAC authentication for OKX API
 * 🔄 Schema-based response parsing
-* 🧩 Modular GET/POST generators with internal tooling
+* 🧹 Modular GET/POST generators with internal tooling
 * ✅ User-friendly wrappers like `get_account_balance()`, `post_trade_order()`
 * 📦 Fully documented and roxygen2-ready structure
 
@@ -53,14 +53,12 @@ get_account_positions(config)
 
 ```r
 post_trade_order(
-  body_list = list(
-    instId  = "BTC-USDT",
-    tdMode  = "cross",
-    side    = "buy",
-    ordType = "market",
-    sz      = "0.01"
-  ),
-  config = config
+  inst_id  = "BTC-USDT",
+  td_mode  = "cross",
+  side     = "buy",
+  ord_type = "market",
+  sz       = "0.01",
+  config   = config
 )
 ```
 
@@ -89,6 +87,33 @@ post_trade_order(
 
 ---
 
+## Version History
+
+### v0.1.1 – 2025-07-13
+
+* Added new POST wrappers:
+
+  * `post_trade_order()`
+  * `post_trade_cancel_order()`
+  * `post_trade_close_position()`
+  * `post_account_set_leverage()`
+* Added new GET wrapper:
+
+  * `gets_trade_orders_pending()`
+* Added helper:
+
+  * `standardize_ohlcv_names()`
+* Improved roxygen2 documentation for all major endpoints
+* Cleaned up and clarified internal endpoint specs
+
+### v0.1.0 – Initial Release
+
+* GET/POST endpoint spec framework
+* HMAC signing, query execution core
+* Basic wrappers for account, asset, market
+
+---
+
 ## License
 
 MIT
@@ -96,3 +121,4 @@ MIT
 ## Author
 
 Oliver Lee / [LinkedIn](https://www.linkedin.com/in/oliver-lee-28b32b176/)
+

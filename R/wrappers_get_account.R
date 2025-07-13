@@ -11,7 +11,8 @@
 #'
 #' @export
 get_account_balance <- function(config, tz = "Asia/Hong_Kong") {
-  .gets$account_balance(tz = tz, config = config)
+  query_string <- ""
+  .gets$account_balance(query_string = query_string, tz = tz, config = config)
 }
 
 #' Get account open positions
@@ -25,7 +26,8 @@ get_account_balance <- function(config, tz = "Asia/Hong_Kong") {
 #'
 #' @export
 get_account_positions <- function(config, tz = "Asia/Hong_Kong") {
-  .gets$account_positions(tz = tz, config = config)
+  query_string <- ""
+  .gets$account_positions(query_string = query_string, tz = tz, config = config)
 }
 
 #' Get account position history
@@ -39,7 +41,8 @@ get_account_positions <- function(config, tz = "Asia/Hong_Kong") {
 #'
 #' @export
 get_account_positions_history <- function(config, tz = "Asia/Hong_Kong") {
-  .gets$account_positions_history(tz = tz, config = config)
+  query_string <- ""
+  .gets$account_positions_history(query_string = query_string, tz = tz, config = config)
 }
 
 #' Get account leverage settings
@@ -55,5 +58,6 @@ get_account_positions_history <- function(config, tz = "Asia/Hong_Kong") {
 #'
 #' @export
 get_account_leverage_info <- function(inst_id, mgn_mode, config, tz = "Asia/Hong_Kong") {
-  .gets$account_leverage_info(inst_id = inst_id, mgnMode = mgn_mode, config = config, tz = tz)
+  query_string <- sprintf("?instId=%s&mgnMode=%s", inst_id, mgn_mode)
+  .gets$account_leverage_info(query_string = query_string, config = config, tz = tz)
 }

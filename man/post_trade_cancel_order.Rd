@@ -2,24 +2,22 @@
 % Please edit documentation in R/wrappers_post_trade.R
 \name{post_trade_cancel_order}
 \alias{post_trade_cancel_order}
-\title{Cancel a trade order}
+\title{Cancel a Trade Order}
 \usage{
-post_trade_cancel_order(body_list, config, tz = "Asia/Hong_Kong")
+post_trade_cancel_order(inst_id, ord_id, config, tz = "Asia/Hong_Kong")
 }
 \arguments{
-\item{body_list}{A named list of cancellation parameters. Typically:
-\itemize{
-  \item{\code{instId}}{Instrument ID (e.g., \code{"BTC-USDT"})}
-  \item{\code{ordId}}{Order ID (or use \code{clOrdId} instead)}
-}}
+\item{inst_id}{Instrument ID (e.g., \code{"BTC-USDT"}).}
 
-\item{config}{API credentials as a list with \code{api_key}, \code{secret_key}, and \code{passphrase}.}
+\item{ord_id}{Order ID to cancel. Alternatively, you can modify the function to accept \code{clOrdId}.}
 
-\item{tz}{Timezone string for timestamp parsing (default: \code{"Asia/Hong_Kong"}).}
+\item{config}{A list with API credentials: \code{api_key}, \code{secret_key}, \code{passphrase}.}
+
+\item{tz}{Timezone for parsing any timestamps (default: \code{"Asia/Hong_Kong"}).}
 }
 \value{
-A \code{data.frame} with cancellation result and timestamp.
+A \code{data.frame} containing cancellation result and timestamp.
 }
 \description{
-Submits a cancel request for an existing trade order.
+Submits a cancellation request for a previously placed trade order.
 }

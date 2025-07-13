@@ -11,7 +11,8 @@
 #'
 #' @export
 get_asset_balances <- function(config, tz = "Asia/Hong_Kong") {
-  .gets$asset_balances(tz = tz, config = config)
+  query_string <- ""
+  .gets$asset_balances(query_string = query_string, tz = tz, config = config)
 }
 
 #' Get asset deposit history
@@ -25,7 +26,8 @@ get_asset_balances <- function(config, tz = "Asia/Hong_Kong") {
 #'
 #' @export
 get_asset_deposit_history <- function(config, tz = "Asia/Hong_Kong") {
-  .gets$asset_deposit_history(tz = tz, config = config)
+  query_string <- ""
+  .gets$asset_deposit_history(query_string = query_string, tz = tz, config = config)
 }
 
 #' Get asset withdrawal history
@@ -39,5 +41,6 @@ get_asset_deposit_history <- function(config, tz = "Asia/Hong_Kong") {
 #'
 #' @export
 get_asset_withdrawal_history <- function(config, tz = "Asia/Hong_Kong") {
-  .gets$asset_withdrawal_history(tz = tz, config = config)
+  query_string <- ""
+  .gets$asset_withdrawal_history(query_string = query_string, tz = tz, config = config)
 }

@@ -21,8 +21,7 @@
 #'
 #' @keywords internal
 .make_post_function <- function(api) {
-  mode <- if (!is.null(api$mode)) api$mode else "entry"
-  parser <- .make_parser(api$schema, mode = mode)
+  parser <- .make_parser(api$parser_schema, mode = api$parser_mode %||% "entry")
 
   function(body_list, tz, config) {
     res <- .execute_post_action(api$okx_path, body_list, config)

@@ -21,22 +21,10 @@
 #'
 #' @keywords internal
 .make_get_function <- function(api) {
-  mode <- if (!is.null(api$mode)) api$mode else "entry"
-  parser <- .make_parser(api$schema, mode = mode)
-
-  function(tz = "Asia/Hong_Kong", config, ...) {
-    query <- if (is.function(api$query)) {
-      query_args <- list(...)
-      query_formals <- names(formals(api$query))
-
-      if ("tz" %in% query_formals) {
-        query_args$tz <- tz
-      }
-      query <- do.call(api$query, query_args)
-    } else {
-      api$query
-    }
-    res <- .execute_get_action(api$okx_path, query, config)
+  parser <- .make_parser(api$parser_schema, mode = api$parser_mode %||% "entry")
+  
+  function(query_string, tz, config) {
+    res <- .execute_get_action(api$okx_path, query_string, config)
     parser(res, tz)
   }
 }

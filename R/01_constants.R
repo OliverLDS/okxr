@@ -1,3 +1,6 @@
+#' @importFrom rlang %||%
+NULL
+
 #' Base URL for OKX API
 #'
 #' This constant defines the base URL used for all OKX API requests.
@@ -8,12 +11,30 @@
 
 #----.API_POST_SPECS----
 
-#' POST API Specifications for OKX
+#' OKX POST API Specifications
 #'
-#' Internal list containing POST endpoint configurations.
+#' Internal list defining OKX POST endpoint configurations.
 #'
+#' Each entry is a list containing:
+#' - `okx_path`: Endpoint path.
+#' - `parser_schema`: Data frame describing the expected fields, their formal names, and types.
+#' - `parser_mode`: Indicates whether to parse by name or position.
+#'
+#' @format A named list of endpoint specifications.
 #' @keywords internal
 .api_POST_specs <- list(
+  
+  #----account_set_leverage----
+  account_set_leverage = list(
+    okx_path     = "/api/v5/account/set-leverage",
+    parser_schema       = data.frame(
+      okx    = c("mgnMode", "instId", "posSide"),
+      formal = c("Margin mode", "Instrument ID", "Position side"),
+      type   = c("string", "string", "string"),
+      stringsAsFactors = FALSE
+    ),
+    parser_mode = "named"
+  ),
   
   #----trade_order----
   #' Specification for placing an order (`/api/v5/trade/order`)
@@ -26,13 +47,13 @@
   #' @format A list with keys: \code{okx_path}, \code{schema}, \code{mode}
   trade_order = list(
     okx_path     = "/api/v5/trade/order",
-    schema       = data.frame(
+    parser_schema       = data.frame(
       okx    = c("ts", "ordId", "clOrdId", "sCode"),
       formal = c("Timestamp", "Order ID", "Client Order ID", "Code of the execution result"),
       type   = c("time", "string", "string", "string"),
       stringsAsFactors = FALSE
     ),
-    mode = "named"
+    parser_mode = "named"
   ),
   
   #----trade_cancel_order----
@@ -46,23 +67,42 @@
   #' @format A list with keys: \code{okx_path}, \code{schema}, \code{mode}
   trade_cancel_order = list(
     okx_path     = "/api/v5/trade/cancel-order",
-    schema       = data.frame(
+    parser_schema       = data.frame(
       okx    = c("ts", "ordId", "clOrdId", "sCode"),
       formal = c("Timestamp", "Order ID", "Client Order ID", "Code of the execution result"),
       type   = c("time", "string", "string", "string"),
       stringsAsFactors = FALSE
     ),
-    mode = "named"
+    parser_mode = "named"
+  ),
+  
+  #----trade_close_position----
+  trade_close_position = list(
+    okx_path     = "/api/v5/trade/close-position",
+    parser_schema       = data.frame(
+      okx    = c("instId", "posSide", "clOrdId", "tag"),
+      formal = c("Instrument ID", "Position side", "Client Order ID", "Order tag"),
+      type   = c("string", "string", "string", "string"),
+      stringsAsFactors = FALSE
+    ),
+    parser_mode = "named"
   )
+  
   
 )
 
 #----.API_GET_SPECS----
 
-#' GET API Specifications for OKX
+#' OKX GET API Specifications
 #'
-#' Internal list containing GET endpoint configurations.
+#' Internal list defining OKX GET endpoint configurations.
 #'
+#' Each entry is a list containing:
+#' - `okx_path`: Endpoint path.
+#' - `parser_schema`: Data frame describing the expected fields, their formal names, and types.
+#' - `parser_mode`: Indicates whether to parse by name or position.
+#'
+#' @format A named list of endpoint specifications.
 #' @keywords internal
 .api_GET_specs <- list(
   
@@ -72,14 +112,33 @@
   #' Retrieves details for a single order by order ID.
   trade_order = list(
     okx_path     = "/api/v5/trade/order",
-    query        = function(instId, ordId) sprintf("?instId=%s&ordId=%s", instId, ordId), # clOrdId is also acceptable
-    schema       = data.frame(
+    parser_schema       = data.frame(
       okx    = c("cTime", "ordId", "clOrdId", "instId", "ordType", "px", "sz", "side", "posSide", "state"),
       formal = c("Creation time", "Order ID", "Client Order ID", "Instrument ID", "Order type", "Price", "Quantity to buy or sell", "Order side", "Position side", "State"),
       type   = c("time", "string", "string", "string", "string", "numeric", "numeric", "string", "string", "string"),
       stringsAsFactors = FALSE
     ),
-    mode = "named"
+    parser_mode = "named"
+  ),
+  
+  #----trade_orders_pending----
+  #' Specification for pending orders (`/api/v5/trade/orders-pending`)
+  #'
+  #' Retrieves all open (unfilled) orders for the account.
+  #'
+  #' @section Endpoint:
+  #' \code{/api/v5/trade/orders-pending}
+  #'
+  #' @format A list with keys: \code{okx_path}, \code{parser_schema}, \code{parser_mode}
+  trade_orders_pending = list(
+    okx_path     = "/api/v5/trade/orders-pending",
+    parser_schema       = data.frame(
+      okx    = c("cTime", "ordId", "clOrdId", "instId", "ordType", "px", "sz", "side", "posSide", "state"),
+      formal = c("Creation time", "Order ID", "Client Order ID", "Instrument ID", "Order type", "Price", "Quantity to buy or sell", "Order side", "Position side", "State"),
+      type   = c("time", "string", "string", "string", "string", "numeric", "numeric", "string", "string", "string"),
+      stringsAsFactors = FALSE
+    ),
+    parser_mode = "named"
   ),
   
   #----asset_balances----
@@ -88,14 +147,13 @@
   #' Retrieves the balances of all assets in the account.
   asset_balances = list(
     okx_path     = "/api/v5/asset/balances",
-    query        = "",
-    schema       = data.frame(
+    parser_schema       = data.frame(
       okx    = c("bal", "availBal", "frozenBal", "ccy"),
       formal = c("Balance", "Available", "Frozen", "Currency"),
       type   = c("numeric", "numeric", "numeric", "string"),
       stringsAsFactors = FALSE
     ),
-    mode = "named"
+    parser_mode = "named"
   ),
   
   #----asset_deposit_history----
@@ -104,14 +162,13 @@
   #' Retrieves the history of asset deposits.
   asset_deposit_history = list(
     okx_path     = "/api/v5/asset/deposit-history",
-    query        = "",
-    schema       = data.frame(
+    parser_schema       = data.frame(
       okx    = c("ts", "amt", "ccy"),
       formal = c("Timestamp", "Amount", "Currency"),
       type   = c("time", "numeric", "string"),
       stringsAsFactors = FALSE
     ),
-    mode = "named"
+    parser_mode = "named"
   ),
   
   #----asset_withdrawal_history----
@@ -120,14 +177,13 @@
   #' Retrieves the history of asset withdrawals.
   asset_withdrawal_history = list(
     okx_path     = "/api/v5/asset/withdrawal-history",
-    query        = "",
-    schema       = data.frame(
+    parser_schema       = data.frame(
       okx    = c("ts", "amt", "ccy"),
       formal = c("Timestamp", "Amount", "Currency"),
       type   = c("time", "numeric", "string"),
       stringsAsFactors = FALSE
     ),
-    mode = "named"
+    parser_mode = "named"
   ),
   
   #----account_balance----
@@ -136,15 +192,14 @@
   #' Retrieves the account-level margin and equity details.
   account_balance = list(
     okx_path     = "/api/v5/account/balance",
-    query        = "",
-    schema       = data.frame(
+    parser_schema       = data.frame(
       check.names = FALSE,
       okx    = c("uTime", "totalEq", "isoEq", "adjEq", "availEq", "ordFroz", "imr", "mmr"),
       formal = c("Update time", "Total equity", "Isolated margin equity", "Adjusted / Effective equity", "Account level available equity", "Cross margin frozen for pending orders", "Initial margin requirement", "Maintenance margin requirement"),
       type   = c("time", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric"),
       stringsAsFactors = FALSE
     ),
-    mode = "named"
+    parser_mode = "named"
   ),
   
   #----account_positions----
@@ -153,15 +208,14 @@
   #' Retrieves all open positions under the account.
   account_positions = list(
     okx_path     = "/api/v5/account/positions",
-    query        = "",
-    schema       = data.frame(
+    parser_schema       = data.frame(
       check.names = FALSE,
-      okx    = c("cTime", "uTime", "instId", "lever", "posId", "posSide", "pos", "imr", "mmr"),
-      formal = c("Creation time", "Update time", "Instrument ID", "Leverage", "Position ID", "Position side", "Quantity of positions", "Initial margin requirement", "Maintenance margin requirement"),
-      type   = c("time", "time", "string", "numeric", "string", "string", "numeric", "numeric", "numeric"),
+      okx    = c("cTime", "uTime", "instId", "lever", "posId", "posSide", "pos", "imr", "mmr", "avgPx", "markPx", "upl", "realizedPnl", "settledPnl", "pnl", "fee", "fundingFee", "liqPenalty"),
+      formal = c("Creation time", "Update time", "Instrument ID", "Leverage", "Position ID", "Position side", "Quantity of positions", "Initial margin requirement", "Maintenance margin requirement", "Average open price", "Latest Mark price", "Unrealized profit and loss", "Realized profit and loss", "Accumulated settled profit and loss", "Accumulated pnl of closing order(s)", "Accumulated fee", "Accumulated funding fee", "	Accumulated liquidation penalty"),
+      type   = c("time", "time", "string", "numeric", "string", "string", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric"),
       stringsAsFactors = FALSE
     ),
-    mode = "named"
+    parser_mode = "named"
   ),
   
   #----account_positions_history----
@@ -170,15 +224,14 @@
   #' Retrieves historical position information.
   account_positions_history = list(
     okx_path     = "/api/v5/account/positions-history",
-    query        = "",
-    schema       = data.frame(
+    parser_schema       = data.frame(
       check.names = FALSE,
       okx    = c("cTime", "uTime", "instId", "lever", "posId", "posSide", "pos", "realizedPnl", "fee"),
       formal = c("Creation time", "Update time", "Instrument ID", "Leverage", "Position ID", "Position side", "Quantity of positions", "Realized profit and loss", "Accumulated fee"),
       type   = c("time", "time", "string", "numeric", "string", "string", "numeric", "numeric", "numeric"),
       stringsAsFactors = FALSE
     ),
-    mode = "named"
+    parser_mode = "named"
   ),
   
   #----account_leverage_info----
@@ -187,15 +240,14 @@
   #' Retrieves leverage settings for a specific instrument and margin mode.
   account_leverage_info = list(
     okx_path     = "/api/v5/account/leverage-info",
-    query        = function(inst_id, mgnMode) sprintf("?instId=%s&mgnMode=%s", inst_id, mgnMode),
-    schema       = data.frame(
+    parser_schema       = data.frame(
       check.names = FALSE,
       okx    = c("instId", "mgnMode", "posSide", "lever"),
       formal = c("Instrument ID", "Margin mode", "Position side", "Leverage"),
       type   = c("string", "string", "string", "numeric"),
       stringsAsFactors = FALSE
     ),
-    mode = "named"
+    parser_mode = "named"
   ),
   
   #----market_candles----
@@ -204,15 +256,14 @@
   #' Fetches latest candlestick data for a given instrument and time bar.
   market_candles = list(
     okx_path     = "/api/v5/market/candles",
-    query        = function(inst_id, bar, limit) sprintf("?instId=%s&bar=%s&limit=%d", inst_id, bar, limit),
-    schema       = data.frame(
+    parser_schema       = data.frame(
       check.names = FALSE,
       okx    = c("ts", "o", "h", "l", "c", "vol", "volCcy", "volCcyQuote", "confirm"),
       formal = c("Timestamp", "Open price", "Highest price", "Lowest price", "Close price", "Trading volume (contract)", "Trading volume (currency)", "Trading volume (quote currency)", "The state of candlesticks"),
       type   = c("time", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "integer"),
       stringsAsFactors = FALSE
     ),
-    mode = "positional"
+    parser_mode = "positional"
   ),
   
   #----market_history_candles----
@@ -221,23 +272,14 @@
   #' Fetches historical candlestick data before a specific timestamp.
   market_history_candles = list(
     okx_path     = "/api/v5/market/history-candles",
-    query        = function(inst_id, bar, before = NULL, limit = 100L, tz) {
-      if (is.null(before)) {
-        query_string <- sprintf("?instId=%s&bar=%s&limit=%d", inst_id, bar, limit)
-      } else {
-        before_ms <- as.numeric(as.POSIXct(before, format = "%Y-%m-%d %H:%M:%S", tz = tz)) * 1000
-        query_string <- sprintf("?instId=%s&bar=%s&after=%.0f&limit=%d", inst_id, bar, before_ms, limit) # NOTE: OKX uses 'after=' to mean 'return data BEFORE this time'
-      }
-      return(query_string)
-    },
-    schema       = data.frame(
+    parser_schema       = data.frame(
       check.names = FALSE,
       okx    = c("ts", "o", "h", "l", "c", "vol", "volCcy", "volCcyQuote", "confirm"),
       formal = c("Timestamp", "Open price", "Highest price", "Lowest price", "Close price", "Trading volume (contract)", "Trading volume (currency)", "Trading volume (quote currency)", "The state of candlesticks"),
       type   = c("time", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "integer"),
       stringsAsFactors = FALSE
     ),
-    mode = "positional"
+    parser_mode = "positional"
   ),
 
   #----public_mark_price----
@@ -246,14 +288,13 @@
   #' Retrieves the current mark price for an instrument.
   public_mark_price = list(
     okx_path = "/api/v5/public/mark-price",
-    query    = function(inst_id, inst_type="SWAP") sprintf("?instType=%s&instId=%s", inst_type, inst_id),
-    schema = data.frame(
+    parser_schema = data.frame(
       check.names = FALSE,
       okx    = c("ts", "instId", "markPx"),
       formal = c("Timestamp", "Instrument ID", "Price"),
       type   = c("time", "string", "numeric"),
       stringsAsFactors = FALSE
     ),
-    mode = "named"
+    parser_mode = "named"
   )
 )
