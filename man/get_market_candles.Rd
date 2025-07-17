@@ -4,7 +4,14 @@
 \alias{get_market_candles}
 \title{Get recent market candles}
 \usage{
-get_market_candles(inst_id, bar, limit = 100L, config, tz = "Asia/Hong_Kong")
+get_market_candles(
+  inst_id,
+  bar,
+  limit = 100L,
+  config,
+  tz = "Asia/Hong_Kong",
+  standardize_names = TRUE
+)
 }
 \arguments{
 \item{inst_id}{Instrument ID (e.g., \code{"BTC-USDT"}).}

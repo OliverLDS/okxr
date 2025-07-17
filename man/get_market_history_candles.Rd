@@ -10,7 +10,8 @@ get_market_history_candles(
   before = NULL,
   limit = 100L,
   config,
-  tz = "Asia/Hong_Kong"
+  tz = "Asia/Hong_Kong",
+  standardize_names = TRUE
 )
 }
 \arguments{
