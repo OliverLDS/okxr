@@ -7,13 +7,40 @@
 get_account_positions(config, tz = "Asia/Hong_Kong")
 }
 \arguments{
-\item{config}{API credentials as a list with \code{api_key}, \code{secret_key}, and \code{passphrase}.}
+\item{config}{List. API credentials/config, typically containing
+`api_key`, `secret_key`, and `passphrase`.}
 
-\item{tz}{Timezone string (default: \code{"Asia/Hong_Kong"}).}
+\item{tz}{Character. Time zone for parsing timestamps. Default `"Asia/Hong_Kong"`.}
 }
 \value{
-A \code{data.frame} containing position information.
+A `data.frame` with columns such as `instId`, `posId`, `posSide`, `pos`,
+`lever`, `avgPx`, `markPx`, `upl`, `realizedPnl`, etc. Timestamps (`cTime`,
+`uTime`) are `POSIXct`.
 }
 \description{
-Retrieves all currently open positions under the user's account.
+Retrieve all currently open positions under the account.
 }
+\details{
+Wraps `/api/v5/account/positions`. Returns one row per open position.
+}
+\note{
+Since okxr 0.1.1
+}
+\examples{
+\dontrun{
+cfg <- list(api_key = "xxx", secret_key = "xxx", passphrase = "xxx")
+pos <- get_account_positions(config = cfg)
+pos
+}
+
+}
+\seealso{
+[get_account_balance()], [get_account_positions_history()]
+
+Other okxr-account: 
+\code{\link{get_account_balance}()},
+\code{\link{get_account_config}()},
+\code{\link{get_account_leverage_info}()},
+\code{\link{get_account_positions_history}()}
+}
+\concept{okxr-account}

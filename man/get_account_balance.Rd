@@ -7,13 +7,41 @@
 get_account_balance(config, tz = "Asia/Hong_Kong")
 }
 \arguments{
-\item{config}{API credentials as a list with \code{api_key}, \code{secret_key}, and \code{passphrase}.}
+\item{config}{List. API credentials/config, typically containing
+`api_key`, `secret_key`, and `passphrase`. May also include `base_url`.}
 
-\item{tz}{Timezone string (default: \code{"Asia/Hong_Kong"}).}
+\item{tz}{Character. Time zone for parsing timestamps. Default `"Asia/Hong_Kong"`.}
 }
 \value{
-A \code{data.frame} with balance and margin metrics.
+A `data.frame` with account balance and margin metrics (e.g.,
+`totalEq`, `isoEq`, `adjEq`, `availEq`, `ordFroz`, `imr`, `mmr`, `upl`,
+`mgnRatio`, …). Timestamp columns (`uTime`) are `POSIXct`.
 }
 \description{
-Retrieves account-level margin and equity information.
+Retrieve account-level margin and equity information for your OKX account.
 }
+\details{
+This wraps `/api/v5/account/balance`. Returns one row per account-level
+equity snapshot. Timestamps are parsed into `POSIXct` in the given `tz`.
+}
+\note{
+Since okxr 0.1.1
+}
+\examples{
+\dontrun{
+cfg <- list(api_key = "xxx", secret_key = "xxx", passphrase = "xxx")
+bal <- get_account_balance(config = cfg)
+head(bal)
+}
+
+}
+\seealso{
+[get_account_positions()], [get_account_leverage_info()]
+
+Other okxr-account: 
+\code{\link{get_account_config}()},
+\code{\link{get_account_leverage_info}()},
+\code{\link{get_account_positions_history}()},
+\code{\link{get_account_positions}()}
+}
+\concept{okxr-account}

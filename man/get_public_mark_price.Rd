@@ -12,17 +12,42 @@ get_public_mark_price(
 )
 }
 \arguments{
-\item{inst_id}{Instrument ID (e.g., \code{"BTC-USDT"}).}
+\item{inst_id}{Character. Instrument ID, e.g. `"BTC-USDT"`, `"ETH-USDT-SWAP"`.}
 
-\item{inst_type}{Instrument type (default: \code{"SWAP"}).}
+\item{inst_type}{Character. Instrument type. One of `"SPOT"`, `"MARGIN"`,
+`"SWAP"` (default), `"FUTURES"`, `"OPTION"`.}
 
-\item{config}{API credentials as a list with \code{api_key}, \code{secret_key}, and \code{passphrase}.}
+\item{config}{List. API credentials/config, typically containing
+`api_key`, `secret_key`, and `passphrase`.}
 
-\item{tz}{Timezone string (default: \code{"Asia/Hong_Kong"}).}
+\item{tz}{Character. Time zone for parsing timestamps. Default `"Asia/Hong_Kong"`.}
 }
 \value{
-A \code{data.frame} containing the instrument's current mark price and timestamp.
+A `data.frame` with columns `timestamp`, `instId`, `markPx`.
 }
 \description{
-Retrieves the mark price for a specific instrument.
+Retrieve the current mark price for a given instrument.
 }
+\details{
+Wraps `/api/v5/public/mark-price`. Useful for margin calculations and PnL
+estimation. Returns a single row with the latest mark price and timestamp.
+}
+\note{
+Since okxr 0.1.1
+}
+\examples{
+\dontrun{
+cfg <- list(api_key = "xxx", secret_key = "xxx", passphrase = "xxx")
+get_public_mark_price("BTC-USDT", inst_type = "SWAP", config = cfg)
+}
+
+}
+\seealso{
+[get_public_instruments()]
+
+Other okxr-market: 
+\code{\link{get_market_candles}()},
+\code{\link{get_market_history_candles}()},
+\code{\link{get_public_instruments}()}
+}
+\concept{okxr-market}

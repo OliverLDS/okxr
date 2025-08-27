@@ -14,19 +14,48 @@ get_market_candles(
 )
 }
 \arguments{
-\item{inst_id}{Instrument ID (e.g., \code{"BTC-USDT"}).}
+\item{inst_id}{Character. Instrument ID, e.g. `"BTC-USDT"`, `"ETH-USDT-SWAP"`.}
 
-\item{bar}{Candlestick granularity (e.g., \code{"1m"}, \code{"5m"}, \code{"1H"}).}
+\item{bar}{Character. Candlestick granularity, e.g. `"1m"`, `"5m"`, `"1H"`, `"1D"`.}
 
-\item{limit}{Number of data points to retrieve (default: 100).}
+\item{limit}{Integer. Number of bars to retrieve. Default `100L`.}
 
-\item{config}{API credentials as a list with \code{api_key}, \code{secret_key}, and \code{passphrase}.}
+\item{config}{List. API credentials/config, typically containing
+`api_key`, `secret_key`, and `passphrase`.}
 
-\item{tz}{Timezone string (default: \code{"Asia/Hong_Kong"}).}
+\item{tz}{Character. Time zone for parsing timestamps. Default `"Asia/Hong_Kong"`.}
+
+\item{standardize_names}{Logical. If `TRUE` (default), renames columns to
+`timestamp`, `open`, `high`, `low`, `close`, `volume`, `volQuote`.}
 }
 \value{
-A \code{data.frame} of candlestick data sorted by timestamp.
+A `data.frame` with columns including `timestamp`, `open`, `high`, `low`,
+`close`, `volume`, and `volQuote`. Timestamps are `POSIXct` in `tz`.
 }
 \description{
-Retrieves the latest candlestick data for a given instrument and bar size.
+Retrieve the latest candlestick data for a given instrument and bar size.
 }
+\details{
+Wraps `/api/v5/market/candles`. Returns up to `limit` bars, sorted by
+timestamp. Candlestick fields can be standardized to common OHLCV names via
+`standardize_names = TRUE`.
+}
+\note{
+Since okxr 0.1.1
+}
+\examples{
+\dontrun{
+cfg <- list(api_key = "xxx", secret_key = "xxx", passphrase = "xxx")
+get_market_candles("BTC-USDT", bar = "5m", limit = 50, config = cfg)
+}
+
+}
+\seealso{
+[get_market_history_candles()], [get_public_mark_price()]
+
+Other okxr-market: 
+\code{\link{get_market_history_candles}()},
+\code{\link{get_public_instruments}()},
+\code{\link{get_public_mark_price}()}
+}
+\concept{okxr-market}

@@ -7,17 +7,46 @@
 get_account_leverage_info(inst_id, mgn_mode, config, tz = "Asia/Hong_Kong")
 }
 \arguments{
-\item{inst_id}{Instrument ID (e.g., \code{"BTC-USDT"}).}
+\item{inst_id}{Character. Instrument ID, e.g. `"BTC-USDT"`.}
 
-\item{mgn_mode}{Margin mode (e.g., \code{"cross"} or \code{"isolated"}).}
+\item{mgn_mode}{Character. Margin mode. One of `"cross"` or `"isolated"`.}
 
-\item{config}{API credentials as a list with \code{api_key}, \code{secret_key}, and \code{passphrase}.}
+\item{config}{List. API credentials/config, typically containing
+`api_key`, `secret_key`, and `passphrase`.}
 
-\item{tz}{Timezone string (default: \code{"Asia/Hong_Kong"}).}
+\item{tz}{Character. Time zone for parsing timestamps. Default `"Asia/Hong_Kong"`.}
 }
 \value{
-A \code{data.frame} with leverage information.
+A `data.frame` with columns `instId`, `mgnMode`, `posSide`, and `lever`.
 }
 \description{
-Retrieves the leverage configuration for a given instrument and margin mode.
+Retrieve leverage configuration for a given instrument and margin mode.
 }
+\details{
+Wraps `/api/v5/account/leverage-info`. Requires both `inst_id` and
+`mgn_mode`. Returns current leverage values (numeric).
+}
+\note{
+Since okxr 0.1.1
+}
+\examples{
+\dontrun{
+cfg <- list(api_key = "xxx", secret_key = "xxx", passphrase = "xxx")
+get_account_leverage_info(
+  inst_id = "BTC-USDT",
+  mgn_mode = "cross",
+  config = cfg
+)
+}
+
+}
+\seealso{
+[get_account_balance()], [get_account_positions()]
+
+Other okxr-account: 
+\code{\link{get_account_balance}()},
+\code{\link{get_account_config}()},
+\code{\link{get_account_positions_history}()},
+\code{\link{get_account_positions}()}
+}
+\concept{okxr-account}

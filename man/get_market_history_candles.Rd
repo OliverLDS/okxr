@@ -15,21 +15,54 @@ get_market_history_candles(
 )
 }
 \arguments{
-\item{inst_id}{Instrument ID (e.g., \code{"BTC-USDT"}).}
+\item{inst_id}{Character. Instrument ID, e.g. `"BTC-USDT"`.}
 
-\item{bar}{Candlestick granularity (e.g., \code{"1m"}, \code{"5m"}, \code{"1H"}).}
+\item{bar}{Character. Candlestick granularity, e.g. `"1m"`, `"5m"`, `"1H"`.}
 
-\item{before}{A timestamp (string in \code{"\%Y-\%m-\%d \%H:\%M:\%S"} format) to fetch data before.}
+\item{before}{Character or `NULL`. Timestamp string in format
+`"%Y-%m-%d %H:%M:%S"`. If `NULL` (default), fetches most recent history.}
 
-\item{limit}{Number of data points to retrieve (default: 100).}
+\item{limit}{Integer. Number of bars to retrieve. Default `100L`.}
 
-\item{config}{API credentials as a list with \code{api_key}, \code{secret_key}, and \code{passphrase}.}
+\item{config}{List. API credentials/config, typically containing
+`api_key`, `secret_key`, and `passphrase`.}
 
-\item{tz}{Timezone string (default: \code{"Asia/Hong_Kong"}).}
+\item{tz}{Character. Time zone for parsing timestamps. Default `"Asia/Hong_Kong"`.}
+
+\item{standardize_names}{Logical. If `TRUE` (default), renames columns to
+`timestamp`, `open`, `high`, `low`, `close`, `volume`, `volQuote`.}
 }
 \value{
-A \code{data.frame} of historical candlestick data sorted by timestamp.
+A `data.frame` of candlestick bars with standardized column names if
+`standardize_names = TRUE`. Timestamps are `POSIXct` in `tz`.
 }
 \description{
-Retrieves historical candlestick data before a specific datetime.
+Retrieve candlestick data before a specific datetime.
 }
+\details{
+Wraps `/api/v5/market/history-candles`. If `before` is supplied, it is
+converted to milliseconds since epoch (in `tz`) and sent as `after=…`
+(per OKX semantics: *return data before this time*).
+}
+\note{
+Since okxr 0.1.1
+}
+\examples{
+\dontrun{
+cfg <- list(api_key = "xxx", secret_key = "xxx", passphrase = "xxx")
+get_market_history_candles(
+  "ETH-USDT-SWAP", bar = "1H",
+  before = "2025-08-20 00:00:00", config = cfg
+)
+}
+
+}
+\seealso{
+[get_market_candles()]
+
+Other okxr-market: 
+\code{\link{get_market_candles}()},
+\code{\link{get_public_instruments}()},
+\code{\link{get_public_mark_price}()}
+}
+\concept{okxr-market}
