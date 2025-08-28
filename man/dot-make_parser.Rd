@@ -2,38 +2,72 @@
 % Please edit documentation in R/utils_parser.R
 \name{.make_parser}
 \alias{.make_parser}
-\title{Create a response parser based on schema and response mode}
+\title{Build a typed OKX JSON response parser (named or positional) → data.table}
 \usage{
 .make_parser(schema, mode = c("named", "positional"))
 }
 \arguments{
-\item{schema}{A \code{data.frame} describing the structure of OKX response fields.
-It must contain the columns:
+\item{schema}{A \code{data.frame} describing the response fields with columns:
 \describe{
-  \item{okx}{Field name in raw JSON response}
-  \item{formal}{Human-readable label}
-  \item{type}{Expected R data type: one of \code{"time"}, \code{"numeric"}, \code{"integer"}, \code{"string"}, \code{"logical"}}
+  \item{\code{okx}}{Field name in the raw JSON response (used as output column names).}
+  \item{\code{formal}}{Human-readable label (stored in \code{attr(, "var_labels")}).}
+  \item{\code{type}}{One of \code{"time"}, \code{"numeric"}, \code{"integer"},
+    \code{"string"}, \code{"logical"}.}
 }}
 
-\item{mode}{Parsing mode, either \code{"named"} (default) or \code{"positional"}.
-\code{"named"} accesses response fields by key, while \code{"positional"} uses index.}
+\item{mode}{Parsing mode; either \code{"named"} (default) for key-based access,
+or \code{"positional"} for index-based access.}
 }
 \value{
-A function taking \code{(res, tz)} where:
+A function with signature \code{function(res, tz)} where:
   \describe{
-    \item{\code{res}}{An \code{httr::response} object}
-    \item{\code{tz}}{A timezone string used for time conversion}
+    \item{\code{res}}{An \code{httr::response}. The body must decode to a list
+      with \code{$code}, \code{$msg}, and \code{$data}.}
+    \item{\code{tz}}{Timezone string used for \code{"time"} fields. Millisecond
+      timestamps are converted via \code{as.POSIXct(ms/1000, tz=tz)}.}
   }
-  and returns a parsed \code{data.frame}, or \code{NULL} if the request failed or empty.
+  The returned parser yields a \code{data.table} with column names from
+  \code{schema$okx} and attaches variable labels as
+  \code{attr(DT, "var_labels")} (a named character vector \code{formal} by \code{okx}).
+  Returns \code{NULL} if the API \code{code} is not \code{"0"} or if \code{$data}
+  is empty.
 }
 \description{
-Returns a function that parses an OKX API JSON response into a typed \code{data.frame}
-using the specified schema and parsing mode. The parser handles both "named"
-(key-based) and "positional" (index-based) formats depending on the endpoint.
+Constructs and returns a parser function that converts an OKX REST API JSON
+response into a typed \code{data.table}, using a provided field schema and a
+parsing \code{mode}. Supports both key-based (\code{"named"}) and index-based
+(\code{"positional"}) endpoints. For \code{"named"} endpoints returning a
+single object, the parser wraps it as a one-row table.
 }
 \details{
-- The returned data frame uses column names from \code{okx}, not \code{formal}.
-- A variable label mapping is attached as an attribute: \code{attr(df, "var_labels")}.
-- Rows are sorted by the first column listed in the \code{okx} field (usually timestamp).
+\itemize{
+  \item \strong{Typing}: Columns are preallocated per \code{schema$type}. Time fields
+  are interpreted as UNIX \emph{milliseconds}.
+  \item \strong{Modes}:
+    \itemize{
+      \item \code{"named"} — fields accessed via \code{okx} keys; a single object
+        in \code{$data} is wrapped to one row.
+      \item \code{"positional"} — fields accessed by index order of \code{schema}.
+    }
+  \item \strong{Attributes}: \code{attr(DT, "var_labels")} maps \code{okx} → \code{formal}.
+}
+}
+\section{Errors & warnings}{
+
+If \code{parsed$code != "0"}, a warning with \code{parsed$msg} is emitted and
+\code{NULL} is returned.
+}
+
+\examples{
+\dontrun{
+# Suppose `schema` has columns: okx, formal, type; and `res` is an httr response.
+parser <- .make_parser(schema, mode = "named")
+DT <- parser(res, tz = "UTC")
+if (!is.null(DT)) {
+  str(DT)
+  attr(DT, "var_labels")
+}
+}
+
 }
 \keyword{internal}

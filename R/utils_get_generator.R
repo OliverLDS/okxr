@@ -25,7 +25,7 @@
   
   function(query_string, tz, config) {
     res <- .execute_get_action(api$okx_path, query_string, config)
-    parser(res, tz)
+    parser(res = res, tz = tz)
   }
 }
 

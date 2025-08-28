@@ -317,7 +317,7 @@ NULL
       check.names = FALSE,
       okx    = c("uid", "mainUid", "acctLv", "posMode", "autoLoan"),
       formal = c("Account ID", "Main Account ID", "Account mode", "Position mode", "Whether to borrow coins automatically"),
-      type   = c("string", "string", "string", "string", "string"),
+      type   = c("string", "string", "string", "string", "logical"),
       stringsAsFactors = FALSE
     ),
     parser_mode = "named"

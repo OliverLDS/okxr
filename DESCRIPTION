@@ -12,7 +12,8 @@ Imports:
     httr,
     jsonlite,
     digest,
-    base64enc
+    base64enc,
+	data.table
 Collate:
     def_constants.R
     utils_headers.R
