@@ -95,6 +95,7 @@ get_market_history_candles <- function(inst_id, bar, before = NULL, limit = 100L
     query_string <- sprintf("?instId=%s&bar=%s&after=%.0f&limit=%d", inst_id, bar, before_ms, limit) # NOTE: OKX uses 'after=' to mean 'return data BEFORE this time'
   }
   df <- .gets$market_history_candles(query_string = query_string, config = config, tz = tz)
+  if(length(df) == 0) {return(NULL)}
   if (standardize_names) return(.standardize_ohlcv_names(df))
   return(df)
 }
