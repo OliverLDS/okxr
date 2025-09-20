@@ -336,6 +336,19 @@ NULL
     parser_mode = "named"
   ),
   
+  #----market_ticker----
+  market_ticker = list(
+    okx_path     = "/api/v5/market/ticker",
+    parser_schema       = data.frame(
+      check.names = FALSE,
+      okx    = c("instType", "instId", "last", "askPx", "bidPx", "ts"),
+      formal = c("Instrument type", "Instrument ID", "Last traded price", "Best ask price", "Best bid price", "Ticker data generation time"),
+      type   = c("string", "string", "numeric", "numeric", "numeric", "time"),
+      stringsAsFactors = FALSE
+    ),
+    parser_mode = "named"
+  ),
+  
   #----market_candles----
   market_candles = list(
     okx_path     = "/api/v5/market/candles",
@@ -383,6 +396,45 @@ NULL
       okx    = c("ts", "instId", "markPx"),
       formal = c("Timestamp", "Instrument ID", "Price"),
       type   = c("time", "string", "numeric"),
+      stringsAsFactors = FALSE
+    ),
+    parser_mode = "named"
+  ),
+  
+  #----public_funding_rate----
+  public_funding_rate = list(
+    okx_path = "/api/v5/public/funding-rate",
+    parser_schema = data.frame(
+      check.names = FALSE,
+      okx    = c("instId", "formulaType", "fundingRate", "fundingTime", "nextFundingTime", "minFundingRate", "maxFundingRate", "interestRate", "impactValue", "premium", "ts"),
+      formal = c("Instrument ID", "Formula type", "Current funding rate", "Settlement time", "Forecasted funding time for the next period", "The lower limit of the funding rate", "The upper limit of the funding rate", "Interest rate", "Depth weighted amount", "Premium index", "Data return time"),
+      type   = c("string", "string", "numeric", "time", "time", "numeric", "numeric", "numeric", "numeric", "numeric", "time"),
+      stringsAsFactors = FALSE
+    ),
+    parser_mode = "named"
+  ),
+  
+  #----public_funding_rate_history----
+  public_funding_rate_history = list(
+    okx_path = "/api/v5/public/funding-rate-history",
+    parser_schema = data.frame(
+      check.names = FALSE,
+      okx    = c("instId", "formulaType", "fundingRate", "realizedRate", "fundingTime", "method"),
+      formal = c("Instrument ID", "Formula type", "Predicted funding rate", "Actual funding rate", "Settlement time", "Funding rate mechanism"),
+      type   = c("string", "string", "numeric", "numeric", "time", "string"),
+      stringsAsFactors = FALSE
+    ),
+    parser_mode = "named"
+  ),
+  
+  #----public_open_interest----
+  public_open_interest = list(
+    okx_path = "/api/v5/public/open-interest",
+    parser_schema = data.frame(
+      check.names = FALSE,
+      okx    = c("instId", "oi", "oiCcy", "oiUsd", "ts"),
+      formal = c("Instrument ID", "Open interest in number of contracts", "Open interest in number of coin", "Open interest in number of USD", "Data return time"),
+      type   = c("string", "numeric", "numeric", "numeric", "time"),
       stringsAsFactors = FALSE
     ),
     parser_mode = "named"

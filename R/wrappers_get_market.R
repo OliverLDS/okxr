@@ -133,6 +133,12 @@ get_public_mark_price <- function(inst_id, inst_type = "SWAP", config, tz = "Asi
   .gets$public_mark_price(query_string = query_string, config = config, tz = tz)
 }
 
+#' @export
+get_market_ticker <- function(inst_id, config, tz = "Asia/Hong_Kong") {
+  query_string <- sprintf("?instId=%s", inst_id)
+  .gets$market_ticker(query_string = query_string, config = config, tz = tz)
+}
+
 #' Get instrument metadata
 #'
 #' Retrieve metadata for instruments of a given type.
@@ -172,4 +178,23 @@ get_public_instruments <- function(inst_id, inst_type = "SWAP", config, tz = "As
   query_string <- sprintf("?instType=%s&instId=%s", inst_type, inst_id)
   .gets$public_instruments(query_string = query_string, config = config, tz = tz)
 }
+
+#' @export
+get_public_funding_rate <- function(inst_id, config, tz = "Asia/Hong_Kong") {
+  query_string <- sprintf("?instId=%s", inst_id)
+  .gets$public_funding_rate(query_string = query_string, config = config, tz = tz)
+}
+
+#' @export
+get_public_funding_rate_history<- function(inst_id, before = NULL, after = NULL, limit = 400, config, tz = "Asia/Hong_Kong") {
+  query_string <- sprintf("?instId=%s", inst_id) # need to add before, after, limit later
+  .gets$public_funding_rate_history(query_string = query_string, config = config, tz = tz)
+}
+
+#' @export
+get_public_open_interest <- function(inst_id, inst_type, config, tz = "Asia/Hong_Kong") {
+  query_string <- sprintf("?instType=%s&instId=%s", inst_type, inst_id)
+  .gets$public_open_interest(query_string = query_string, config = config, tz = tz)
+}
+
 
