@@ -129,8 +129,8 @@
 
     attr(DT, "var_labels") <- setNames(col_names, okx_keys)
     return(list(
-      raw_data = data_list,
-      dt_data = DT
+      data_raw = data_list,
+      data_dt = DT
     ))
   }
 }

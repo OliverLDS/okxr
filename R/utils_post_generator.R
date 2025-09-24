@@ -23,9 +23,10 @@
 .make_post_function <- function(api) {
   parser <- .make_parser(api$parser_schema, mode = api$parser_mode %||% "entry")
 
-  function(body_list, tz, config) {
+  function(body_list, tz, config, raw_data = FALSE) {
     res <- .execute_post_action(api$okx_path, body_list, config)
-    parser(res, tz)
+    parsed_res <- parser(res = res, tz = tz)
+    if (raw_data) return(parsed_res$data_raw) else return(parsed_res$data_dt)
   }
 }
 
