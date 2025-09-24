@@ -16,9 +16,7 @@ Imports:
 	data.table
 Collate:
     def_constants.R
-    utils_headers.R
-    utils_request.R
-    utils_execute.R
+    utils_auth.R
     utils_parser.R
     utils_get_generator.R
     utils_post_generator.R
