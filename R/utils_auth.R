@@ -14,13 +14,24 @@
     prehash <- paste0(timestamp, toupper(httr_method), httr_path, body_json)
     hmac_sha256 <- digest::hmac(key = config$secret_key, object = charToRaw(prehash), algo = 'sha256', raw = TRUE)
     signature <- base64enc::base64encode(hmac_sha256)
-    httr::add_headers(
-      "OK-ACCESS-KEY" = config$api_key,
-      "OK-ACCESS-SIGN" = signature,
-      "OK-ACCESS-TIMESTAMP" = timestamp,
-      "OK-ACCESS-PASSPHRASE" = config$passphrase,
-      "Content-Type" = "application/json"
-    )
+    if (identical(config$demo, TRUE)) {
+      httr::add_headers(
+        "OK-ACCESS-KEY" = config$api_key,
+        "OK-ACCESS-SIGN" = signature,
+        "OK-ACCESS-TIMESTAMP" = timestamp,
+        "OK-ACCESS-PASSPHRASE" = config$passphrase,
+        "Content-Type" = "application/json",
+        "x-simulated-trading" = "1"
+      )
+    } else {
+      httr::add_headers(
+        "OK-ACCESS-KEY" = config$api_key,
+        "OK-ACCESS-SIGN" = signature,
+        "OK-ACCESS-TIMESTAMP" = timestamp,
+        "OK-ACCESS-PASSPHRASE" = config$passphrase,
+        "Content-Type" = "application/json"
+      )
+    }
 }
 
 #' Build a full OKX request object

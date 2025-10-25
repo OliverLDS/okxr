@@ -23,7 +23,7 @@
 .make_get_function <- function(api) {
   parser <- .make_parser(api$parser_schema, mode = api$parser_mode %||% "entry")
   
-  function(query_string, tz, config, raw_data = FALSE) {
+  function(query_string, tz, config, raw_data = TRUE) {
     res <- .execute_get_action(api$okx_path, query_string, config)
     parsed_res <- parser(res = res, tz = tz)
     if (raw_data) return(parsed_res$data_raw) else return(parsed_res$data_dt)
