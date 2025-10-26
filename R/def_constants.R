@@ -1,6 +1,33 @@
 #' @importFrom rlang %||%
 NULL
 
+#' Set or get okxr options
+#'
+#' @description
+#' Convenience wrapper to set global options for okxr, such as whether to
+#' return raw data instead of parsed data.
+#'
+#' @param raw_data Logical. Whether functions should return raw data (default = FALSE).
+#' If NULL, the function simply returns the current value.
+#'
+#' @examples
+#' okxr_set_options(raw_data = TRUE)
+#' getOption("okxr.raw_data")
+#'
+#' set_okxr_options(raw_data = NULL)  # check current value
+#' @export
+set_okxr_options <- function(raw_data = NULL) {
+  if (!is.null(raw_data)) {
+    if (!is.logical(raw_data) || length(raw_data) != 1L)
+      stop("`raw_data` must be a single TRUE or FALSE value.", call. = FALSE)
+    
+    options(okxr.raw_data = raw_data)
+    message("okxr.raw_data option set to ", raw_data)
+  }
+  
+  invisible(getOption("okxr.raw_data", FALSE))
+}
+
 #' Base URL for OKX API
 #'
 #' Canonical base URL used by all OKX REST requests in **okxr**.
