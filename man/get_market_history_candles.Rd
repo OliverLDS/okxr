@@ -10,7 +10,7 @@ get_market_history_candles(
   before = NULL,
   limit = 100L,
   config,
-  tz = "Asia/Hong_Kong",
+  tz = .okx_default_tz,
   standardize_names = TRUE
 )
 }
@@ -20,7 +20,7 @@ get_market_history_candles(
 \item{bar}{Character. Candlestick granularity, e.g. `"1m"`, `"5m"`, `"1H"`.}
 
 \item{before}{Character or `NULL`. Timestamp string in format
-`"%Y-%m-%d %H:%M:%S"`. If `NULL` (default), fetches most recent history.}
+`"\%Y-\%m-\%d \%H:\%M:\%S"`. If `NULL` (default), fetches most recent history.}
 
 \item{limit}{Integer. Number of bars to retrieve. Default `100L`.}
 

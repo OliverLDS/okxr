@@ -15,7 +15,7 @@ Convenience wrapper to set global options for okxr, such as whether to
 return raw data instead of parsed data.
 }
 \examples{
-okxr_set_options(raw_data = TRUE)
+set_okxr_options(raw_data = TRUE)
 getOption("okxr.raw_data")
 
 set_okxr_options(raw_data = NULL)  # check current value

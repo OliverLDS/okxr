@@ -4,16 +4,23 @@
 \alias{get_copy_trade_my_leaders}
 \title{Get my lead traders}
 \usage{
-get_copy_trade_my_leaders(instType = NULL, config, tz = "Asia/Hong_Kong")
+get_copy_trade_my_leaders(
+  inst_type = NULL,
+  config,
+  tz = .okx_default_tz,
+  instType = inst_type
+)
 }
 \arguments{
-\item{instType}{Character or `NULL`. Filter by instrument type
+\item{inst_type}{Character or `NULL`. Filter by instrument type
 (e.g., `"SWAP"`, `"MARGIN"`, `"SPOT"`). If `NULL`, returns all.}
 
 \item{config}{List. API credentials/config, typically containing
 `api_key`, `secret_key`, and `passphrase`.}
 
 \item{tz}{Character. Time zone for parsing timestamps. Default `"Asia/Hong_Kong"`.}
+
+\item{instType}{Deprecated alias for `inst_type`.}
 }
 \value{
 A `data.frame` with fields such as `nickName` and `uniqueCode`.
@@ -31,7 +38,7 @@ Since okxr 0.1.2
 \examples{
 \dontrun{
 cfg <- list(api_key = "xxx", secret_key = "xxx", passphrase = "xxx")
-get_copy_trade_my_leaders(instType = "SWAP", config = cfg)
+get_copy_trade_my_leaders(inst_type = "SWAP", config = cfg)
 }
 
 }

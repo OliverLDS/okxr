@@ -4,15 +4,22 @@
 \alias{get_copy_trade_settings}
 \title{Get copy trading settings}
 \usage{
-get_copy_trade_settings(uniqueCode, config, tz = "Asia/Hong_Kong")
+get_copy_trade_settings(
+  unique_code,
+  config,
+  tz = .okx_default_tz,
+  uniqueCode = unique_code
+)
 }
 \arguments{
-\item{uniqueCode}{Character. Lead trader unique code.}
+\item{unique_code}{Character. Lead trader unique code.}
 
 \item{config}{List. API credentials/config, typically containing
 `api_key`, `secret_key`, and `passphrase`.}
 
 \item{tz}{Character. Time zone for parsing timestamps. Default `"Asia/Hong_Kong"`.}
+
+\item{uniqueCode}{Deprecated alias for `unique_code`.}
 }
 \value{
 A `data.frame` with fields like `copyMode` and `copyState`.
@@ -22,7 +29,7 @@ Retrieve your account's copy trading configuration.
 }
 \details{
 Wraps `/api/v5/copytrading/copy-settings`. Returns one row with the
-current copy mode and copy state for the given `uniqueCode`.
+current copy mode and copy state for the given `unique_code`.
 }
 \note{
 Since okxr 0.1.2
@@ -30,7 +37,7 @@ Since okxr 0.1.2
 \examples{
 \dontrun{
 cfg <- list(api_key = "xxx", secret_key = "xxx", passphrase = "xxx")
-get_copy_trade_settings("1129E65755274C36", config = cfg)
+get_copy_trade_settings(unique_code = "1129E65755274C36", config = cfg)
 }
 
 }

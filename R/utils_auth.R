@@ -9,29 +9,36 @@
 #'
 #' @return A `httr::add_headers` object containing the signed headers.
 .get_headers <- function(config, httr_method, httr_path, body_json = "") {
-    stopifnot(all(c("api_key", "secret_key", "passphrase") %in% names(config)))
-    timestamp <- format(Sys.time(), "%Y-%m-%dT%H:%M:%S.000Z", tz = "UTC") 
-    prehash <- paste0(timestamp, toupper(httr_method), httr_path, body_json)
-    hmac_sha256 <- digest::hmac(key = config$secret_key, object = charToRaw(prehash), algo = 'sha256', raw = TRUE)
-    signature <- base64enc::base64encode(hmac_sha256)
-    if (identical(config$demo, TRUE)) {
-      httr::add_headers(
-        "OK-ACCESS-KEY" = config$api_key,
-        "OK-ACCESS-SIGN" = signature,
-        "OK-ACCESS-TIMESTAMP" = timestamp,
-        "OK-ACCESS-PASSPHRASE" = config$passphrase,
-        "Content-Type" = "application/json",
-        "x-simulated-trading" = "1"
-      )
-    } else {
-      httr::add_headers(
-        "OK-ACCESS-KEY" = config$api_key,
-        "OK-ACCESS-SIGN" = signature,
-        "OK-ACCESS-TIMESTAMP" = timestamp,
-        "OK-ACCESS-PASSPHRASE" = config$passphrase,
-        "Content-Type" = "application/json"
-      )
-    }
+  .okx_validate_config(config)
+
+  timestamp <- format(Sys.time(), "%Y-%m-%dT%H:%M:%S.000Z", tz = "UTC")
+  prehash <- paste0(timestamp, toupper(httr_method), httr_path, body_json)
+  hmac_sha256 <- digest::hmac(
+    key = config$secret_key,
+    object = charToRaw(prehash),
+    algo = "sha256",
+    raw = TRUE
+  )
+  signature <- base64enc::base64encode(hmac_sha256)
+
+  if (identical(config$demo, TRUE)) {
+    httr::add_headers(
+      "OK-ACCESS-KEY" = config$api_key,
+      "OK-ACCESS-SIGN" = signature,
+      "OK-ACCESS-TIMESTAMP" = timestamp,
+      "OK-ACCESS-PASSPHRASE" = config$passphrase,
+      "Content-Type" = "application/json",
+      "x-simulated-trading" = "1"
+    )
+  } else {
+    httr::add_headers(
+      "OK-ACCESS-KEY" = config$api_key,
+      "OK-ACCESS-SIGN" = signature,
+      "OK-ACCESS-TIMESTAMP" = timestamp,
+      "OK-ACCESS-PASSPHRASE" = config$passphrase,
+      "Content-Type" = "application/json"
+    )
+  }
 }
 
 #' Build a full OKX request object
@@ -78,7 +85,7 @@
     warning("Request failed: ", httr::status_code(res))
     return(NULL)
   }
-  return(res)
+  res
 }
 
 #' Execute a POST request to OKX
@@ -93,24 +100,22 @@
 .execute_post_action <- function(api_path, body_list, config) {
   base_url     <- .okx_base_url
   httr_method  <- "POST"
-  
+
   body_json <- jsonlite::toJSON(body_list, auto_unbox = TRUE, pretty = FALSE)
-  
+
   req <- .build_request(
     httr_method   = httr_method,
     base_url      = base_url,
     api_path      = api_path,
-    query_string  = "",     # no query string for POST
+    query_string  = "",
     config        = config,
     body_json     = body_json
   )
-  
+
   res <- httr::POST(req$url, req$headers, body = req$body_json, encode = "raw")
   if (httr::http_error(res)) {
     warning("Request failed: ", httr::status_code(res))
     return(NULL)
   }
-  return(res)
+  res
 }
-
-

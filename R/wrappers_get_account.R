@@ -28,9 +28,8 @@
 #' @family okxr-account
 #' @note Since okxr 0.1.1
 #' @export
-get_account_balance <- function(config, tz = "Asia/Hong_Kong") {
-  query_string <- ""
-  .gets$account_balance(query_string = query_string, tz = tz, config = config)
+get_account_balance <- function(config, tz = .okx_default_tz) {
+  .gets$account_balance(query_string = "", tz = tz, config = config)
 }
 
 #' Get account open positions
@@ -60,9 +59,8 @@ get_account_balance <- function(config, tz = "Asia/Hong_Kong") {
 #' @family okxr-account
 #' @note Since okxr 0.1.1
 #' @export
-get_account_positions <- function(config, tz = "Asia/Hong_Kong") {
-  query_string <- ""
-  .gets$account_positions(query_string = query_string, tz = tz, config = config)
+get_account_positions <- function(config, tz = .okx_default_tz) {
+  .gets$account_positions(query_string = "", tz = tz, config = config)
 }
 
 #' Get account position history
@@ -92,9 +90,8 @@ get_account_positions <- function(config, tz = "Asia/Hong_Kong") {
 #' @family okxr-account
 #' @note Since okxr 0.1.1
 #' @export
-get_account_positions_history <- function(config, tz = "Asia/Hong_Kong") {
-  query_string <- ""
-  .gets$account_positions_history(query_string = query_string, tz = tz, config = config)
+get_account_positions_history <- function(config, tz = .okx_default_tz) {
+  .gets$account_positions_history(query_string = "", tz = tz, config = config)
 }
 
 #' Get account configuration
@@ -124,9 +121,8 @@ get_account_positions_history <- function(config, tz = "Asia/Hong_Kong") {
 #' @family okxr-account
 #' @note Since okxr 0.1.2
 #' @export
-get_account_config <- function(config, tz = "Asia/Hong_Kong") {
-  query_string <- ""
-  .gets$account_config(query_string = query_string, tz = tz, config = config)
+get_account_config <- function(config, tz = .okx_default_tz) {
+  .gets$account_config(query_string = "", tz = tz, config = config)
 }
 
 #' Get account leverage settings
@@ -160,7 +156,7 @@ get_account_config <- function(config, tz = "Asia/Hong_Kong") {
 #' @family okxr-account
 #' @note Since okxr 0.1.1
 #' @export
-get_account_leverage_info <- function(inst_id, mgn_mode, config, tz = "Asia/Hong_Kong") {
-  query_string <- sprintf("?instId=%s&mgnMode=%s", inst_id, mgn_mode)
+get_account_leverage_info <- function(inst_id, mgn_mode, config, tz = .okx_default_tz) {
+  query_string <- .okx_build_query(instId = inst_id, mgnMode = mgn_mode)
   .gets$account_leverage_info(query_string = query_string, config = config, tz = tz)
 }

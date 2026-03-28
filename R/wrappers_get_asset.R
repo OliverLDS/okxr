@@ -10,9 +10,8 @@
 #' @return A \code{data.frame} with balances per currency.
 #'
 #' @export
-get_asset_balances <- function(config, tz = "Asia/Hong_Kong") {
-  query_string <- ""
-  .gets$asset_balances(query_string = query_string, tz = tz, config = config)
+get_asset_balances <- function(config, tz = .okx_default_tz) {
+  .gets$asset_balances(query_string = "", tz = tz, config = config)
 }
 
 #' Get asset deposit history
@@ -25,9 +24,8 @@ get_asset_balances <- function(config, tz = "Asia/Hong_Kong") {
 #' @return A \code{data.frame} with deposit timestamps, amounts, and currencies.
 #'
 #' @export
-get_asset_deposit_history <- function(config, tz = "Asia/Hong_Kong") {
-  query_string <- ""
-  .gets$asset_deposit_history(query_string = query_string, tz = tz, config = config)
+get_asset_deposit_history <- function(config, tz = .okx_default_tz) {
+  .gets$asset_deposit_history(query_string = "", tz = tz, config = config)
 }
 
 #' Get asset withdrawal history
@@ -40,7 +38,6 @@ get_asset_deposit_history <- function(config, tz = "Asia/Hong_Kong") {
 #' @return A \code{data.frame} with withdrawal timestamps, amounts, and currencies.
 #'
 #' @export
-get_asset_withdrawal_history <- function(config, tz = "Asia/Hong_Kong") {
-  query_string <- ""
-  .gets$asset_withdrawal_history(query_string = query_string, tz = tz, config = config)
+get_asset_withdrawal_history <- function(config, tz = .okx_default_tz) {
+  .gets$asset_withdrawal_history(query_string = "", tz = tz, config = config)
 }

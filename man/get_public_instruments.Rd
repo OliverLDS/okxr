@@ -5,15 +5,15 @@
 \title{Get instrument metadata}
 \usage{
 get_public_instruments(
-  inst_id,
+  inst_id = NULL,
   inst_type = "SWAP",
   config,
-  tz = "Asia/Hong_Kong"
+  tz = .okx_default_tz
 )
 }
 \arguments{
-\item{inst_id}{Character. Specific instrument ID to query, or leave blank
-to fetch all instruments of `inst_type`.}
+\item{inst_id}{Character or `NULL`. Specific instrument ID to query. Use
+`NULL` to fetch all instruments of `inst_type`.}
 
 \item{inst_type}{Character. Instrument type. One of `"SPOT"`, `"MARGIN"`,
 `"SWAP"` (default), `"FUTURES"`, `"OPTION"`.}

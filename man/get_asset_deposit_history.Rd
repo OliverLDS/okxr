@@ -4,7 +4,7 @@
 \alias{get_asset_deposit_history}
 \title{Get asset deposit history}
 \usage{
-get_asset_deposit_history(config, tz = "Asia/Hong_Kong")
+get_asset_deposit_history(config, tz = .okx_default_tz)
 }
 \arguments{
 \item{config}{API credentials as a list with \code{api_key}, \code{secret_key}, and \code{passphrase}.}

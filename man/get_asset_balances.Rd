@@ -4,7 +4,7 @@
 \alias{get_asset_balances}
 \title{Get asset balances}
 \usage{
-get_asset_balances(config, tz = "Asia/Hong_Kong")
+get_asset_balances(config, tz = .okx_default_tz)
 }
 \arguments{
 \item{config}{API credentials as a list with \code{api_key}, \code{secret_key}, and \code{passphrase}.}

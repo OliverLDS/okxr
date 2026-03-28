@@ -42,13 +42,15 @@
 #' @family okxr-trade
 #' @note Since okxr 0.1.1
 #' @export
-get_trade_order <- function(inst_id, ord_id = NULL, cl_ord_id = NULL, config, tz = "Asia/Hong_Kong") {
-  if (is.null(ord_id) && is.null(cl_ord_id)) {
-    stop("Either 'ord_id' or 'cl_ord_id' must be provided.")
+get_trade_order <- function(inst_id, ord_id = NULL, cl_ord_id = NULL, config, tz = .okx_default_tz) {
+  if (xor(is.null(ord_id), is.null(cl_ord_id)) == FALSE) {
+    stop("Provide exactly one of `ord_id` or `cl_ord_id`.", call. = FALSE)
   }
-  query_string <- ifelse(!is.null(ord_id),
-    sprintf("?instId=%s&ordId=%s", inst_id, ord_id),
-    sprintf("?instId=%s&clOrdId=%s", inst_id, cl_ord_id)
+
+  query_string <- .okx_build_query(
+    instId = inst_id,
+    ordId = ord_id,
+    clOrdId = cl_ord_id
   )
   .gets$trade_order(query_string = query_string, config = config, tz = tz)
 }
@@ -85,9 +87,8 @@ get_trade_order <- function(inst_id, ord_id = NULL, cl_ord_id = NULL, config, tz
 #' @family okxr-trade
 #' @note Since okxr 0.1.1
 #' @export
-get_trade_orders_pending <- function(config, tz) {
-  query_string <- ""
-  .gets$trade_orders_pending(query_string = query_string, config = config, tz = tz)
+get_trade_orders_pending <- function(config, tz = .okx_default_tz) {
+  .gets$trade_orders_pending(query_string = "", config = config, tz = tz)
 }
 
 #' Get trade orders history (last 7 days)
@@ -122,8 +123,7 @@ get_trade_orders_pending <- function(config, tz) {
 #' @family okxr-trade
 #' @note Since okxr 0.1.2
 #' @export
-get_trade_orders_history_7d <- function(inst_type = 'SWAP', config, tz) {
-  query_string <- sprintf("?instType=%s", inst_type)
+get_trade_orders_history_7d <- function(inst_type = "SWAP", config, tz = .okx_default_tz) {
+  query_string <- .okx_build_query(instType = inst_type)
   .gets$trade_orders_history_7d(query_string = query_string, config = config, tz = tz)
 }
-

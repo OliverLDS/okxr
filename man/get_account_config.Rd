@@ -4,7 +4,7 @@
 \alias{get_account_config}
 \title{Get account configuration}
 \usage{
-get_account_config(config, tz = "Asia/Hong_Kong")
+get_account_config(config, tz = .okx_default_tz)
 }
 \arguments{
 \item{config}{List. API credentials/config, typically containing

@@ -4,7 +4,7 @@
 \alias{get_account_positions_history}
 \title{Get account position history}
 \usage{
-get_account_positions_history(config, tz = "Asia/Hong_Kong")
+get_account_positions_history(config, tz = .okx_default_tz)
 }
 \arguments{
 \item{config}{List. API credentials/config, typically containing

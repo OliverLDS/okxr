@@ -4,7 +4,7 @@
 \alias{get_trade_orders_pending}
 \title{Get all pending trade orders}
 \usage{
-get_trade_orders_pending(config, tz)
+get_trade_orders_pending(config, tz = .okx_default_tz)
 }
 \arguments{
 \item{config}{List. API credentials/config, typically containing

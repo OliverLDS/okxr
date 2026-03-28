@@ -64,6 +64,10 @@
   mode <- match.arg(mode)
 
   function(res, tz) {
+    if (is.null(res)) {
+      return(NULL)
+    }
+
     parsed <- httr::content(res, as = "parsed", type = "application/json")
 
     if (parsed$code != "0") {
@@ -79,58 +83,84 @@
       data_list <- list(data_list)
     }
 
-    n_rows <- length(data_list)
     okx_keys  <- schema$okx
     col_names <- schema$formal
     col_types <- schema$type
 
-    # Initialize empty data.frame with predefined structure
-    .allocate_column <- function(type, n) {
-      switch(type,
-        time    = as.POSIXct(rep(NA_real_, n), origin = "1970-01-01", tz = tz),
-        numeric = rep(NA_real_, n),
-        integer = rep(NA_integer_, n),
-        string  = rep(NA_character_, n),
-        logical = as.logical(rep(NA, n)),
-        rep(NA, n)  # fallback
+    .extract_column <- function(index) {
+      raw_vals <- lapply(
+        data_list,
+        function(entry) {
+          if (mode == "named") entry[[okx_keys[[index]]]] else entry[[index]]
+        }
+      )
+
+      type <- col_types[[index]]
+      switch(
+        type,
+        time = {
+          seconds <- vapply(
+            raw_vals,
+            function(raw_val) {
+              if (is.null(raw_val)) {
+                return(NA_real_)
+              }
+              suppressWarnings(as.numeric(raw_val) / 1000)
+            },
+            numeric(1)
+          )
+          as.POSIXct(seconds, origin = "1970-01-01", tz = tz)
+        },
+        numeric = vapply(
+          raw_vals,
+          function(raw_val) {
+            if (is.null(raw_val)) NA_real_ else suppressWarnings(as.numeric(raw_val))
+          },
+          numeric(1)
+        ),
+        integer = vapply(
+          raw_vals,
+          function(raw_val) {
+            if (is.null(raw_val)) NA_integer_ else suppressWarnings(as.integer(raw_val))
+          },
+          integer(1)
+        ),
+        string = vapply(
+          raw_vals,
+          function(raw_val) {
+            if (is.null(raw_val)) NA_character_ else as.character(raw_val)
+          },
+          character(1)
+        ),
+        logical = vapply(
+          raw_vals,
+          function(raw_val) {
+            if (is.null(raw_val)) {
+              return(NA)
+            }
+
+            if (is.logical(raw_val)) {
+              return(raw_val)
+            }
+
+            raw_text <- toupper(as.character(raw_val))
+            if (identical(raw_text, "TRUE")) return(TRUE)
+            if (identical(raw_text, "FALSE")) return(FALSE)
+            NA
+          },
+          logical(1)
+        ),
+        raw_vals
       )
     }
-    cols <- setNames(lapply(col_types, .allocate_column, n = n_rows), okx_keys)
+
+    cols <- stats::setNames(lapply(seq_along(okx_keys), .extract_column), okx_keys)
     DT <- data.table::as.data.table(cols)
-    
-    for (i in seq_len(length(okx_keys))) {
-      okx_key  <- okx_keys[i]
-      col_name <- col_names[i]
-      type     <- col_types[i]
 
-      for (j in seq_len(n_rows)) {
-        raw_val <- if (mode == "named") {
-          data_list[[j]][[okx_key]]
-        } else {
-          data_list[[j]][[i]]
-        }
-
-        val <- if (is.null(raw_val)) {
-          NA
-        } else {
-          switch(type,
-            time    = as.POSIXct(as.numeric(raw_val) / 1000, origin = "1970-01-01", tz = tz),
-            numeric = suppressWarnings(as.numeric(raw_val)),
-            integer = suppressWarnings(as.integer(raw_val)),
-            string  = as.character(raw_val),
-            logical = ifelse(raw_val == 'TRUE', TRUE, ifelse(raw_val == 'FALSE', FALSE, as.logical(NA))),
-            raw_val
-          )
-        }
-
-        DT[[okx_key]][[j]] <- val
-      }
-    }
-
-    attr(DT, "var_labels") <- setNames(col_names, okx_keys)
-    return(list(
+    attr(DT, "var_labels") <- stats::setNames(col_names, okx_keys)
+    list(
       data_raw = data_list,
       data_dt = DT
-    ))
+    )
   }
 }

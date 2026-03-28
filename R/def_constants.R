@@ -11,7 +11,7 @@ NULL
 #' If NULL, the function simply returns the current value.
 #'
 #' @examples
-#' okxr_set_options(raw_data = TRUE)
+#' set_okxr_options(raw_data = TRUE)
 #' getOption("okxr.raw_data")
 #'
 #' set_okxr_options(raw_data = NULL)  # check current value

@@ -9,7 +9,7 @@ post_account_set_leverage(
   lever,
   mgn_mode,
   pos_side = NULL,
-  tz = "Asia/Hong_Kong",
+  tz = .okx_default_tz,
   config
 )
 }

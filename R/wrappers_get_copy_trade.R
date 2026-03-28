@@ -4,9 +4,10 @@
 #'
 #' @details
 #' Wraps `/api/v5/copytrading/copy-settings`. Returns one row with the
-#' current copy mode and copy state for the given `uniqueCode`.
+#' current copy mode and copy state for the given `unique_code`.
 #'
-#' @param uniqueCode Character. Lead trader unique code.
+#' @param unique_code Character. Lead trader unique code.
+#' @param uniqueCode Deprecated alias for `unique_code`.
 #' @param config List. API credentials/config, typically containing
 #'   `api_key`, `secret_key`, and `passphrase`.
 #' @param tz Character. Time zone for parsing timestamps. Default `"Asia/Hong_Kong"`.
@@ -17,15 +18,15 @@
 #' @examples
 #' \dontrun{
 #' cfg <- list(api_key = "xxx", secret_key = "xxx", passphrase = "xxx")
-#' get_copy_trade_settings("1129E65755274C36", config = cfg)
+#' get_copy_trade_settings(unique_code = "1129E65755274C36", config = cfg)
 #' }
 #'
 #' @seealso [get_copy_trade_my_leaders()], [get_copy_trade_current_subpos()]
 #' @family okxr-copytrading
 #' @note Since okxr 0.1.2
 #' @export
-get_copy_trade_settings <- function(uniqueCode, config, tz = "Asia/Hong_Kong") {
-  query_string <- sprintf("?uniqueCode=%s", uniqueCode)
+get_copy_trade_settings <- function(unique_code, config, tz = .okx_default_tz, uniqueCode = unique_code) {
+  query_string <- .okx_build_query(uniqueCode = uniqueCode)
   .gets$copy_trade_settings(query_string = query_string, tz = tz, config = config)
 }
 
@@ -37,8 +38,9 @@ get_copy_trade_settings <- function(uniqueCode, config, tz = "Asia/Hong_Kong") {
 #' Wraps `/api/v5/copytrading/current-lead-traders`. Returns one row per
 #' lead trader followed by your account.
 #'
-#' @param instType Character or `NULL`. Filter by instrument type
+#' @param inst_type Character or `NULL`. Filter by instrument type
 #'   (e.g., `"SWAP"`, `"MARGIN"`, `"SPOT"`). If `NULL`, returns all.
+#' @param instType Deprecated alias for `inst_type`.
 #' @param config List. API credentials/config, typically containing
 #'   `api_key`, `secret_key`, and `passphrase`.
 #' @param tz Character. Time zone for parsing timestamps. Default `"Asia/Hong_Kong"`.
@@ -49,15 +51,15 @@ get_copy_trade_settings <- function(uniqueCode, config, tz = "Asia/Hong_Kong") {
 #' @examples
 #' \dontrun{
 #' cfg <- list(api_key = "xxx", secret_key = "xxx", passphrase = "xxx")
-#' get_copy_trade_my_leaders(instType = "SWAP", config = cfg)
+#' get_copy_trade_my_leaders(inst_type = "SWAP", config = cfg)
 #' }
 #'
 #' @seealso [get_copy_trade_settings()], [get_copy_trade_current_subpos()]
 #' @family okxr-copytrading
 #' @note Since okxr 0.1.2
 #' @export
-get_copy_trade_my_leaders <- function(instType = NULL, config, tz = "Asia/Hong_Kong") {
-  query_string <- ifelse(!is.null(instType), sprintf("?instType=%s", instType), "")
+get_copy_trade_my_leaders <- function(inst_type = NULL, config, tz = .okx_default_tz, instType = inst_type) {
+  query_string <- .okx_build_query(instType = instType)
   .gets$copy_trade_my_leaders(query_string = query_string, tz = tz, config = config)
 }
 
@@ -86,9 +88,8 @@ get_copy_trade_my_leaders <- function(instType = NULL, config, tz = "Asia/Hong_K
 #' @family okxr-copytrading
 #' @note Since okxr 0.1.2
 #' @export
-get_copy_trade_current_subpos <- function(config, tz = "Asia/Hong_Kong") {
-  query_string <- ""
-  .gets$copy_trade_current_subpos(query_string = query_string, tz = tz, config = config)
+get_copy_trade_current_subpos <- function(config, tz = .okx_default_tz) {
+  .gets$copy_trade_current_subpos(query_string = "", tz = tz, config = config)
 }
 
 #' Get historical copy trading subpositions
@@ -117,7 +118,6 @@ get_copy_trade_current_subpos <- function(config, tz = "Asia/Hong_Kong") {
 #' @family okxr-copytrading
 #' @note Since okxr 0.1.2
 #' @export
-get_copy_trade_historical_subpos <- function(config, tz = "Asia/Hong_Kong") {
-  query_string <- ""
-  .gets$copy_trade_historical_subpos(query_string = query_string, tz = tz, config = config)
+get_copy_trade_historical_subpos <- function(config, tz = .okx_default_tz) {
+  .gets$copy_trade_historical_subpos(query_string = "", tz = tz, config = config)
 }

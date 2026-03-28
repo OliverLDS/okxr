@@ -9,7 +9,7 @@ get_market_candles(
   bar,
   limit = 100L,
   config,
-  tz = "Asia/Hong_Kong",
+  tz = .okx_default_tz,
   standardize_names = TRUE
 )
 }

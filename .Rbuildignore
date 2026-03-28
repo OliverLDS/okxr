@@ -1,0 +1,9 @@
+^\.DS_Store$
+^\.Rhistory$
+^R/\.DS_Store$
+^R/\.Rhistory$
+^tests/\.DS_Store$
+^\.git$
+^\.git/.*
+^\.\.Rcheck$
+^\.\.Rcheck/.*

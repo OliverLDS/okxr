@@ -4,7 +4,7 @@
 \alias{get_copy_trade_current_subpos}
 \title{Get current copy trading subpositions}
 \usage{
-get_copy_trade_current_subpos(config, tz = "Asia/Hong_Kong")
+get_copy_trade_current_subpos(config, tz = .okx_default_tz)
 }
 \arguments{
 \item{config}{List. API credentials/config, typically containing

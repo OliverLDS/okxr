@@ -12,7 +12,7 @@
 #' @return A \code{data.frame} with leverage update confirmation (including instrument ID and leverage settings).
 #'
 #' @export
-post_account_set_leverage <- function(inst_id, lever, mgn_mode, pos_side = NULL, tz = "Asia/Hong_Kong", config) {
+post_account_set_leverage <- function(inst_id, lever, mgn_mode, pos_side = NULL, tz = .okx_default_tz, config) {
   body <- list(instId = inst_id, lever = lever, mgnMode = mgn_mode)
   if (!is.null(pos_side) && mgn_mode == "isolated") {
     body$posSide <- pos_side

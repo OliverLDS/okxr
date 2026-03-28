@@ -34,9 +34,12 @@ post_trade_order <- function(
   cl_ord_id = NULL,
   tag = NULL,
   config,
-  tz = "Asia/Hong_Kong"
+  tz = .okx_default_tz
 ) {
-  cl_ord_id <- paste0("r", format(Sys.time(), "%Y%m%d%H%M%S"), sample(1000:9999, 1))
+  if (is.null(cl_ord_id)) {
+    cl_ord_id <- .okx_generate_client_order_id()
+  }
+
   body_list <- list(
     instId = inst_id,
     tdMode = td_mode,
@@ -66,7 +69,7 @@ post_trade_order <- function(
 #' @return A \code{data.frame} containing cancellation result and timestamp.
 #'
 #' @export
-post_trade_cancel_order <- function(inst_id, ord_id, config, tz = "Asia/Hong_Kong") {
+post_trade_cancel_order <- function(inst_id, ord_id, config, tz = .okx_default_tz) {
   .posts$trade_cancel_order(body_list = list(instId = inst_id, ordId = ord_id), tz = tz, config = config)
 }
 
@@ -83,6 +86,6 @@ post_trade_cancel_order <- function(inst_id, ord_id, config, tz = "Asia/Hong_Kon
 #' @return A \code{data.frame} with close position confirmation details.
 #'
 #' @export
-post_trade_close_position <- function(inst_id, mgn_mode, pos_side, tz, config) {
+post_trade_close_position <- function(inst_id, mgn_mode, pos_side, tz = .okx_default_tz, config) {
   .posts$trade_close_position(body_list = list(instId = inst_id, mgnMode = mgn_mode, posSide = pos_side), tz = tz, config = config)
 }

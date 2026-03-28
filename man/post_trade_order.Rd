@@ -17,7 +17,7 @@ post_trade_order(
   cl_ord_id = NULL,
   tag = NULL,
   config,
-  tz = "Asia/Hong_Kong"
+  tz = .okx_default_tz
 )
 }
 \arguments{

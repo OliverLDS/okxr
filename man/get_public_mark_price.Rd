@@ -8,7 +8,7 @@ get_public_mark_price(
   inst_id,
   inst_type = "SWAP",
   config,
-  tz = "Asia/Hong_Kong"
+  tz = .okx_default_tz
 )
 }
 \arguments{

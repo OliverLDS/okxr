@@ -4,7 +4,7 @@
 \alias{get_account_positions}
 \title{Get account open positions}
 \usage{
-get_account_positions(config, tz = "Asia/Hong_Kong")
+get_account_positions(config, tz = .okx_default_tz)
 }
 \arguments{
 \item{config}{List. API credentials/config, typically containing

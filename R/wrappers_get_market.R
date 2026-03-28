@@ -1,6 +1,10 @@
 #---- Market: GET Wrappers ----
 
-.standardize_ohlcv_names <- function(df) {
+.okx_standardize_ohlcv_names <- function(df) {
+  if (is.null(df)) {
+    return(NULL)
+  }
+
   names(df)[names(df) == "ts"] <- "timestamp"
   names(df)[names(df) == "o"]  <- "open"
   names(df)[names(df) == "h"]  <- "high"
@@ -43,11 +47,11 @@
 #' @family okxr-market
 #' @note Since okxr 0.1.1
 #' @export
-get_market_candles <- function(inst_id, bar, limit = 100L, config, tz = "Asia/Hong_Kong", standardize_names = TRUE) {
-  query_string <- sprintf("?instId=%s&bar=%s&limit=%d", inst_id, bar, limit)
+get_market_candles <- function(inst_id, bar, limit = 100L, config, tz = .okx_default_tz, standardize_names = TRUE) {
+  query_string <- .okx_build_query(instId = inst_id, bar = bar, limit = as.integer(limit))
   df <- .gets$market_candles(query_string = query_string, config = config, tz = tz)
-  if (standardize_names) return(.standardize_ohlcv_names(df))
-  return(df)
+  if (standardize_names) return(.okx_standardize_ohlcv_names(df))
+  df
 }
 
 #' Get historical market candles
@@ -62,7 +66,7 @@ get_market_candles <- function(inst_id, bar, limit = 100L, config, tz = "Asia/Ho
 #' @param inst_id Character. Instrument ID, e.g. `"BTC-USDT"`.
 #' @param bar Character. Candlestick granularity, e.g. `"1m"`, `"5m"`, `"1H"`.
 #' @param before Character or `NULL`. Timestamp string in format
-#'   `"%Y-%m-%d %H:%M:%S"`. If `NULL` (default), fetches most recent history.
+#'   `"\%Y-\%m-\%d \%H:\%M:\%S"`. If `NULL` (default), fetches most recent history.
 #' @param limit Integer. Number of bars to retrieve. Default `100L`.
 #' @param config List. API credentials/config, typically containing
 #'   `api_key`, `secret_key`, and `passphrase`.
@@ -87,17 +91,20 @@ get_market_candles <- function(inst_id, bar, limit = 100L, config, tz = "Asia/Ho
 #' @family okxr-market
 #' @note Since okxr 0.1.1
 #' @export
-get_market_history_candles <- function(inst_id, bar, before = NULL, limit = 100L, config, tz = "Asia/Hong_Kong", standardize_names = TRUE) {
-  if (is.null(before)) {
-    query_string <- sprintf("?instId=%s&bar=%s&limit=%d", inst_id, bar, limit)
-  } else {
-    before_ms <- as.numeric(as.POSIXct(before, format = "%Y-%m-%d %H:%M:%S", tz = tz)) * 1000
-    query_string <- sprintf("?instId=%s&bar=%s&after=%.0f&limit=%d", inst_id, bar, before_ms, limit) # NOTE: OKX uses 'after=' to mean 'return data BEFORE this time'
-  }
+get_market_history_candles <- function(inst_id, bar, before = NULL, limit = 100L, config, tz = .okx_default_tz, standardize_names = TRUE) {
+  before_ms <- .okx_datetime_to_ms(before, tz = tz)
+  query_string <- .okx_build_query(
+    instId = inst_id,
+    bar = bar,
+    after = before_ms,
+    limit = as.integer(limit)
+  )
   df <- .gets$market_history_candles(query_string = query_string, config = config, tz = tz)
-  if(length(df) == 0) {return(NULL)}
-  if (standardize_names) return(.standardize_ohlcv_names(df))
-  return(df)
+  if (is.null(df) || length(df) == 0L) {
+    return(NULL)
+  }
+  if (standardize_names) return(.okx_standardize_ohlcv_names(df))
+  df
 }
 
 #' Get current mark price
@@ -128,14 +135,25 @@ get_market_history_candles <- function(inst_id, bar, before = NULL, limit = 100L
 #' @family okxr-market
 #' @note Since okxr 0.1.1
 #' @export
-get_public_mark_price <- function(inst_id, inst_type = "SWAP", config, tz = "Asia/Hong_Kong") {
-  query_string <- sprintf("?instType=%s&instId=%s", inst_type, inst_id)
+get_public_mark_price <- function(inst_id, inst_type = "SWAP", config, tz = .okx_default_tz) {
+  query_string <- .okx_build_query(instType = inst_type, instId = inst_id)
   .gets$public_mark_price(query_string = query_string, config = config, tz = tz)
 }
 
+#' Get market ticker
+#'
+#' Retrieve the latest ticker snapshot for a specific instrument.
+#'
+#' @param inst_id Character. Instrument ID, e.g. `"BTC-USDT"` or `"ETH-USDT-SWAP"`.
+#' @param config List. API credentials/config, typically containing
+#'   `api_key`, `secret_key`, and `passphrase`.
+#' @param tz Character. Time zone for parsing timestamps. Default `"Asia/Hong_Kong"`.
+#'
+#' @return A `data.frame` with the latest ticker fields returned by OKX.
+#'
 #' @export
-get_market_ticker <- function(inst_id, config, tz = "Asia/Hong_Kong") {
-  query_string <- sprintf("?instId=%s", inst_id)
+get_market_ticker <- function(inst_id, config, tz = .okx_default_tz) {
+  query_string <- .okx_build_query(instId = inst_id)
   .gets$market_ticker(query_string = query_string, config = config, tz = tz)
 }
 
@@ -147,8 +165,8 @@ get_market_ticker <- function(inst_id, config, tz = "Asia/Hong_Kong") {
 #' Wraps `/api/v5/public/instruments`. Returns one row per instrument,
 #' including contract specifications, tick size, lot size, expiry, and state.
 #'
-#' @param inst_id Character. Specific instrument ID to query, or leave blank
-#'   to fetch all instruments of `inst_type`.
+#' @param inst_id Character or `NULL`. Specific instrument ID to query. Use
+#'   `NULL` to fetch all instruments of `inst_type`.
 #' @param inst_type Character. Instrument type. One of `"SPOT"`, `"MARGIN"`,
 #'   `"SWAP"` (default), `"FUTURES"`, `"OPTION"`.
 #' @param config List. API credentials/config, typically containing
@@ -174,27 +192,67 @@ get_market_ticker <- function(inst_id, config, tz = "Asia/Hong_Kong") {
 #' @family okxr-market
 #' @note Since okxr 0.1.2
 #' @export
-get_public_instruments <- function(inst_id, inst_type = "SWAP", config, tz = "Asia/Hong_Kong") {
-  query_string <- sprintf("?instType=%s&instId=%s", inst_type, inst_id)
+get_public_instruments <- function(inst_id = NULL, inst_type = "SWAP", config, tz = .okx_default_tz) {
+  query_string <- .okx_build_query(instType = inst_type, instId = inst_id)
   .gets$public_instruments(query_string = query_string, config = config, tz = tz)
 }
 
+#' Get current funding rate
+#'
+#' Retrieve the current funding rate for a perpetual swap instrument.
+#'
+#' @param inst_id Character. Instrument ID, e.g. `"BTC-USDT-SWAP"`.
+#' @param config List. API credentials/config, typically containing
+#'   `api_key`, `secret_key`, and `passphrase`.
+#' @param tz Character. Time zone for parsing timestamps. Default `"Asia/Hong_Kong"`.
+#'
+#' @return A `data.frame` containing the current funding rate fields returned by OKX.
+#'
 #' @export
-get_public_funding_rate <- function(inst_id, config, tz = "Asia/Hong_Kong") {
-  query_string <- sprintf("?instId=%s", inst_id)
+get_public_funding_rate <- function(inst_id, config, tz = .okx_default_tz) {
+  query_string <- .okx_build_query(instId = inst_id)
   .gets$public_funding_rate(query_string = query_string, config = config, tz = tz)
 }
 
+#' Get funding rate history
+#'
+#' Retrieve historical funding rate entries for a perpetual swap instrument.
+#'
+#' @param inst_id Character. Instrument ID, e.g. `"BTC-USDT-SWAP"`.
+#' @param before Optional cursor for records earlier than the supplied value.
+#' @param after Optional cursor for records later than the supplied value.
+#' @param limit Integer. Number of records to request. Default `400`.
+#' @param config List. API credentials/config, typically containing
+#'   `api_key`, `secret_key`, and `passphrase`.
+#' @param tz Character. Time zone for parsing timestamps. Default `"Asia/Hong_Kong"`.
+#'
+#' @return A `data.frame` containing funding rate history rows returned by OKX.
+#'
 #' @export
-get_public_funding_rate_history<- function(inst_id, before = NULL, after = NULL, limit = 400, config, tz = "Asia/Hong_Kong") {
-  query_string <- sprintf("?instId=%s", inst_id) # need to add before, after, limit later
+get_public_funding_rate_history <- function(inst_id, before = NULL, after = NULL, limit = 400, config, tz = .okx_default_tz) {
+  query_string <- .okx_build_query(
+    instId = inst_id,
+    before = before,
+    after = after,
+    limit = as.integer(limit)
+  )
   .gets$public_funding_rate_history(query_string = query_string, config = config, tz = tz)
 }
 
+#' Get open interest
+#'
+#' Retrieve current open interest for an instrument.
+#'
+#' @param inst_id Character. Instrument ID, e.g. `"BTC-USDT-SWAP"`.
+#' @param inst_type Character. Instrument type such as `"SWAP"` or `"FUTURES"`.
+#' @param config List. API credentials/config, typically containing
+#'   `api_key`, `secret_key`, and `passphrase`.
+#' @param tz Character. Time zone for parsing timestamps. Default `"Asia/Hong_Kong"`.
+#'
+#' @return A `data.frame` containing open interest fields returned by OKX.
+#'
 #' @export
-get_public_open_interest <- function(inst_id, inst_type, config, tz = "Asia/Hong_Kong") {
-  query_string <- sprintf("?instType=%s&instId=%s", inst_type, inst_id)
+get_public_open_interest <- function(inst_id, inst_type, config, tz = .okx_default_tz) {
+  query_string <- .okx_build_query(instType = inst_type, instId = inst_id)
   .gets$public_open_interest(query_string = query_string, config = config, tz = tz)
 }
-
-

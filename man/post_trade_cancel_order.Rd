@@ -4,7 +4,7 @@
 \alias{post_trade_cancel_order}
 \title{Cancel a Trade Order}
 \usage{
-post_trade_cancel_order(inst_id, ord_id, config, tz = "Asia/Hong_Kong")
+post_trade_cancel_order(inst_id, ord_id, config, tz = .okx_default_tz)
 }
 \arguments{
 \item{inst_id}{Instrument ID (e.g., \code{"BTC-USDT"}).}

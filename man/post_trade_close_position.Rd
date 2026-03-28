@@ -4,7 +4,13 @@
 \alias{post_trade_close_position}
 \title{Close a Position}
 \usage{
-post_trade_close_position(inst_id, mgn_mode, pos_side, tz, config)
+post_trade_close_position(
+  inst_id,
+  mgn_mode,
+  pos_side,
+  tz = .okx_default_tz,
+  config
+)
 }
 \arguments{
 \item{inst_id}{Instrument ID (e.g., \code{"BTC-USDT"}).}
