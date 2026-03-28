@@ -1,17 +1,23 @@
 # okxr: R Interface to the OKX API
 
-`okxr` is an R package that provides a streamlined interface to the OKX REST API. It includes typed, timezone-aware wrappers for both GET and POST endpoints, and exposes user-friendly functions organized by category (e.g., market data, account info, trade execution, copy trading).
+`okxr` is an R package for working with the OKX REST API from R. It provides
+typed wrappers for market data, account endpoints, asset history, trading, and
+copy trading, with shared request signing and schema-based response parsing.
+
+## Status
+
+`okxr` is currently a GitHub-release package. It is not prepared for CRAN
+submission yet.
+
+Current release: `v0.1.3`
 
 ## Features
 
-* 🔐 Secure HMAC authentication for OKX API  
-* 🔄 Schema-based response parsing  
-* 🧹 Modular GET/POST generators with internal tooling  
-* ✅ User-friendly wrappers like `get_account_balance()`, `post_trade_order()`  
-* 🪪 Copy trading support (`get_copy_trade_*` wrappers)  
-* 📦 Fully documented and roxygen2-ready structure  
-
----
+* Signed OKX REST requests with HMAC authentication
+* Typed parsing into tabular R objects with variable labels
+* Shared internal GET/POST generators backed by endpoint specs
+* User-facing wrappers for account, asset, market, trade, and copy-trading APIs
+* Configurable raw vs parsed return mode via `set_okxr_options()`
 
 ## Installation
 
@@ -24,7 +30,7 @@ devtools::install_github("OliverLDS/okxr")
 
 ```r
 config <- list(
-  api_key    = "your_api_key",
+  api_key = "your_api_key",
   secret_key = "your_secret_key",
   passphrase = "your_passphrase"
 )
@@ -32,107 +38,69 @@ config <- list(
 
 ## Examples
 
-### 📈 Market Data
+### Market data
 
 ```r
 get_market_candles(
   inst_id = "BTC-USDT",
-  bar     = "1m",
-  limit   = 100,
-  config  = config
+  bar = "1m",
+  limit = 100,
+  config = config
 )
 ```
 
-### 💰 Account Info
+### Account data
 
 ```r
-get_account_balance(config)
-get_account_positions(config)
+get_account_balance(config = config)
+get_account_positions(config = config)
 ```
 
-### 📤 Place an Order
+### Place an order
 
 ```r
 post_trade_order(
-  inst_id  = "BTC-USDT",
-  td_mode  = "cross",
-  side     = "buy",
+  inst_id = "BTC-USDT",
+  td_mode = "cross",
+  side = "buy",
   ord_type = "market",
-  sz       = "0.01",
-  config   = config
+  sz = "0.01",
+  config = config
 )
 ```
 
-### 👥 Copy Trading
+### Copy trading
 
 ```r
 get_copy_trade_my_leaders(config = config)
 get_copy_trade_current_subpos(config = config)
 ```
 
----
+## Wrapper categories
 
-## Wrapper Categories
+| Category | Method | Example function |
+| --- | --- | --- |
+| market | GET | `get_market_candles()` |
+| account | GET | `get_account_balance()` |
+| asset | GET | `get_asset_balances()` |
+| trade | GET | `get_trade_order()` |
+| trade | POST | `post_trade_order()` |
+| trade | POST | `post_trade_cancel_order()` |
+| copy trading | GET | `get_copy_trade_my_leaders()` |
 
-| Category      | Method | Example Function                 |
-| ------------- | ------ | -------------------------------- |
-| market        | GET    | `get_market_candles()`           |
-| account       | GET    | `get_account_balance()`          |
-| asset         | GET    | `get_asset_balances()`           |
-| trade         | GET    | `get_trade_order()`              |
-| trade         | POST   | `post_trade_order()`             |
-| trade         | POST   | `post_trade_cancel_order()`      |
-| copy trading  | GET    | `get_copy_trade_my_leaders()`    |
+## Release notes
 
----
+See [NEWS.md](NEWS.md) for release history.
 
-## Development Status
+## Development status
 
-* [x] GET support for major endpoints  
-* [x] POST support for order, cancel, leverage, close position  
-* [x] Copy trading wrappers  
-* [x] User-friendly wrappers  
-* [ ] Websocket support (planned)  
-* [ ] Strategy builder modules (planned)  
-
----
-
-## Version History
-
-### v0.1.2 – 2025-08-27
-* Added **Copy Trading GET wrappers**:
-  * `get_copy_trade_settings()`
-  * `get_copy_trade_my_leaders()`
-  * `get_copy_trade_current_subpos()`
-  * `get_copy_trade_historical_subpos()`
-* Added **Account GET wrappers**:
-  * `get_account_config()`
-  * `get_account_leverage_info()`
-* Added **Market GET wrappers**:
-  * `get_public_mark_price()`
-  * `get_public_instruments()`
-* Improved candlestick helpers with `standardize_ohlcv_names()`
-* Documentation updated and expanded (roxygen2)
-
-### v0.1.1 – 2025-07-13
-* Added new POST wrappers:
-  * `post_trade_order()`
-  * `post_trade_cancel_order()`
-  * `post_trade_close_position()`
-  * `post_account_set_leverage()`
-* Added new GET wrapper:
-  * `get_trade_orders_pending()`
-* Added helper:
-  * `standardize_ohlcv_names()`
-* Improved roxygen2 documentation for all major endpoints
-* Cleaned up and clarified internal endpoint specs
-
-### v0.1.0 – Initial Release
-* GET/POST endpoint spec framework  
-* HMAC signing, query execution core  
-* Basic wrappers for account, asset, market  
-
----
+* [x] GET support for major endpoints
+* [x] POST support for order, cancel, leverage, close position
+* [x] Copy trading wrappers
+* [x] Package metadata and generated documentation aligned for GitHub release
+* [ ] Automated test suite
+* [ ] GitHub Actions package check workflow
+* [ ] Websocket support
 
 ## License
 
@@ -140,4 +108,4 @@ MIT
 
 ## Author
 
-Oliver Lee / [LinkedIn](https://www.linkedin.com/in/oliver-lee-28b32b176/)
+Oliver Zhou
