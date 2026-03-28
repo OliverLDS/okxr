@@ -1,0 +1,19 @@
+# R package build artifacts
+*.tar.gz
+*.Rcheck/
+.Rcheck/
+
+# R session and history files
+.Rhistory
+.RData
+.Ruserdata
+R/.Rhistory
+
+# macOS / editor junk
+.DS_Store
+**/.DS_Store
+
+# Common IDE/project files
+.Rproj.user/
+*.Rproj
+.vscode/
