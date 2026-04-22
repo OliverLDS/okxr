@@ -9,3 +9,7 @@
 ^\.github/.*
 ^\.\.Rcheck$
 ^\.\.Rcheck/.*
+^.*\.Rcheck$
+^.*\.Rcheck/.*
+^.*\.tar\.gz$
+^cran-comments\.md$

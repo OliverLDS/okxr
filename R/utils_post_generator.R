@@ -16,7 +16,17 @@
 #' @examples
 #' \dontrun{
 #' place_order <- .make_post_function(.api_POST_specs$trade_order)
-#' place_order(list(instId = "BTC-USDT", tdMode = "cash", side = "buy", ordType = "market", sz = "10"), tz = "Asia/Hong_Kong", config = okx_keys)
+#' place_order(
+#'   list(
+#'     instId = "BTC-USDT",
+#'     tdMode = "cash",
+#'     side = "buy",
+#'     ordType = "market",
+#'     sz = "10"
+#'   ),
+#'   tz = "Asia/Hong_Kong",
+#'   config = okx_keys
+#' )
 #' }
 #'
 #' @keywords internal

@@ -25,7 +25,17 @@ a POST request to the OKX API and returns the parsed response using the provided
 \examples{
 \dontrun{
 place_order <- .make_post_function(.api_POST_specs$trade_order)
-place_order(list(instId = "BTC-USDT", tdMode = "cash", side = "buy", ordType = "market", sz = "10"), tz = "Asia/Hong_Kong", config = okx_keys)
+place_order(
+  list(
+    instId = "BTC-USDT",
+    tdMode = "cash",
+    side = "buy",
+    ordType = "market",
+    sz = "10"
+  ),
+  tz = "Asia/Hong_Kong",
+  config = okx_keys
+)
 }
 
 }

@@ -1,21 +1,22 @@
 Package: okxr
-Title: OKX API Wrapper for R
-Version: 0.1.7
+Title: R Interface to the 'OKX' REST API
+Version: 0.1.8
 Authors@R: person('Oliver', 'Zhou', email = 'oliver.yxzhou@gmail.com', role = c('aut', 'cre'))
 Author: Oliver Zhou [aut, cre]
 Maintainer: Oliver Zhou <oliver.yxzhou@gmail.com>
-Description: Provides lightweight R wrappers for the OKX REST API, covering 
+Description: Provides lightweight R wrappers for the 'OKX' REST API, covering 
     endpoints for market data, trading, account management, asset balances, 
     and copy trading.
 License: MIT + file LICENSE
 Encoding: UTF-8
+Language: en-US
 Imports:
     rlang,
     httr,
     jsonlite,
     digest,
     base64enc,
-	data.table
+    data.table
 Suggests:
     testthat (>= 3.0.0)
 Config/testthat/edition: 3

@@ -1,5 +1,16 @@
 # okxr news
 
+## okxr 0.1.8
+
+* Polished package metadata for future CRAN submission, including title,
+  description, language, and import formatting.
+* Added CRAN submission support files and spelling allow-list terms for
+  package-specific names.
+* Expanded build-ignore rules so local check directories, source tarballs, and
+  CRAN submission notes are excluded from package builds.
+* Updated README release status to describe the package as CRAN-targeted but not
+  yet submitted.
+
 ## okxr 0.1.7
 
 * Public market and public reference GET endpoints no longer require API
