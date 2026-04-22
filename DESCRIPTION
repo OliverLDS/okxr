@@ -1,9 +1,9 @@
 Package: okxr
 Title: OKX API Wrapper for R
 Version: 0.1.7
-Authors@R: person('Oliver', 'Zhou', email = 'olee7149@gmail.com', role = c('aut', 'cre'))
+Authors@R: person('Oliver', 'Zhou', email = 'oliver.yxzhou@gmail.com', role = c('aut', 'cre'))
 Author: Oliver Zhou [aut, cre]
-Maintainer: Oliver Zhou <olee7149@gmail.com>
+Maintainer: Oliver Zhou <oliver.yxzhou@gmail.com>
 Description: Provides lightweight R wrappers for the OKX REST API, covering 
     endpoints for market data, trading, account management, asset balances, 
     and copy trading.

@@ -32,7 +32,7 @@ account-specific side effects.
 [set_okxr_options()], [get_market_candles()], [post_trade_order()]
 }
 \author{
-\strong{Maintainer}: Oliver Zhou \email{olee7149@gmail.com}
+\strong{Maintainer}: Oliver Zhou \email{oliver.yxzhou@gmail.com}
 
 }
 \keyword{package}
