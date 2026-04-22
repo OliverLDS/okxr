@@ -9,7 +9,7 @@ copy trading, with shared request signing and schema-based response parsing.
 `okxr` is currently a GitHub-release package. It is not prepared for CRAN
 submission yet.
 
-Current release: `v0.1.4`
+Current release: `v0.1.5`
 
 ## Features
 
@@ -104,8 +104,8 @@ See [NEWS.md](NEWS.md) for release history.
 * [x] POST support for order, cancel, leverage, close position
 * [x] Copy trading wrappers
 * [x] Package metadata and generated documentation aligned for GitHub release
-* [ ] Automated test suite
-* [ ] GitHub Actions package check workflow
+* [x] Automated test suite foundation
+* [x] GitHub Actions package check workflow
 * [ ] Websocket support
 
 ## License

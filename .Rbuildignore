@@ -5,5 +5,7 @@
 ^tests/\.DS_Store$
 ^\.git$
 ^\.git/.*
+^\.github$
+^\.github/.*
 ^\.\.Rcheck$
 ^\.\.Rcheck/.*

@@ -1,5 +1,15 @@
 # okxr news
 
+## okxr 0.1.5
+
+* Added `testthat` infrastructure for package-level regression testing.
+* Added mocked unit tests for request helpers, config validation, parser behavior,
+  raw/parsed result extraction, wrapper query construction, and client order ID
+  preservation.
+* Added a GitHub Actions `R CMD check` workflow for Linux, macOS, and Windows.
+* Kept tests credential-free and network-free so they are suitable for future
+  CRAN hardening work.
+
 ## okxr 0.1.4
 
 * Added additional OKX REST GET wrappers for market data:

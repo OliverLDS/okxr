@@ -1,6 +1,6 @@
 Package: okxr
 Title: OKX API Wrapper for R
-Version: 0.1.4
+Version: 0.1.5
 Authors@R: person('Oliver', 'Zhou', email = 'olee7149@gmail.com', role = c('aut', 'cre'))
 Author: Oliver Zhou [aut, cre]
 Maintainer: Oliver Zhou <olee7149@gmail.com>
@@ -16,6 +16,9 @@ Imports:
     digest,
     base64enc,
 	data.table
+Suggests:
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3
 Collate:
     def_constants.R
     utils_request_helpers.R
