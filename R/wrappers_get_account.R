@@ -160,3 +160,71 @@ get_account_leverage_info <- function(inst_id, mgn_mode, config, tz = .okx_defau
   query_string <- .okx_build_query(instId = inst_id, mgnMode = mgn_mode)
   .gets$account_leverage_info(query_string = query_string, config = config, tz = tz)
 }
+
+#' Get account bills
+#'
+#' Retrieve account bill details from the last 7 days.
+#'
+#' @param inst_type Character or `NULL`. Instrument type filter.
+#' @param ccy Character or `NULL`. Currency filter.
+#' @param mgn_mode Character or `NULL`. Margin mode filter.
+#' @param ct_type Character or `NULL`. Contract type filter.
+#' @param type Character or `NULL`. Bill type filter.
+#' @param sub_type Character or `NULL`. Bill subtype filter.
+#' @param after Character or `NULL`. Pagination cursor for earlier records.
+#' @param before Character or `NULL`. Pagination cursor for newer records.
+#' @param limit Integer or `NULL`. Number of rows to request.
+#' @param config List. API credentials/config.
+#' @param tz Character. Time zone for parsing timestamps. Default `"Asia/Hong_Kong"`.
+#'
+#' @return A `data.frame` with account bill rows.
+#'
+#' @export
+get_account_bills <- function(inst_type = NULL, ccy = NULL, mgn_mode = NULL, ct_type = NULL, type = NULL, sub_type = NULL, after = NULL, before = NULL, limit = NULL, config, tz = .okx_default_tz) {
+  query_string <- .okx_build_query(
+    instType = inst_type,
+    ccy = ccy,
+    mgnMode = mgn_mode,
+    ctType = ct_type,
+    type = type,
+    subType = sub_type,
+    after = after,
+    before = before,
+    limit = limit
+  )
+  .gets$account_bills(query_string = query_string, config = config, tz = tz)
+}
+
+#' Get archived account bills
+#'
+#' Retrieve archived account bill details.
+#'
+#' @param inst_type Character or `NULL`. Instrument type filter.
+#' @param ccy Character or `NULL`. Currency filter.
+#' @param mgn_mode Character or `NULL`. Margin mode filter.
+#' @param ct_type Character or `NULL`. Contract type filter.
+#' @param type Character or `NULL`. Bill type filter.
+#' @param sub_type Character or `NULL`. Bill subtype filter.
+#' @param after Character or `NULL`. Pagination cursor for earlier records.
+#' @param before Character or `NULL`. Pagination cursor for newer records.
+#' @param limit Integer or `NULL`. Number of rows to request.
+#' @param config List. API credentials/config.
+#' @param tz Character. Time zone for parsing timestamps. Default `"Asia/Hong_Kong"`.
+#'
+#' @return A `data.frame` with archived account bill rows.
+#'
+#' @export
+get_account_bills_archive <- function(inst_type = NULL, ccy = NULL, mgn_mode = NULL, ct_type = NULL, type = NULL, sub_type = NULL, after = NULL, before = NULL, limit = NULL, config, tz = .okx_default_tz) {
+  query_string <- .okx_build_query(
+    instType = inst_type,
+    ccy = ccy,
+    mgnMode = mgn_mode,
+    ctType = ct_type,
+    type = type,
+    subType = sub_type,
+    after = after,
+    before = before,
+    limit = limit
+  )
+  .gets$account_bills_archive(query_string = query_string, config = config, tz = tz)
+}

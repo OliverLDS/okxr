@@ -213,6 +213,32 @@ set_okxr_options <- function(raw_data = NULL) {
     ),
     parser_mode = "named"
   ),
+
+  #----trade_fills----
+  trade_fills = list(
+    okx_path     = "/api/v5/trade/fills",
+    parser_schema       = data.frame(
+      check.names = FALSE,
+      okx    = c("instType", "instId", "tradeId", "ordId", "clOrdId", "billId", "subType", "tag", "fillPx", "fillSz", "fillIdxPx", "fillPnl", "fillPxVol", "fillPxUsd", "fee", "feeCcy", "ts"),
+      formal = c("Instrument type", "Instrument ID", "Trade ID", "Order ID", "Client Order ID", "Bill ID", "Transaction type", "Order tag", "Filled price", "Filled size", "Index price at fill", "Filled profit and loss", "Filled implied volatility", "Filled option price in USD", "Fee", "Fee currency", "Trade time"),
+      type   = c("string", "string", "string", "string", "string", "string", "string", "string", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "string", "time"),
+      stringsAsFactors = FALSE
+    ),
+    parser_mode = "named"
+  ),
+
+  #----trade_fills_history----
+  trade_fills_history = list(
+    okx_path     = "/api/v5/trade/fills-history",
+    parser_schema       = data.frame(
+      check.names = FALSE,
+      okx    = c("instType", "instId", "tradeId", "ordId", "clOrdId", "billId", "subType", "tag", "fillPx", "fillSz", "fillIdxPx", "fillPnl", "fillPxVol", "fillPxUsd", "fee", "feeCcy", "ts"),
+      formal = c("Instrument type", "Instrument ID", "Trade ID", "Order ID", "Client Order ID", "Bill ID", "Transaction type", "Order tag", "Filled price", "Filled size", "Index price at fill", "Filled profit and loss", "Filled implied volatility", "Filled option price in USD", "Fee", "Fee currency", "Trade time"),
+      type   = c("string", "string", "string", "string", "string", "string", "string", "string", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "string", "time"),
+      stringsAsFactors = FALSE
+    ),
+    parser_mode = "named"
+  ),
   
   #----copy_trade_settings----
   copy_trade_settings = list(
@@ -297,6 +323,32 @@ set_okxr_options <- function(raw_data = NULL) {
     ),
     parser_mode = "named"
   ),
+
+  #----asset_currencies----
+  asset_currencies = list(
+    okx_path     = "/api/v5/asset/currencies",
+    parser_schema       = data.frame(
+      check.names = FALSE,
+      okx    = c("ccy", "name", "chain", "ctAddr", "canDep", "canWd", "canInternal", "minDep", "minWd", "maxWd", "wdTickSz", "depEstOpenTime", "wdEstOpenTime"),
+      formal = c("Currency", "Currency name", "Chain", "Contract address", "Deposit available", "Withdrawal available", "Internal transfer available", "Minimum deposit", "Minimum withdrawal", "Maximum withdrawal", "Withdrawal tick size", "Estimated deposit open time", "Estimated withdrawal open time"),
+      type   = c("string", "string", "string", "string", "logical", "logical", "logical", "numeric", "numeric", "numeric", "numeric", "time", "time"),
+      stringsAsFactors = FALSE
+    ),
+    parser_mode = "named"
+  ),
+
+  #----asset_deposit_address----
+  asset_deposit_address = list(
+    okx_path     = "/api/v5/asset/deposit-address",
+    parser_schema       = data.frame(
+      check.names = FALSE,
+      okx    = c("ccy", "chain", "addr", "selected", "to", "memo", "tag", "pmtId", "addrEx"),
+      formal = c("Currency", "Chain", "Deposit address", "Selected address", "Address owner", "Memo", "Tag", "Payment ID", "Address extension"),
+      type   = c("string", "string", "string", "logical", "string", "string", "string", "string", "string"),
+      stringsAsFactors = FALSE
+    ),
+    parser_mode = "named"
+  ),
   
   #----account_balance----
   account_balance = list(
@@ -362,6 +414,32 @@ set_okxr_options <- function(raw_data = NULL) {
     ),
     parser_mode = "named"
   ),
+
+  #----account_bills----
+  account_bills = list(
+    okx_path     = "/api/v5/account/bills",
+    parser_schema       = data.frame(
+      check.names = FALSE,
+      okx    = c("billId", "instType", "instId", "ccy", "mgnMode", "type", "subType", "bal", "balChg", "posBal", "posBalChg", "sz", "px", "fee", "pnl", "ordId", "from", "to", "ts"),
+      formal = c("Bill ID", "Instrument type", "Instrument ID", "Currency", "Margin mode", "Bill type", "Bill subtype", "Balance", "Balance change", "Position balance", "Position balance change", "Quantity", "Price", "Fee", "Profit and loss", "Order ID", "Transfer from", "Transfer to", "Bill time"),
+      type   = c("string", "string", "string", "string", "string", "string", "string", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "string", "string", "string", "time"),
+      stringsAsFactors = FALSE
+    ),
+    parser_mode = "named"
+  ),
+
+  #----account_bills_archive----
+  account_bills_archive = list(
+    okx_path     = "/api/v5/account/bills-archive",
+    parser_schema       = data.frame(
+      check.names = FALSE,
+      okx    = c("billId", "instType", "instId", "ccy", "mgnMode", "type", "subType", "bal", "balChg", "posBal", "posBalChg", "sz", "px", "fee", "pnl", "ordId", "from", "to", "ts"),
+      formal = c("Bill ID", "Instrument type", "Instrument ID", "Currency", "Margin mode", "Bill type", "Bill subtype", "Balance", "Balance change", "Position balance", "Position balance change", "Quantity", "Price", "Fee", "Profit and loss", "Order ID", "Transfer from", "Transfer to", "Bill time"),
+      type   = c("string", "string", "string", "string", "string", "string", "string", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "string", "string", "string", "time"),
+      stringsAsFactors = FALSE
+    ),
+    parser_mode = "named"
+  ),
   
   #----market_ticker----
   market_ticker = list(
@@ -371,6 +449,58 @@ set_okxr_options <- function(raw_data = NULL) {
       okx    = c("instType", "instId", "last", "askPx", "bidPx", "ts"),
       formal = c("Instrument type", "Instrument ID", "Last traded price", "Best ask price", "Best bid price", "Ticker data generation time"),
       type   = c("string", "string", "numeric", "numeric", "numeric", "time"),
+      stringsAsFactors = FALSE
+    ),
+    parser_mode = "named"
+  ),
+
+  #----market_tickers----
+  market_tickers = list(
+    okx_path     = "/api/v5/market/tickers",
+    parser_schema       = data.frame(
+      check.names = FALSE,
+      okx    = c("instType", "instId", "last", "lastSz", "askPx", "askSz", "bidPx", "bidSz", "open24h", "high24h", "low24h", "volCcy24h", "vol24h", "sodUtc0", "sodUtc8", "ts"),
+      formal = c("Instrument type", "Instrument ID", "Last traded price", "Last traded size", "Best ask price", "Best ask size", "Best bid price", "Best bid size", "Open price in past 24 hours", "Highest price in past 24 hours", "Lowest price in past 24 hours", "24h volume in currency", "24h volume", "UTC 0 open price", "UTC 8 open price", "Ticker data generation time"),
+      type   = c("string", "string", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "time"),
+      stringsAsFactors = FALSE
+    ),
+    parser_mode = "named"
+  ),
+
+  #----market_books----
+  market_books = list(
+    okx_path     = "/api/v5/market/books",
+    parser_schema       = data.frame(
+      check.names = FALSE,
+      okx    = c("asks", "bids", "ts"),
+      formal = c("Ask levels", "Bid levels", "Order book generation time"),
+      type   = c("string", "string", "time"),
+      stringsAsFactors = FALSE
+    ),
+    parser_mode = "named"
+  ),
+
+  #----market_trades----
+  market_trades = list(
+    okx_path     = "/api/v5/market/trades",
+    parser_schema       = data.frame(
+      check.names = FALSE,
+      okx    = c("instId", "tradeId", "px", "sz", "side", "source", "ts"),
+      formal = c("Instrument ID", "Trade ID", "Trade price", "Trade quantity", "Taker side", "Order source", "Trade time"),
+      type   = c("string", "string", "numeric", "numeric", "string", "string", "time"),
+      stringsAsFactors = FALSE
+    ),
+    parser_mode = "named"
+  ),
+
+  #----market_history_trades----
+  market_history_trades = list(
+    okx_path     = "/api/v5/market/history-trades",
+    parser_schema       = data.frame(
+      check.names = FALSE,
+      okx    = c("instId", "tradeId", "px", "sz", "side", "source", "ts"),
+      formal = c("Instrument ID", "Trade ID", "Trade price", "Trade quantity", "Taker side", "Order source", "Trade time"),
+      type   = c("string", "string", "numeric", "numeric", "string", "string", "time"),
       stringsAsFactors = FALSE
     ),
     parser_mode = "named"
@@ -462,6 +592,32 @@ set_okxr_options <- function(raw_data = NULL) {
       okx    = c("instId", "oi", "oiCcy", "oiUsd", "ts"),
       formal = c("Instrument ID", "Open interest in number of contracts", "Open interest in number of coin", "Open interest in number of USD", "Data return time"),
       type   = c("string", "numeric", "numeric", "numeric", "time"),
+      stringsAsFactors = FALSE
+    ),
+    parser_mode = "named"
+  ),
+
+  #----public_time----
+  public_time = list(
+    okx_path = "/api/v5/public/time",
+    parser_schema = data.frame(
+      check.names = FALSE,
+      okx    = c("ts"),
+      formal = c("System time"),
+      type   = c("time"),
+      stringsAsFactors = FALSE
+    ),
+    parser_mode = "named"
+  ),
+
+  #----public_price_limit----
+  public_price_limit = list(
+    okx_path = "/api/v5/public/price-limit",
+    parser_schema = data.frame(
+      check.names = FALSE,
+      okx    = c("instId", "buyLmt", "sellLmt", "ts"),
+      formal = c("Instrument ID", "Highest buy price", "Lowest sell price", "Data return time"),
+      type   = c("string", "numeric", "numeric", "time"),
       stringsAsFactors = FALSE
     ),
     parser_mode = "named"

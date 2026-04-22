@@ -9,7 +9,7 @@ copy trading, with shared request signing and schema-based response parsing.
 `okxr` is currently a GitHub-release package. It is not prepared for CRAN
 submission yet.
 
-Current release: `v0.1.3`
+Current release: `v0.1.4`
 
 ## Features
 
@@ -81,9 +81,15 @@ get_copy_trade_current_subpos(config = config)
 | Category | Method | Example function |
 | --- | --- | --- |
 | market | GET | `get_market_candles()` |
+| market | GET | `get_market_tickers()` |
+| market | GET | `get_market_trades()` |
+| public | GET | `get_public_time()` |
 | account | GET | `get_account_balance()` |
+| account | GET | `get_account_bills()` |
 | asset | GET | `get_asset_balances()` |
+| asset | GET | `get_asset_currencies()` |
 | trade | GET | `get_trade_order()` |
+| trade | GET | `get_trade_fills()` |
 | trade | POST | `post_trade_order()` |
 | trade | POST | `post_trade_cancel_order()` |
 | copy trading | GET | `get_copy_trade_my_leaders()` |

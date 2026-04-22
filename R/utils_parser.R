@@ -128,7 +128,15 @@
         string = vapply(
           raw_vals,
           function(raw_val) {
-            if (is.null(raw_val)) NA_character_ else as.character(raw_val)
+            if (is.null(raw_val)) {
+              return(NA_character_)
+            }
+
+            if (is.list(raw_val)) {
+              return(as.character(jsonlite::toJSON(raw_val, auto_unbox = TRUE)))
+            }
+
+            as.character(raw_val)
           },
           character(1)
         ),

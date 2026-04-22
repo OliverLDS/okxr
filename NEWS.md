@@ -1,5 +1,21 @@
 # okxr news
 
+## okxr 0.1.4
+
+* Added additional OKX REST GET wrappers for market data:
+  `get_market_tickers()`, `get_market_books()`, `get_market_trades()`, and
+  `get_market_history_trades()`.
+* Added public-data wrappers:
+  `get_public_time()` and `get_public_price_limit()`.
+* Added trade fill wrappers:
+  `get_trade_fills()` and `get_trade_fills_history()`.
+* Added account bill wrappers:
+  `get_account_bills()` and `get_account_bills_archive()`.
+* Added funding asset metadata wrappers:
+  `get_asset_currencies()` and `get_asset_deposit_address()`.
+* Improved parser handling for list-valued response fields by encoding them as
+  JSON strings in parsed tables.
+
 ## okxr 0.1.3
 
 * Refined internal package structure with shared request helpers for config

@@ -157,6 +157,95 @@ get_market_ticker <- function(inst_id, config, tz = .okx_default_tz) {
   .gets$market_ticker(query_string = query_string, config = config, tz = tz)
 }
 
+#' Get market tickers
+#'
+#' Retrieve ticker snapshots for all instruments under an instrument type.
+#'
+#' @param inst_type Character. Instrument type, e.g. `"SPOT"`, `"SWAP"`,
+#'   `"FUTURES"`, or `"OPTION"`.
+#' @param uly Character or `NULL`. Underlying. Optional filter for derivatives.
+#' @param inst_family Character or `NULL`. Instrument family. Optional filter
+#'   for derivatives and options.
+#' @param config List. API credentials/config, typically containing
+#'   `api_key`, `secret_key`, and `passphrase`.
+#' @param tz Character. Time zone for parsing timestamps. Default `"Asia/Hong_Kong"`.
+#'
+#' @return A `data.frame` with one row per ticker.
+#'
+#' @export
+get_market_tickers <- function(inst_type, uly = NULL, inst_family = NULL, config, tz = .okx_default_tz) {
+  query_string <- .okx_build_query(
+    instType = inst_type,
+    uly = uly,
+    instFamily = inst_family
+  )
+  .gets$market_tickers(query_string = query_string, config = config, tz = tz)
+}
+
+#' Get order book
+#'
+#' Retrieve the current order book for an instrument.
+#'
+#' @param inst_id Character. Instrument ID, e.g. `"BTC-USDT"`.
+#' @param sz Integer or `NULL`. Order book depth. If `NULL`, OKX uses its
+#'   endpoint default.
+#' @param config List. API credentials/config, typically containing
+#'   `api_key`, `secret_key`, and `passphrase`.
+#' @param tz Character. Time zone for parsing timestamps. Default `"Asia/Hong_Kong"`.
+#'
+#' @return A `data.frame` with JSON-encoded `asks` and `bids` columns plus `ts`.
+#'
+#' @export
+get_market_books <- function(inst_id, sz = NULL, config, tz = .okx_default_tz) {
+  query_string <- .okx_build_query(instId = inst_id, sz = sz)
+  .gets$market_books(query_string = query_string, config = config, tz = tz)
+}
+
+#' Get recent public trades
+#'
+#' Retrieve recent public trades for an instrument.
+#'
+#' @param inst_id Character. Instrument ID, e.g. `"BTC-USDT"`.
+#' @param limit Integer or `NULL`. Number of rows to request.
+#' @param config List. API credentials/config, typically containing
+#'   `api_key`, `secret_key`, and `passphrase`.
+#' @param tz Character. Time zone for parsing timestamps. Default `"Asia/Hong_Kong"`.
+#'
+#' @return A `data.frame` with recent public trades.
+#'
+#' @export
+get_market_trades <- function(inst_id, limit = NULL, config, tz = .okx_default_tz) {
+  query_string <- .okx_build_query(instId = inst_id, limit = limit)
+  .gets$market_trades(query_string = query_string, config = config, tz = tz)
+}
+
+#' Get historical public trades
+#'
+#' Retrieve public trade history for an instrument.
+#'
+#' @param inst_id Character. Instrument ID, e.g. `"BTC-USDT"`.
+#' @param type Character or `NULL`. Pagination type, using OKX values.
+#' @param after Character or `NULL`. Pagination cursor for earlier records.
+#' @param before Character or `NULL`. Pagination cursor for newer records.
+#' @param limit Integer or `NULL`. Number of rows to request.
+#' @param config List. API credentials/config, typically containing
+#'   `api_key`, `secret_key`, and `passphrase`.
+#' @param tz Character. Time zone for parsing timestamps. Default `"Asia/Hong_Kong"`.
+#'
+#' @return A `data.frame` with historical public trades.
+#'
+#' @export
+get_market_history_trades <- function(inst_id, type = NULL, after = NULL, before = NULL, limit = NULL, config, tz = .okx_default_tz) {
+  query_string <- .okx_build_query(
+    instId = inst_id,
+    type = type,
+    after = after,
+    before = before,
+    limit = limit
+  )
+  .gets$market_history_trades(query_string = query_string, config = config, tz = tz)
+}
+
 #' Get instrument metadata
 #'
 #' Retrieve metadata for instruments of a given type.
@@ -255,4 +344,36 @@ get_public_funding_rate_history <- function(inst_id, before = NULL, after = NULL
 get_public_open_interest <- function(inst_id, inst_type, config, tz = .okx_default_tz) {
   query_string <- .okx_build_query(instType = inst_type, instId = inst_id)
   .gets$public_open_interest(query_string = query_string, config = config, tz = tz)
+}
+
+#' Get OKX system time
+#'
+#' Retrieve OKX system time.
+#'
+#' @param config List. API credentials/config, typically containing
+#'   `api_key`, `secret_key`, and `passphrase`.
+#' @param tz Character. Time zone for parsing timestamps. Default `"Asia/Hong_Kong"`.
+#'
+#' @return A one-row `data.frame` with system time.
+#'
+#' @export
+get_public_time <- function(config, tz = .okx_default_tz) {
+  .gets$public_time(query_string = "", config = config, tz = tz)
+}
+
+#' Get price limit
+#'
+#' Retrieve buy and sell price limits for an instrument.
+#'
+#' @param inst_id Character. Instrument ID, e.g. `"BTC-USDT-SWAP"`.
+#' @param config List. API credentials/config, typically containing
+#'   `api_key`, `secret_key`, and `passphrase`.
+#' @param tz Character. Time zone for parsing timestamps. Default `"Asia/Hong_Kong"`.
+#'
+#' @return A `data.frame` with price limit fields.
+#'
+#' @export
+get_public_price_limit <- function(inst_id, config, tz = .okx_default_tz) {
+  query_string <- .okx_build_query(instId = inst_id)
+  .gets$public_price_limit(query_string = query_string, config = config, tz = tz)
 }

@@ -127,3 +127,67 @@ get_trade_orders_history_7d <- function(inst_type = "SWAP", config, tz = .okx_de
   query_string <- .okx_build_query(instType = inst_type)
   .gets$trade_orders_history_7d(query_string = query_string, config = config, tz = tz)
 }
+
+#' Get trade fills
+#'
+#' Retrieve recently filled transaction details from the last 3 days.
+#'
+#' @param inst_type Character or `NULL`. Instrument type filter.
+#' @param inst_family Character or `NULL`. Instrument family filter.
+#' @param inst_id Character or `NULL`. Instrument ID filter.
+#' @param ord_id Character or `NULL`. Order ID filter.
+#' @param sub_type Character or `NULL`. Transaction subtype filter.
+#' @param after Character or `NULL`. Pagination cursor for earlier records.
+#' @param before Character or `NULL`. Pagination cursor for newer records.
+#' @param limit Integer or `NULL`. Number of rows to request.
+#' @param config List. API credentials/config.
+#' @param tz Character. Time zone for parsing timestamps. Default `"Asia/Hong_Kong"`.
+#'
+#' @return A `data.frame` with fill rows.
+#'
+#' @export
+get_trade_fills <- function(inst_type = NULL, inst_family = NULL, inst_id = NULL, ord_id = NULL, sub_type = NULL, after = NULL, before = NULL, limit = NULL, config, tz = .okx_default_tz) {
+  query_string <- .okx_build_query(
+    instType = inst_type,
+    instFamily = inst_family,
+    instId = inst_id,
+    ordId = ord_id,
+    subType = sub_type,
+    after = after,
+    before = before,
+    limit = limit
+  )
+  .gets$trade_fills(query_string = query_string, config = config, tz = tz)
+}
+
+#' Get trade fills history
+#'
+#' Retrieve historical filled transaction details from the last 3 months.
+#'
+#' @param inst_type Character. Instrument type, e.g. `"SPOT"` or `"SWAP"`.
+#' @param inst_family Character or `NULL`. Instrument family filter.
+#' @param inst_id Character or `NULL`. Instrument ID filter.
+#' @param ord_id Character or `NULL`. Order ID filter.
+#' @param sub_type Character or `NULL`. Transaction subtype filter.
+#' @param after Character or `NULL`. Pagination cursor for earlier records.
+#' @param before Character or `NULL`. Pagination cursor for newer records.
+#' @param limit Integer or `NULL`. Number of rows to request.
+#' @param config List. API credentials/config.
+#' @param tz Character. Time zone for parsing timestamps. Default `"Asia/Hong_Kong"`.
+#'
+#' @return A `data.frame` with historical fill rows.
+#'
+#' @export
+get_trade_fills_history <- function(inst_type, inst_family = NULL, inst_id = NULL, ord_id = NULL, sub_type = NULL, after = NULL, before = NULL, limit = NULL, config, tz = .okx_default_tz) {
+  query_string <- .okx_build_query(
+    instType = inst_type,
+    instFamily = inst_family,
+    instId = inst_id,
+    ordId = ord_id,
+    subType = sub_type,
+    after = after,
+    before = before,
+    limit = limit
+  )
+  .gets$trade_fills_history(query_string = query_string, config = config, tz = tz)
+}
