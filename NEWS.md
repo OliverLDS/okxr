@@ -1,5 +1,14 @@
 # okxr news
 
+## okxr 0.1.6
+
+* Added package-level help documenting credential structure, simulated trading,
+  return behavior, and live API example policy.
+* Hardened examples for CRAN readiness by avoiding live API calls in runnable
+  examples and avoiding persistent global option changes.
+* Expanded README guidance for credential handling, simulated trading, return
+  values, and network/API failure behavior.
+
 ## okxr 0.1.5
 
 * Added `testthat` infrastructure for package-level regression testing.

@@ -11,8 +11,9 @@ NULL
 #' If NULL, the function simply returns the current value.
 #'
 #' @examples
+#' old <- getOption("okxr.raw_data")
 #' set_okxr_options(raw_data = TRUE)
-#' getOption("okxr.raw_data")
+#' set_okxr_options(raw_data = old)
 #'
 #' set_okxr_options(raw_data = NULL)  # check current value
 #' @export

@@ -10,12 +10,12 @@
 #' @return A character label if \code{var} is provided, or a named character vector of all labels if \code{var = NULL}.
 #'
 #' @examples
-#' \dontrun{
-#' # Assume df is parsed from OKX API
+#' df <- data.frame(ordId = "123", px = 10)
+#' attr(df, "var_labels") <- c(ordId = "Order ID", px = "Price")
+#'
 #' get_var_label(df, "ordId")
 #' get_var_label(df, 2)
-#' get_var_label(df)  # returns all labels
-#' }
+#' get_var_label(df)
 #'
 #' @export
 get_var_label <- function(df, var = NULL, default = NA_character_) {

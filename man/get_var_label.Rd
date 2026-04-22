@@ -21,11 +21,11 @@ Returns human-readable labels attached to a data frame produced by OKX API parse
 You can retrieve all labels or a label for a specific variable by name or index.
 }
 \examples{
-\dontrun{
-# Assume df is parsed from OKX API
+df <- data.frame(ordId = "123", px = 10)
+attr(df, "var_labels") <- c(ordId = "Order ID", px = "Price")
+
 get_var_label(df, "ordId")
 get_var_label(df, 2)
-get_var_label(df)  # returns all labels
-}
+get_var_label(df)
 
 }

@@ -9,7 +9,7 @@ copy trading, with shared request signing and schema-based response parsing.
 `okxr` is currently a GitHub-release package. It is not prepared for CRAN
 submission yet.
 
-Current release: `v0.1.5`
+Current release: `v0.1.6`
 
 ## Features
 
@@ -36,7 +36,32 @@ config <- list(
 )
 ```
 
+Do not store real credentials in committed R scripts, examples, or tests. For
+interactive use, load them from environment variables or another local secret
+store. If you use OKX simulated trading, set `demo = TRUE` in `config`.
+
+```r
+config <- list(
+  api_key = Sys.getenv("OKX_API_KEY"),
+  secret_key = Sys.getenv("OKX_SECRET_KEY"),
+  passphrase = Sys.getenv("OKX_PASSPHRASE"),
+  demo = TRUE
+)
+```
+
+## Return values
+
+By default, wrappers return parsed `data.table` objects with typed columns and
+variable labels where schemas are defined. Use `set_okxr_options(raw_data = TRUE)`
+to return the raw OKX `data` payload instead.
+
+Network failures, OKX error responses, or empty API `data` payloads may return
+`NULL`.
+
 ## Examples
+
+The following examples require valid OKX credentials and network access. Trading
+examples may have account side effects.
 
 ### Market data
 
@@ -106,6 +131,7 @@ See [NEWS.md](NEWS.md) for release history.
 * [x] Package metadata and generated documentation aligned for GitHub release
 * [x] Automated test suite foundation
 * [x] GitHub Actions package check workflow
+* [x] CRAN-safe package examples and package-level help
 * [ ] Websocket support
 
 ## License
