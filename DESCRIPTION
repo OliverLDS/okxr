@@ -1,6 +1,6 @@
 Package: okxr
 Title: R Interface to the 'OKX' REST API
-Version: 0.2.1
+Version: 0.2.2
 Authors@R: person('Oliver', 'Zhou', email = 'oliver.yxzhou@gmail.com', role = c('aut', 'cre'))
 Author: Oliver Zhou [aut, cre]
 Maintainer: Oliver Zhou <oliver.yxzhou@gmail.com>

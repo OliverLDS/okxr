@@ -28,6 +28,7 @@ first CRAN submission.
 
 Before submission, run the manual CRAN preflight workflow and update this file
 with the final check results from an environment with working DNS and LaTeX.
+Use `CRAN-SUBMISSION.md` as the final release checklist.
 
 The package wraps selected 'OKX' REST API endpoints. Runnable examples and tests
 do not require live credentials, do not call live trading endpoints, and do not

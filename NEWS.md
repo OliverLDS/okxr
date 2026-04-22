@@ -1,5 +1,13 @@
 # okxr news
 
+## okxr 0.2.2
+
+* Added a repo-only CRAN submission checklist for the final manual pre-submission
+  steps.
+* Updated CRAN submission notes to point to the final checklist and preflight
+  workflow.
+* Updated package-level release metadata for the CRAN polish release.
+
 ## okxr 0.2.1
 
 * Added a manual GitHub Actions CRAN preflight workflow that runs

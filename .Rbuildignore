@@ -13,3 +13,4 @@
 ^.*\.Rcheck/.*
 ^.*\.tar\.gz$
 ^cran-comments\.md$
+^CRAN-SUBMISSION\.md$
