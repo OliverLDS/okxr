@@ -1,5 +1,14 @@
 # okxr news
 
+## okxr 0.1.9
+
+* Added mocked HTTP tests for successful GET/POST execution, HTTP errors,
+  request errors, and private credential validation.
+* Hardened response parsing so malformed or unreadable JSON responses warn and
+  return `NULL` instead of bubbling parser errors.
+* Added parser coverage for malformed response bodies and missing fields.
+* Updated release metadata for the robustness-focused CRAN preparation release.
+
 ## okxr 0.1.8
 
 * Polished package metadata for future CRAN submission, including title,

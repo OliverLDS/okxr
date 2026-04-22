@@ -68,10 +68,19 @@
       return(NULL)
     }
 
-    parsed <- httr::content(res, as = "parsed", type = "application/json")
+    parsed <- tryCatch(
+      httr::content(res, as = "parsed", type = "application/json"),
+      error = function(err) {
+        warning("Response parsing failed: ", conditionMessage(err), call. = FALSE)
+        NULL
+      }
+    )
+    if (is.null(parsed)) {
+      return(NULL)
+    }
 
     if (parsed$code != "0") {
-      warning("Request failed: ", parsed$msg)
+      warning("Request failed: ", parsed$msg %||% "unknown OKX API error", call. = FALSE)
       return(NULL)
     }
 

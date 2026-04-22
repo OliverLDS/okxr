@@ -57,3 +57,34 @@ test_that(".make_parser handles API failures, empty data, and list-valued fields
   parsed <- parser(mock_okx_response(list(list(asks = list(list("1", "2"))))), tz = "UTC")
   expect_match(parsed$data_dt$asks, "\\[")
 })
+
+test_that(".make_parser warns and returns NULL for malformed responses", {
+  schema <- data.frame(
+    okx = "px",
+    formal = "Price",
+    type = "numeric",
+    stringsAsFactors = FALSE
+  )
+  parser <- okxr:::.make_parser(schema, mode = "named")
+
+  expect_warning(
+    expect_null(parser(mock_text_response("{not-json"), tz = "UTC")),
+    "Response parsing failed"
+  )
+})
+
+test_that(".make_parser keeps missing fields as typed missing values", {
+  schema <- data.frame(
+    okx = c("px", "count", "name"),
+    formal = c("Price", "Count", "Name"),
+    type = c("numeric", "integer", "string"),
+    stringsAsFactors = FALSE
+  )
+  parser <- okxr:::.make_parser(schema, mode = "named")
+
+  parsed <- parser(mock_okx_response(list(list(px = "12.5"))), tz = "UTC")
+
+  expect_equal(parsed$data_dt$px, 12.5)
+  expect_true(is.na(parsed$data_dt$count))
+  expect_true(is.na(parsed$data_dt$name))
+})

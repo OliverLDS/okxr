@@ -57,3 +57,92 @@ test_that(".build_request can build unsigned public requests without config", {
   expect_equal(req$url, "https://www.okx.com/api/v5/public/time")
   expect_null(req$headers)
 })
+
+test_that(".execute_get_action handles unsigned success, HTTP error, and request error", {
+  called <- new.env(parent = emptyenv())
+  called$url <- NULL
+  called$has_headers <- FALSE
+
+  testthat::local_mocked_bindings(
+    GET = function(url, ...) {
+      called$url <- url
+      called$has_headers <- length(list(...)) > 1L
+      mock_http_response()
+    },
+    .package = "httr"
+  )
+
+  res <- okxr:::.execute_get_action("/api/v5/public/time", "", auth = FALSE)
+  expect_s3_class(res, "response")
+  expect_equal(called$url, "https://www.okx.com/api/v5/public/time")
+  expect_false(called$has_headers)
+
+  testthat::local_mocked_bindings(
+    GET = function(url, ...) mock_http_response(status_code = 500L),
+    .package = "httr"
+  )
+  expect_warning(
+    expect_null(okxr:::.execute_get_action("/api/v5/public/time", "", auth = FALSE)),
+    "Request failed: 500"
+  )
+
+  testthat::local_mocked_bindings(
+    GET = function(url, ...) stop("timeout"),
+    .package = "httr"
+  )
+  expect_warning(
+    expect_null(okxr:::.execute_get_action("/api/v5/public/time", "", auth = FALSE)),
+    "timeout"
+  )
+})
+
+test_that(".execute_get_action validates credentials for private requests before HTTP", {
+  testthat::local_mocked_bindings(
+    GET = function(url, ...) stop("should not call HTTP"),
+    .package = "httr"
+  )
+
+  expect_error(
+    okxr:::.execute_get_action("/api/v5/account/balance", "", config = list(), auth = TRUE),
+    "Missing required config field"
+  )
+})
+
+test_that(".execute_post_action handles success, HTTP error, and request error", {
+  cfg <- list(api_key = "key", secret_key = "secret", passphrase = "pass")
+  called <- new.env(parent = emptyenv())
+  called$body <- NULL
+  called$encode <- NULL
+
+  testthat::local_mocked_bindings(
+    POST = function(url, ..., body = NULL, encode = NULL) {
+      called$body <- body
+      called$encode <- encode
+      mock_http_response()
+    },
+    .package = "httr"
+  )
+
+  res <- okxr:::.execute_post_action("/api/v5/trade/order", list(instId = "BTC-USDT"), cfg)
+  expect_s3_class(res, "response")
+  expect_match(called$body, "BTC-USDT")
+  expect_equal(called$encode, "raw")
+
+  testthat::local_mocked_bindings(
+    POST = function(url, ..., body = NULL, encode = NULL) mock_http_response(status_code = 429L),
+    .package = "httr"
+  )
+  expect_warning(
+    expect_null(okxr:::.execute_post_action("/api/v5/trade/order", list(), cfg)),
+    "Request failed: 429"
+  )
+
+  testthat::local_mocked_bindings(
+    POST = function(url, ..., body = NULL, encode = NULL) stop("connection failed"),
+    .package = "httr"
+  )
+  expect_warning(
+    expect_null(okxr:::.execute_post_action("/api/v5/trade/order", list(), cfg)),
+    "connection failed"
+  )
+})

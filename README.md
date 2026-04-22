@@ -9,7 +9,7 @@ copy trading, with shared request signing and schema-based response parsing.
 `okxr` is currently a GitHub-release package. It is being hardened for a future
 CRAN submission, but has not been submitted to CRAN yet.
 
-Current release: `v0.1.8`
+Current release: `v0.1.9`
 
 ## Features
 
@@ -140,6 +140,7 @@ See [NEWS.md](NEWS.md) for release history.
 * [x] CRAN-safe package examples and package-level help
 * [x] Unsigned public endpoints and request timeout handling
 * [x] CRAN policy hygiene files and release metadata cleanup
+* [x] Mocked request/parser robustness tests
 * [ ] Websocket support
 
 ## License
