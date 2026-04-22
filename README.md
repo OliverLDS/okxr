@@ -9,7 +9,7 @@ copy trading, with shared request signing and schema-based response parsing.
 `okxr` is a CRAN-targeted release candidate. It has not been submitted to CRAN
 yet; until acceptance, install the development release from GitHub.
 
-Current release: `v0.2.2`
+Current release: `v0.2.3`
 
 ## Features
 
@@ -152,6 +152,7 @@ See [NEWS.md](NEWS.md) for release history.
 * [x] CRAN release-candidate documentation alignment
 * [x] Manual CRAN preflight workflow for release checks
 * [x] CRAN submission checklist for final manual steps
+* [x] Final CRAN submission metadata update
 * [ ] Websocket support
 
 ## License

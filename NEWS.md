@@ -1,5 +1,10 @@
 # okxr news
 
+## okxr 0.2.3
+
+* Updated CRAN submission notes with successful GitHub Actions check results.
+* Bumped release metadata for the final CRAN submission preparation release.
+
 ## okxr 0.2.2
 
 * Added a repo-only CRAN submission checklist for the final manual pre-submission
