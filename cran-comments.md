@@ -18,9 +18,9 @@ submission.
 
 ## Submission notes
 
-This is a pre-CRAN GitHub release used to harden package metadata, examples,
-mocked HTTP behavior, parser robustness, and test behavior before first CRAN
-submission.
+This is a CRAN-targeted release candidate used to verify package metadata,
+examples, mocked HTTP behavior, parser robustness, and test behavior before
+first CRAN submission.
 
 The package wraps selected 'OKX' REST API endpoints. Runnable examples and tests
 do not require live credentials, do not call live trading endpoints, and do not

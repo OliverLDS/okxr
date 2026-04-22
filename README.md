@@ -6,10 +6,10 @@ copy trading, with shared request signing and schema-based response parsing.
 
 ## Status
 
-`okxr` is currently a GitHub-release package. It is being hardened for a future
-CRAN submission, but has not been submitted to CRAN yet.
+`okxr` is a CRAN-targeted release candidate. It has not been submitted to CRAN
+yet; until acceptance, install the development release from GitHub.
 
-Current release: `v0.1.9`
+Current release: `v0.2.0`
 
 ## Features
 
@@ -22,8 +22,15 @@ Current release: `v0.1.9`
 ## Installation
 
 ```r
+# Development release
 # install.packages("devtools")
 devtools::install_github("OliverLDS/okxr")
+```
+
+After CRAN acceptance, installation will use:
+
+```r
+install.packages("okxr")
 ```
 
 ## Setup
@@ -67,8 +74,9 @@ request with `config$timeout`.
 
 ## Examples
 
-The following examples require valid OKX credentials and network access. Trading
-examples may have account side effects.
+Public market examples require network access but no OKX credentials. Private
+account, trading, asset, and copy-trading examples require valid OKX credentials;
+trading examples may have account side effects.
 
 ### Market data
 
@@ -141,6 +149,7 @@ See [NEWS.md](NEWS.md) for release history.
 * [x] Unsigned public endpoints and request timeout handling
 * [x] CRAN policy hygiene files and release metadata cleanup
 * [x] Mocked request/parser robustness tests
+* [x] CRAN release-candidate documentation alignment
 * [ ] Websocket support
 
 ## License

@@ -1,5 +1,14 @@
 # okxr news
 
+## okxr 0.2.0
+
+* Marked the package as a CRAN-targeted release candidate.
+* Updated README installation and status wording so it no longer describes the
+  package as GitHub-release only.
+* Clarified public versus private example requirements in package-level
+  documentation.
+* Rechecked release metadata and package-level documentation for consistency.
+
 ## okxr 0.1.9
 
 * Added mocked HTTP tests for successful GET/POST execution, HTTP errors,
