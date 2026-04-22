@@ -1,5 +1,13 @@
 # okxr news
 
+## okxr 0.2.1
+
+* Added a manual GitHub Actions CRAN preflight workflow that runs
+  `R CMD check --as-cran` with LaTeX support.
+* Updated CRAN submission notes to separate local package checks from
+  environment-dependent incoming, URL, and PDF-manual checks.
+* Updated package-level release metadata for the CRAN preflight release.
+
 ## okxr 0.2.0
 
 * Marked the package as a CRAN-targeted release candidate.
