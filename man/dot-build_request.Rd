@@ -9,8 +9,9 @@
   base_url,
   api_path,
   query_string,
-  config,
-  body_json = ""
+  config = NULL,
+  body_json = "",
+  auth = TRUE
 )
 }
 \arguments{
@@ -25,6 +26,8 @@
 \item{config}{List with API credentials.}
 
 \item{body_json}{Optional JSON string for POST body.}
+
+\item{auth}{Logical. Whether to sign the request with OKX credentials.}
 }
 \value{
 A list with elements: `method`, `url`, `full_path`, `headers`, and `body_json`.

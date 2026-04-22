@@ -4,13 +4,13 @@
 \alias{get_market_ticker}
 \title{Get market ticker}
 \usage{
-get_market_ticker(inst_id, config, tz = .okx_default_tz)
+get_market_ticker(inst_id, config = NULL, tz = .okx_default_tz)
 }
 \arguments{
 \item{inst_id}{Character. Instrument ID, e.g. `"BTC-USDT"` or `"ETH-USDT-SWAP"`.}
 
-\item{config}{List. API credentials/config, typically containing
-`api_key`, `secret_key`, and `passphrase`.}
+\item{config}{Optional list. Public endpoint request options, such as
+`timeout`; credentials are not required.}
 
 \item{tz}{Character. Time zone for parsing timestamps. Default `"Asia/Hong_Kong"`.}
 }

@@ -9,7 +9,7 @@ get_public_funding_rate_history(
   before = NULL,
   after = NULL,
   limit = 400,
-  config,
+  config = NULL,
   tz = .okx_default_tz
 )
 }
@@ -22,8 +22,8 @@ get_public_funding_rate_history(
 
 \item{limit}{Integer. Number of records to request. Default `400`.}
 
-\item{config}{List. API credentials/config, typically containing
-`api_key`, `secret_key`, and `passphrase`.}
+\item{config}{Optional list. Public endpoint request options, such as
+`timeout`; credentials are not required.}
 
 \item{tz}{Character. Time zone for parsing timestamps. Default `"Asia/Hong_Kong"`.}
 }

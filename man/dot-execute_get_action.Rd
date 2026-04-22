@@ -4,7 +4,7 @@
 \alias{.execute_get_action}
 \title{Execute a GET request to OKX}
 \usage{
-.execute_get_action(api_path, query_string, config)
+.execute_get_action(api_path, query_string, config = NULL, auth = TRUE)
 }
 \arguments{
 \item{api_path}{API path (e.g., "/api/v5/account/balance").}
@@ -12,6 +12,8 @@
 \item{query_string}{Query string starting with "?" or empty.}
 
 \item{config}{List with API credentials.}
+
+\item{auth}{Logical. Whether to sign the request with OKX credentials.}
 }
 \value{
 An `httr` response object, or `NULL` if the request fails.

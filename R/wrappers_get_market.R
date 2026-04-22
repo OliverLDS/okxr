@@ -27,8 +27,8 @@
 #' @param inst_id Character. Instrument ID, e.g. `"BTC-USDT"`, `"ETH-USDT-SWAP"`.
 #' @param bar Character. Candlestick granularity, e.g. `"1m"`, `"5m"`, `"1H"`, `"1D"`.
 #' @param limit Integer. Number of bars to retrieve. Default `100L`.
-#' @param config List. API credentials/config, typically containing
-#'   `api_key`, `secret_key`, and `passphrase`.
+#' @param config Optional list. Public endpoint request options, such as
+#'   `timeout`; credentials are not required.
 #' @param tz Character. Time zone for parsing timestamps. Default `"Asia/Hong_Kong"`.
 #' @param standardize_names Logical. If `TRUE` (default), renames columns to
 #'   `timestamp`, `open`, `high`, `low`, `close`, `volume`, `volQuote`.
@@ -47,7 +47,7 @@
 #' @family okxr-market
 #' @note Since okxr 0.1.1
 #' @export
-get_market_candles <- function(inst_id, bar, limit = 100L, config, tz = .okx_default_tz, standardize_names = TRUE) {
+get_market_candles <- function(inst_id, bar, limit = 100L, config = NULL, tz = .okx_default_tz, standardize_names = TRUE) {
   query_string <- .okx_build_query(instId = inst_id, bar = bar, limit = as.integer(limit))
   df <- .gets$market_candles(query_string = query_string, config = config, tz = tz)
   if (standardize_names) return(.okx_standardize_ohlcv_names(df))
@@ -68,8 +68,8 @@ get_market_candles <- function(inst_id, bar, limit = 100L, config, tz = .okx_def
 #' @param before Character or `NULL`. Timestamp string in format
 #'   `"\%Y-\%m-\%d \%H:\%M:\%S"`. If `NULL` (default), fetches most recent history.
 #' @param limit Integer. Number of bars to retrieve. Default `100L`.
-#' @param config List. API credentials/config, typically containing
-#'   `api_key`, `secret_key`, and `passphrase`.
+#' @param config Optional list. Public endpoint request options, such as
+#'   `timeout`; credentials are not required.
 #' @param tz Character. Time zone for parsing timestamps. Default `"Asia/Hong_Kong"`.
 #' @param standardize_names Logical. If `TRUE` (default), renames columns to
 #'   `timestamp`, `open`, `high`, `low`, `close`, `volume`, `volQuote`.
@@ -91,7 +91,7 @@ get_market_candles <- function(inst_id, bar, limit = 100L, config, tz = .okx_def
 #' @family okxr-market
 #' @note Since okxr 0.1.1
 #' @export
-get_market_history_candles <- function(inst_id, bar, before = NULL, limit = 100L, config, tz = .okx_default_tz, standardize_names = TRUE) {
+get_market_history_candles <- function(inst_id, bar, before = NULL, limit = 100L, config = NULL, tz = .okx_default_tz, standardize_names = TRUE) {
   before_ms <- .okx_datetime_to_ms(before, tz = tz)
   query_string <- .okx_build_query(
     instId = inst_id,
@@ -118,8 +118,8 @@ get_market_history_candles <- function(inst_id, bar, before = NULL, limit = 100L
 #' @param inst_id Character. Instrument ID, e.g. `"BTC-USDT"`, `"ETH-USDT-SWAP"`.
 #' @param inst_type Character. Instrument type. One of `"SPOT"`, `"MARGIN"`,
 #'   `"SWAP"` (default), `"FUTURES"`, `"OPTION"`.
-#' @param config List. API credentials/config, typically containing
-#'   `api_key`, `secret_key`, and `passphrase`.
+#' @param config Optional list. Public endpoint request options, such as
+#'   `timeout`; credentials are not required.
 #' @param tz Character. Time zone for parsing timestamps. Default `"Asia/Hong_Kong"`.
 #'
 #' @return
@@ -135,7 +135,7 @@ get_market_history_candles <- function(inst_id, bar, before = NULL, limit = 100L
 #' @family okxr-market
 #' @note Since okxr 0.1.1
 #' @export
-get_public_mark_price <- function(inst_id, inst_type = "SWAP", config, tz = .okx_default_tz) {
+get_public_mark_price <- function(inst_id, inst_type = "SWAP", config = NULL, tz = .okx_default_tz) {
   query_string <- .okx_build_query(instType = inst_type, instId = inst_id)
   .gets$public_mark_price(query_string = query_string, config = config, tz = tz)
 }
@@ -145,14 +145,14 @@ get_public_mark_price <- function(inst_id, inst_type = "SWAP", config, tz = .okx
 #' Retrieve the latest ticker snapshot for a specific instrument.
 #'
 #' @param inst_id Character. Instrument ID, e.g. `"BTC-USDT"` or `"ETH-USDT-SWAP"`.
-#' @param config List. API credentials/config, typically containing
-#'   `api_key`, `secret_key`, and `passphrase`.
+#' @param config Optional list. Public endpoint request options, such as
+#'   `timeout`; credentials are not required.
 #' @param tz Character. Time zone for parsing timestamps. Default `"Asia/Hong_Kong"`.
 #'
 #' @return A `data.frame` with the latest ticker fields returned by OKX.
 #'
 #' @export
-get_market_ticker <- function(inst_id, config, tz = .okx_default_tz) {
+get_market_ticker <- function(inst_id, config = NULL, tz = .okx_default_tz) {
   query_string <- .okx_build_query(instId = inst_id)
   .gets$market_ticker(query_string = query_string, config = config, tz = tz)
 }
@@ -166,14 +166,14 @@ get_market_ticker <- function(inst_id, config, tz = .okx_default_tz) {
 #' @param uly Character or `NULL`. Underlying. Optional filter for derivatives.
 #' @param inst_family Character or `NULL`. Instrument family. Optional filter
 #'   for derivatives and options.
-#' @param config List. API credentials/config, typically containing
-#'   `api_key`, `secret_key`, and `passphrase`.
+#' @param config Optional list. Public endpoint request options, such as
+#'   `timeout`; credentials are not required.
 #' @param tz Character. Time zone for parsing timestamps. Default `"Asia/Hong_Kong"`.
 #'
 #' @return A `data.frame` with one row per ticker.
 #'
 #' @export
-get_market_tickers <- function(inst_type, uly = NULL, inst_family = NULL, config, tz = .okx_default_tz) {
+get_market_tickers <- function(inst_type, uly = NULL, inst_family = NULL, config = NULL, tz = .okx_default_tz) {
   query_string <- .okx_build_query(
     instType = inst_type,
     uly = uly,
@@ -189,14 +189,14 @@ get_market_tickers <- function(inst_type, uly = NULL, inst_family = NULL, config
 #' @param inst_id Character. Instrument ID, e.g. `"BTC-USDT"`.
 #' @param sz Integer or `NULL`. Order book depth. If `NULL`, OKX uses its
 #'   endpoint default.
-#' @param config List. API credentials/config, typically containing
-#'   `api_key`, `secret_key`, and `passphrase`.
+#' @param config Optional list. Public endpoint request options, such as
+#'   `timeout`; credentials are not required.
 #' @param tz Character. Time zone for parsing timestamps. Default `"Asia/Hong_Kong"`.
 #'
 #' @return A `data.frame` with JSON-encoded `asks` and `bids` columns plus `ts`.
 #'
 #' @export
-get_market_books <- function(inst_id, sz = NULL, config, tz = .okx_default_tz) {
+get_market_books <- function(inst_id, sz = NULL, config = NULL, tz = .okx_default_tz) {
   query_string <- .okx_build_query(instId = inst_id, sz = sz)
   .gets$market_books(query_string = query_string, config = config, tz = tz)
 }
@@ -207,14 +207,14 @@ get_market_books <- function(inst_id, sz = NULL, config, tz = .okx_default_tz) {
 #'
 #' @param inst_id Character. Instrument ID, e.g. `"BTC-USDT"`.
 #' @param limit Integer or `NULL`. Number of rows to request.
-#' @param config List. API credentials/config, typically containing
-#'   `api_key`, `secret_key`, and `passphrase`.
+#' @param config Optional list. Public endpoint request options, such as
+#'   `timeout`; credentials are not required.
 #' @param tz Character. Time zone for parsing timestamps. Default `"Asia/Hong_Kong"`.
 #'
 #' @return A `data.frame` with recent public trades.
 #'
 #' @export
-get_market_trades <- function(inst_id, limit = NULL, config, tz = .okx_default_tz) {
+get_market_trades <- function(inst_id, limit = NULL, config = NULL, tz = .okx_default_tz) {
   query_string <- .okx_build_query(instId = inst_id, limit = limit)
   .gets$market_trades(query_string = query_string, config = config, tz = tz)
 }
@@ -228,14 +228,14 @@ get_market_trades <- function(inst_id, limit = NULL, config, tz = .okx_default_t
 #' @param after Character or `NULL`. Pagination cursor for earlier records.
 #' @param before Character or `NULL`. Pagination cursor for newer records.
 #' @param limit Integer or `NULL`. Number of rows to request.
-#' @param config List. API credentials/config, typically containing
-#'   `api_key`, `secret_key`, and `passphrase`.
+#' @param config Optional list. Public endpoint request options, such as
+#'   `timeout`; credentials are not required.
 #' @param tz Character. Time zone for parsing timestamps. Default `"Asia/Hong_Kong"`.
 #'
 #' @return A `data.frame` with historical public trades.
 #'
 #' @export
-get_market_history_trades <- function(inst_id, type = NULL, after = NULL, before = NULL, limit = NULL, config, tz = .okx_default_tz) {
+get_market_history_trades <- function(inst_id, type = NULL, after = NULL, before = NULL, limit = NULL, config = NULL, tz = .okx_default_tz) {
   query_string <- .okx_build_query(
     instId = inst_id,
     type = type,
@@ -258,8 +258,8 @@ get_market_history_trades <- function(inst_id, type = NULL, after = NULL, before
 #'   `NULL` to fetch all instruments of `inst_type`.
 #' @param inst_type Character. Instrument type. One of `"SPOT"`, `"MARGIN"`,
 #'   `"SWAP"` (default), `"FUTURES"`, `"OPTION"`.
-#' @param config List. API credentials/config, typically containing
-#'   `api_key`, `secret_key`, and `passphrase`.
+#' @param config Optional list. Public endpoint request options, such as
+#'   `timeout`; credentials are not required.
 #' @param tz Character. Time zone for parsing timestamps. Default `"Asia/Hong_Kong"`.
 #'
 #' @return
@@ -281,7 +281,7 @@ get_market_history_trades <- function(inst_id, type = NULL, after = NULL, before
 #' @family okxr-market
 #' @note Since okxr 0.1.2
 #' @export
-get_public_instruments <- function(inst_id = NULL, inst_type = "SWAP", config, tz = .okx_default_tz) {
+get_public_instruments <- function(inst_id = NULL, inst_type = "SWAP", config = NULL, tz = .okx_default_tz) {
   query_string <- .okx_build_query(instType = inst_type, instId = inst_id)
   .gets$public_instruments(query_string = query_string, config = config, tz = tz)
 }
@@ -291,14 +291,14 @@ get_public_instruments <- function(inst_id = NULL, inst_type = "SWAP", config, t
 #' Retrieve the current funding rate for a perpetual swap instrument.
 #'
 #' @param inst_id Character. Instrument ID, e.g. `"BTC-USDT-SWAP"`.
-#' @param config List. API credentials/config, typically containing
-#'   `api_key`, `secret_key`, and `passphrase`.
+#' @param config Optional list. Public endpoint request options, such as
+#'   `timeout`; credentials are not required.
 #' @param tz Character. Time zone for parsing timestamps. Default `"Asia/Hong_Kong"`.
 #'
 #' @return A `data.frame` containing the current funding rate fields returned by OKX.
 #'
 #' @export
-get_public_funding_rate <- function(inst_id, config, tz = .okx_default_tz) {
+get_public_funding_rate <- function(inst_id, config = NULL, tz = .okx_default_tz) {
   query_string <- .okx_build_query(instId = inst_id)
   .gets$public_funding_rate(query_string = query_string, config = config, tz = tz)
 }
@@ -311,14 +311,14 @@ get_public_funding_rate <- function(inst_id, config, tz = .okx_default_tz) {
 #' @param before Optional cursor for records earlier than the supplied value.
 #' @param after Optional cursor for records later than the supplied value.
 #' @param limit Integer. Number of records to request. Default `400`.
-#' @param config List. API credentials/config, typically containing
-#'   `api_key`, `secret_key`, and `passphrase`.
+#' @param config Optional list. Public endpoint request options, such as
+#'   `timeout`; credentials are not required.
 #' @param tz Character. Time zone for parsing timestamps. Default `"Asia/Hong_Kong"`.
 #'
 #' @return A `data.frame` containing funding rate history rows returned by OKX.
 #'
 #' @export
-get_public_funding_rate_history <- function(inst_id, before = NULL, after = NULL, limit = 400, config, tz = .okx_default_tz) {
+get_public_funding_rate_history <- function(inst_id, before = NULL, after = NULL, limit = 400, config = NULL, tz = .okx_default_tz) {
   query_string <- .okx_build_query(
     instId = inst_id,
     before = before,
@@ -334,14 +334,14 @@ get_public_funding_rate_history <- function(inst_id, before = NULL, after = NULL
 #'
 #' @param inst_id Character. Instrument ID, e.g. `"BTC-USDT-SWAP"`.
 #' @param inst_type Character. Instrument type such as `"SWAP"` or `"FUTURES"`.
-#' @param config List. API credentials/config, typically containing
-#'   `api_key`, `secret_key`, and `passphrase`.
+#' @param config Optional list. Public endpoint request options, such as
+#'   `timeout`; credentials are not required.
 #' @param tz Character. Time zone for parsing timestamps. Default `"Asia/Hong_Kong"`.
 #'
 #' @return A `data.frame` containing open interest fields returned by OKX.
 #'
 #' @export
-get_public_open_interest <- function(inst_id, inst_type, config, tz = .okx_default_tz) {
+get_public_open_interest <- function(inst_id, inst_type, config = NULL, tz = .okx_default_tz) {
   query_string <- .okx_build_query(instType = inst_type, instId = inst_id)
   .gets$public_open_interest(query_string = query_string, config = config, tz = tz)
 }
@@ -350,14 +350,14 @@ get_public_open_interest <- function(inst_id, inst_type, config, tz = .okx_defau
 #'
 #' Retrieve OKX system time.
 #'
-#' @param config List. API credentials/config, typically containing
-#'   `api_key`, `secret_key`, and `passphrase`.
+#' @param config Optional list. Public endpoint request options, such as
+#'   `timeout`; credentials are not required.
 #' @param tz Character. Time zone for parsing timestamps. Default `"Asia/Hong_Kong"`.
 #'
 #' @return A one-row `data.frame` with system time.
 #'
 #' @export
-get_public_time <- function(config, tz = .okx_default_tz) {
+get_public_time <- function(config = NULL, tz = .okx_default_tz) {
   .gets$public_time(query_string = "", config = config, tz = tz)
 }
 
@@ -366,14 +366,14 @@ get_public_time <- function(config, tz = .okx_default_tz) {
 #' Retrieve buy and sell price limits for an instrument.
 #'
 #' @param inst_id Character. Instrument ID, e.g. `"BTC-USDT-SWAP"`.
-#' @param config List. API credentials/config, typically containing
-#'   `api_key`, `secret_key`, and `passphrase`.
+#' @param config Optional list. Public endpoint request options, such as
+#'   `timeout`; credentials are not required.
 #' @param tz Character. Time zone for parsing timestamps. Default `"Asia/Hong_Kong"`.
 #'
 #' @return A `data.frame` with price limit fields.
 #'
 #' @export
-get_public_price_limit <- function(inst_id, config, tz = .okx_default_tz) {
+get_public_price_limit <- function(inst_id, config = NULL, tz = .okx_default_tz) {
   query_string <- .okx_build_query(instId = inst_id)
   .gets$public_price_limit(query_string = query_string, config = config, tz = tz)
 }

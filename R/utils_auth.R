@@ -51,12 +51,13 @@
 #' @param query_string Query string starting with "?" or empty.
 #' @param config List with API credentials.
 #' @param body_json Optional JSON string for POST body.
+#' @param auth Logical. Whether to sign the request with OKX credentials.
 #'
 #' @return A list with elements: `method`, `url`, `full_path`, `headers`, and `body_json`.
-.build_request <- function(httr_method, base_url, api_path, query_string, config, body_json = "") {
+.build_request <- function(httr_method, base_url, api_path, query_string, config = NULL, body_json = "", auth = TRUE) {
   full_path <- paste0(api_path, query_string)
   full_url  <- paste0(base_url, full_path)
-  headers   <- .get_headers(config, httr_method, full_path, body_json)
+  headers   <- if (auth) .get_headers(config, httr_method, full_path, body_json) else NULL
 
   list(
     method     = httr_method,
@@ -74,15 +75,32 @@
 #' @param api_path API path (e.g., "/api/v5/account/balance").
 #' @param query_string Query string starting with "?" or empty.
 #' @param config List with API credentials.
+#' @param auth Logical. Whether to sign the request with OKX credentials.
 #'
 #' @return An `httr` response object, or `NULL` if the request fails.
-.execute_get_action <- function(api_path, query_string, config) {
+.execute_get_action <- function(api_path, query_string, config = NULL, auth = TRUE) {
   base_url <- .okx_base_url
   httr_method <- "GET"
-  req <- .build_request(httr_method, base_url, api_path, query_string, config)
-  res <- httr::GET(req$url, req$headers)
+  req <- .build_request(httr_method, base_url, api_path, query_string, config, auth = auth)
+  timeout <- .okx_request_timeout(config)
+  res <- tryCatch(
+    {
+      if (is.null(req$headers)) {
+        httr::GET(req$url, timeout)
+      } else {
+        httr::GET(req$url, req$headers, timeout)
+      }
+    },
+    error = function(err) {
+      warning("Request failed: ", conditionMessage(err), call. = FALSE)
+      NULL
+    }
+  )
+  if (is.null(res)) {
+    return(NULL)
+  }
   if (httr::http_error(res)) {
-    warning("Request failed: ", httr::status_code(res))
+    warning("Request failed: ", httr::status_code(res), call. = FALSE)
     return(NULL)
   }
   res
@@ -109,12 +127,24 @@
     api_path      = api_path,
     query_string  = "",
     config        = config,
-    body_json     = body_json
+    body_json     = body_json,
+    auth          = TRUE
   )
 
-  res <- httr::POST(req$url, req$headers, body = req$body_json, encode = "raw")
+  timeout <- .okx_request_timeout(config)
+  res <- tryCatch(
+    httr::POST(req$url, req$headers, timeout, body = req$body_json, encode = "raw"),
+    error = function(err) {
+      warning("Request failed: ", conditionMessage(err), call. = FALSE)
+      NULL
+    }
+  )
+
+  if (is.null(res)) {
+    return(NULL)
+  }
   if (httr::http_error(res)) {
-    warning("Request failed: ", httr::status_code(res))
+    warning("Request failed: ", httr::status_code(res), call. = FALSE)
     return(NULL)
   }
   res

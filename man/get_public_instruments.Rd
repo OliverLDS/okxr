@@ -7,7 +7,7 @@
 get_public_instruments(
   inst_id = NULL,
   inst_type = "SWAP",
-  config,
+  config = NULL,
   tz = .okx_default_tz
 )
 }
@@ -18,8 +18,8 @@ get_public_instruments(
 \item{inst_type}{Character. Instrument type. One of `"SPOT"`, `"MARGIN"`,
 `"SWAP"` (default), `"FUTURES"`, `"OPTION"`.}
 
-\item{config}{List. API credentials/config, typically containing
-`api_key`, `secret_key`, and `passphrase`.}
+\item{config}{Optional list. Public endpoint request options, such as
+`timeout`; credentials are not required.}
 
 \item{tz}{Character. Time zone for parsing timestamps. Default `"Asia/Hong_Kong"`.}
 }

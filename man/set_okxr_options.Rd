@@ -4,11 +4,14 @@
 \alias{set_okxr_options}
 \title{Set or get okxr options}
 \usage{
-set_okxr_options(raw_data = NULL)
+set_okxr_options(raw_data = NULL, timeout = NULL)
 }
 \arguments{
 \item{raw_data}{Logical. Whether functions should return raw data (default = FALSE).
-If NULL, the function simply returns the current value.}
+If `NULL`, the current value is left unchanged.}
+
+\item{timeout}{Numeric. HTTP request timeout in seconds. If `NULL`, the
+current value is left unchanged.}
 }
 \description{
 Convenience wrapper to set global options for okxr, such as whether to
@@ -16,8 +19,10 @@ return raw data instead of parsed data.
 }
 \examples{
 old <- getOption("okxr.raw_data")
+old_timeout <- getOption("okxr.timeout")
 set_okxr_options(raw_data = TRUE)
-set_okxr_options(raw_data = old)
+set_okxr_options(timeout = 5)
+options(okxr.raw_data = old, okxr.timeout = old_timeout)
 
-set_okxr_options(raw_data = NULL)  # check current value
+set_okxr_options()  # check current values
 }

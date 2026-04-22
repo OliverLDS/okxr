@@ -8,7 +8,7 @@ get_market_tickers(
   inst_type,
   uly = NULL,
   inst_family = NULL,
-  config,
+  config = NULL,
   tz = .okx_default_tz
 )
 }
@@ -21,8 +21,8 @@ get_market_tickers(
 \item{inst_family}{Character or `NULL`. Instrument family. Optional filter
 for derivatives and options.}
 
-\item{config}{List. API credentials/config, typically containing
-`api_key`, `secret_key`, and `passphrase`.}
+\item{config}{Optional list. Public endpoint request options, such as
+`timeout`; credentials are not required.}
 
 \item{tz}{Character. Time zone for parsing timestamps. Default `"Asia/Hong_Kong"`.}
 }

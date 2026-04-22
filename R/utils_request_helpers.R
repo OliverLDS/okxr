@@ -7,6 +7,9 @@
 .okx_default_tz <- "Asia/Hong_Kong"
 
 #' @keywords internal
+.okx_default_timeout <- 10
+
+#' @keywords internal
 .okx_validate_config <- function(config) {
   if (!is.list(config)) {
     stop("`config` must be a list.", call. = FALSE)
@@ -23,6 +26,21 @@
   }
 
   invisible(config)
+}
+
+#' @keywords internal
+.okx_request_timeout <- function(config = NULL) {
+  timeout <- if (is.list(config) && !is.null(config$timeout)) {
+    config$timeout
+  } else {
+    getOption("okxr.timeout", .okx_default_timeout)
+  }
+
+  if (!is.numeric(timeout) || length(timeout) != 1L || is.na(timeout) || timeout <= 0) {
+    stop("Request timeout must be a single positive number of seconds.", call. = FALSE)
+  }
+
+  httr::timeout(timeout)
 }
 
 #' @keywords internal

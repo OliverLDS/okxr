@@ -1,5 +1,15 @@
 # okxr news
 
+## okxr 0.1.7
+
+* Public market and public reference GET endpoints no longer require API
+  credentials.
+* Added configurable HTTP request timeout handling via `set_okxr_options()` and
+  per-request `config$timeout`.
+* Improved HTTP failure handling so request errors and timeouts warn and return
+  `NULL` consistently.
+* Extended tests for unsigned request construction and timeout validation.
+
 ## okxr 0.1.6
 
 * Added package-level help documenting credential structure, simulated trading,

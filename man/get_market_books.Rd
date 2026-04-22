@@ -4,7 +4,7 @@
 \alias{get_market_books}
 \title{Get order book}
 \usage{
-get_market_books(inst_id, sz = NULL, config, tz = .okx_default_tz)
+get_market_books(inst_id, sz = NULL, config = NULL, tz = .okx_default_tz)
 }
 \arguments{
 \item{inst_id}{Character. Instrument ID, e.g. `"BTC-USDT"`.}
@@ -12,8 +12,8 @@ get_market_books(inst_id, sz = NULL, config, tz = .okx_default_tz)
 \item{sz}{Integer or `NULL`. Order book depth. If `NULL`, OKX uses its
 endpoint default.}
 
-\item{config}{List. API credentials/config, typically containing
-`api_key`, `secret_key`, and `passphrase`.}
+\item{config}{Optional list. Public endpoint request options, such as
+`timeout`; credentials are not required.}
 
 \item{tz}{Character. Time zone for parsing timestamps. Default `"Asia/Hong_Kong"`.}
 }

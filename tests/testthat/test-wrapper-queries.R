@@ -18,16 +18,16 @@ test_that("GET wrappers build expected query strings", {
     envir = ns
   )
 
-  cfg <- list(api_key = "key", secret_key = "secret", passphrase = "pass")
-
   expect_equal(
-    okxr::get_market_tickers(inst_type = "SWAP", inst_family = "BTC-USDT", config = cfg),
+    okxr::get_market_tickers(inst_type = "SWAP", inst_family = "BTC-USDT"),
     "?instType=SWAP&instFamily=BTC-USDT"
   )
   expect_equal(
-    okxr::get_market_history_trades("BTC-USDT", type = "1", limit = 10, config = cfg),
+    okxr::get_market_history_trades("BTC-USDT", type = "1", limit = 10),
     "?instId=BTC-USDT&type=1&limit=10"
   )
+
+  cfg <- list(api_key = "key", secret_key = "secret", passphrase = "pass")
   expect_equal(
     okxr::get_account_bills(ccy = "USDT", sub_type = "1", config = cfg),
     "?ccy=USDT&subType=1"

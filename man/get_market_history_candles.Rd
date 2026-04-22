@@ -9,7 +9,7 @@ get_market_history_candles(
   bar,
   before = NULL,
   limit = 100L,
-  config,
+  config = NULL,
   tz = .okx_default_tz,
   standardize_names = TRUE
 )
@@ -24,8 +24,8 @@ get_market_history_candles(
 
 \item{limit}{Integer. Number of bars to retrieve. Default `100L`.}
 
-\item{config}{List. API credentials/config, typically containing
-`api_key`, `secret_key`, and `passphrase`.}
+\item{config}{Optional list. Public endpoint request options, such as
+`timeout`; credentials are not required.}
 
 \item{tz}{Character. Time zone for parsing timestamps. Default `"Asia/Hong_Kong"`.}
 

@@ -4,15 +4,20 @@
 \alias{get_public_open_interest}
 \title{Get open interest}
 \usage{
-get_public_open_interest(inst_id, inst_type, config, tz = .okx_default_tz)
+get_public_open_interest(
+  inst_id,
+  inst_type,
+  config = NULL,
+  tz = .okx_default_tz
+)
 }
 \arguments{
 \item{inst_id}{Character. Instrument ID, e.g. `"BTC-USDT-SWAP"`.}
 
 \item{inst_type}{Character. Instrument type such as `"SWAP"` or `"FUTURES"`.}
 
-\item{config}{List. API credentials/config, typically containing
-`api_key`, `secret_key`, and `passphrase`.}
+\item{config}{Optional list. Public endpoint request options, such as
+`timeout`; credentials are not required.}
 
 \item{tz}{Character. Time zone for parsing timestamps. Default `"Asia/Hong_Kong"`.}
 }

@@ -4,15 +4,15 @@
 \alias{get_market_trades}
 \title{Get recent public trades}
 \usage{
-get_market_trades(inst_id, limit = NULL, config, tz = .okx_default_tz)
+get_market_trades(inst_id, limit = NULL, config = NULL, tz = .okx_default_tz)
 }
 \arguments{
 \item{inst_id}{Character. Instrument ID, e.g. `"BTC-USDT"`.}
 
 \item{limit}{Integer or `NULL`. Number of rows to request.}
 
-\item{config}{List. API credentials/config, typically containing
-`api_key`, `secret_key`, and `passphrase`.}
+\item{config}{Optional list. Public endpoint request options, such as
+`timeout`; credentials are not required.}
 
 \item{tz}{Character. Time zone for parsing timestamps. Default `"Asia/Hong_Kong"`.}
 }

@@ -4,11 +4,11 @@
 \alias{get_public_time}
 \title{Get OKX system time}
 \usage{
-get_public_time(config, tz = .okx_default_tz)
+get_public_time(config = NULL, tz = .okx_default_tz)
 }
 \arguments{
-\item{config}{List. API credentials/config, typically containing
-`api_key`, `secret_key`, and `passphrase`.}
+\item{config}{Optional list. Public endpoint request options, such as
+`timeout`; credentials are not required.}
 
 \item{tz}{Character. Time zone for parsing timestamps. Default `"Asia/Hong_Kong"`.}
 }

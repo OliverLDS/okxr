@@ -22,9 +22,10 @@
 #' @keywords internal
 .make_get_function <- function(api) {
   parser <- .make_parser(api$parser_schema, mode = api$parser_mode %||% "named")
+  auth <- api$auth %||% TRUE
 
   function(query_string, tz, config, raw_data = getOption("okxr.raw_data", FALSE)) {
-    res <- .execute_get_action(api$okx_path, query_string, config)
+    res <- .execute_get_action(api$okx_path, query_string, config, auth = auth)
     if (is.null(res)) {
       return(NULL)
     }

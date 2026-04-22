@@ -37,3 +37,23 @@ test_that(".okx_extract_result respects raw_data flag", {
   expect_equal(okxr:::.okx_extract_result(parsed, raw_data = FALSE), parsed$data_dt)
   expect_null(okxr:::.okx_extract_result(NULL))
 })
+
+test_that(".okx_request_timeout validates timeout sources", {
+  timeout <- okxr:::.okx_request_timeout(list(timeout = 3))
+  expect_s3_class(timeout, "request")
+  expect_error(okxr:::.okx_request_timeout(list(timeout = 0)), "positive")
+  expect_error(okxr:::.okx_request_timeout(list(timeout = "bad")), "positive")
+})
+
+test_that(".build_request can build unsigned public requests without config", {
+  req <- okxr:::.build_request(
+    httr_method = "GET",
+    base_url = "https://www.okx.com",
+    api_path = "/api/v5/public/time",
+    query_string = "",
+    auth = FALSE
+  )
+
+  expect_equal(req$url, "https://www.okx.com/api/v5/public/time")
+  expect_null(req$headers)
+})

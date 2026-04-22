@@ -10,7 +10,7 @@ get_market_history_trades(
   after = NULL,
   before = NULL,
   limit = NULL,
-  config,
+  config = NULL,
   tz = .okx_default_tz
 )
 }
@@ -25,8 +25,8 @@ get_market_history_trades(
 
 \item{limit}{Integer or `NULL`. Number of rows to request.}
 
-\item{config}{List. API credentials/config, typically containing
-`api_key`, `secret_key`, and `passphrase`.}
+\item{config}{Optional list. Public endpoint request options, such as
+`timeout`; credentials are not required.}
 
 \item{tz}{Character. Time zone for parsing timestamps. Default `"Asia/Hong_Kong"`.}
 }

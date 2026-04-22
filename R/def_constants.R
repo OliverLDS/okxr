@@ -8,25 +8,38 @@ NULL
 #' return raw data instead of parsed data.
 #'
 #' @param raw_data Logical. Whether functions should return raw data (default = FALSE).
-#' If NULL, the function simply returns the current value.
+#'   If `NULL`, the current value is left unchanged.
+#' @param timeout Numeric. HTTP request timeout in seconds. If `NULL`, the
+#'   current value is left unchanged.
 #'
 #' @examples
 #' old <- getOption("okxr.raw_data")
+#' old_timeout <- getOption("okxr.timeout")
 #' set_okxr_options(raw_data = TRUE)
-#' set_okxr_options(raw_data = old)
+#' set_okxr_options(timeout = 5)
+#' options(okxr.raw_data = old, okxr.timeout = old_timeout)
 #'
-#' set_okxr_options(raw_data = NULL)  # check current value
+#' set_okxr_options()  # check current values
 #' @export
-set_okxr_options <- function(raw_data = NULL) {
+set_okxr_options <- function(raw_data = NULL, timeout = NULL) {
   if (!is.null(raw_data)) {
     if (!is.logical(raw_data) || length(raw_data) != 1L)
       stop("`raw_data` must be a single TRUE or FALSE value.", call. = FALSE)
-    
+
     options(okxr.raw_data = raw_data)
-    message("okxr.raw_data option set to ", raw_data)
   }
-  
-  invisible(getOption("okxr.raw_data", FALSE))
+
+  if (!is.null(timeout)) {
+    if (!is.numeric(timeout) || length(timeout) != 1L || is.na(timeout) || timeout <= 0)
+      stop("`timeout` must be a single positive number.", call. = FALSE)
+
+    options(okxr.timeout = timeout)
+  }
+
+  invisible(list(
+    raw_data = getOption("okxr.raw_data", FALSE),
+    timeout = getOption("okxr.timeout", .okx_default_timeout)
+  ))
 }
 
 #' Base URL for OKX API
@@ -623,4 +636,29 @@ set_okxr_options <- function(raw_data = NULL) {
     ),
     parser_mode = "named"
   )
+)
+
+.public_GET_spec_names <- c(
+  "market_ticker",
+  "market_tickers",
+  "market_books",
+  "market_trades",
+  "market_history_trades",
+  "market_candles",
+  "market_history_candles",
+  "public_instruments",
+  "public_mark_price",
+  "public_funding_rate",
+  "public_funding_rate_history",
+  "public_open_interest",
+  "public_time",
+  "public_price_limit"
+)
+
+.api_GET_specs[.public_GET_spec_names] <- lapply(
+  .api_GET_specs[.public_GET_spec_names],
+  function(api) {
+    api$auth <- FALSE
+    api
+  }
 )
