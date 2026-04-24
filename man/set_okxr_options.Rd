@@ -13,6 +13,11 @@ If `NULL`, the current value is left unchanged.}
 \item{timeout}{Numeric. HTTP request timeout in seconds. If `NULL`, the
 current value is left unchanged.}
 }
+\value{
+An invisible named list with the current package options:
+  `raw_data` (logical) and `timeout` (numeric seconds). This return value
+  can be used to inspect the effective option state after updating it.
+}
 \description{
 Convenience wrapper to set global options for okxr, such as whether to
 return raw data instead of parsed data.

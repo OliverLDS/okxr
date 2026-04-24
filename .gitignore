@@ -2,6 +2,7 @@
 *.tar.gz
 *.Rcheck/
 .Rcheck/
+CRAN-SUBMISSION
 
 # R session and history files
 .Rhistory

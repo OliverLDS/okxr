@@ -11,6 +11,9 @@ NULL
 #'   If `NULL`, the current value is left unchanged.
 #' @param timeout Numeric. HTTP request timeout in seconds. If `NULL`, the
 #'   current value is left unchanged.
+#' @return An invisible named list with the current package options:
+#'   `raw_data` (logical) and `timeout` (numeric seconds). This return value
+#'   can be used to inspect the effective option state after updating it.
 #'
 #' @examples
 #' old <- getOption("okxr.raw_data")

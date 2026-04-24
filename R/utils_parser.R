@@ -45,18 +45,6 @@
 #' @section Errors & warnings:
 #' If \code{parsed$code != "0"}, a warning with \code{parsed$msg} is emitted and
 #' \code{NULL} is returned.
-#'
-#' @examples
-#' \dontrun{
-#' # Suppose `schema` has columns: okx, formal, type; and `res` is an httr response.
-#' parser <- .make_parser(schema, mode = "named")
-#' DT <- parser(res, tz = "UTC")
-#' if (!is.null(DT)) {
-#'   str(DT)
-#'   attr(DT, "var_labels")
-#' }
-#' }
-#'
 #' @importFrom httr content
 #' @importFrom data.table as.data.table
 #' @keywords internal

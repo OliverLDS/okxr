@@ -22,11 +22,4 @@ A function with signature \code{(tz = "Asia/Hong_Kong", config, ...)} that:
 Converts a single entry from \code{.api_GET_specs} into a ready-to-use function
 that executes the HTTP GET request, parses the response, and returns a typed data frame.
 }
-\examples{
-\dontrun{
-market_fn <- .make_get_function(.api_GET_specs$market_candles)
-market_fn(config = okx_keys, inst_id = "BTC-USDT", bar = "1m", limit = 10)
-}
-
-}
 \keyword{internal}

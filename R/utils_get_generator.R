@@ -12,13 +12,6 @@
 #'   \item signs and sends the GET request,
 #'   \item parses and returns the data using the schema-aware parser.
 #' }
-#'
-#' @examples
-#' \dontrun{
-#' market_fn <- .make_get_function(.api_GET_specs$market_candles)
-#' market_fn(config = okx_keys, inst_id = "BTC-USDT", bar = "1m", limit = 10)
-#' }
-#'
 #' @keywords internal
 .make_get_function <- function(api) {
   parser <- .make_parser(api$parser_schema, mode = api$parser_mode %||% "named")

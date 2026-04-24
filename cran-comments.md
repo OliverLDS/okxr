@@ -30,9 +30,15 @@ support.
 
 ## Submission notes
 
-This is a CRAN-targeted release candidate used to verify package metadata,
-examples, mocked HTTP behavior, parser robustness, and test behavior before
-first CRAN submission.
+This is a CRAN resubmission that addresses reviewer feedback on DESCRIPTION and
+Rd documentation.
+
+The following changes were made in response to the CRAN review:
+
+* Added a web reference for the OKX API to the `Description` field in
+  `DESCRIPTION`.
+* Added a documented return value for `set_okxr_options()`.
+* Removed examples from unexported internal helper functions.
 
 Use `CRAN-SUBMISSION.md` as the final release checklist.
 

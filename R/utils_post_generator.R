@@ -12,23 +12,6 @@
 #'   \item Signs and sends the POST request,
 #'   \item Parses and returns the response using the schema-aware parser.
 #' }
-#'
-#' @examples
-#' \dontrun{
-#' place_order <- .make_post_function(.api_POST_specs$trade_order)
-#' place_order(
-#'   list(
-#'     instId = "BTC-USDT",
-#'     tdMode = "cash",
-#'     side = "buy",
-#'     ordType = "market",
-#'     sz = "10"
-#'   ),
-#'   tz = "Asia/Hong_Kong",
-#'   config = okx_keys
-#' )
-#' }
-#'
 #' @keywords internal
 .make_post_function <- function(api) {
   parser <- .make_parser(api$parser_schema, mode = api$parser_mode %||% "named")

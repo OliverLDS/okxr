@@ -1,5 +1,12 @@
 # okxr news
 
+## okxr 0.2.4
+
+* Added an API web reference to `DESCRIPTION` as requested by CRAN.
+* Documented the return value for `set_okxr_options()`.
+* Removed examples from unexported helper functions to satisfy CRAN
+  documentation checks.
+
 ## okxr 0.2.3
 
 * Updated CRAN submission notes with successful GitHub Actions check results.
