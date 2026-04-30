@@ -377,3 +377,320 @@ get_public_price_limit <- function(inst_id, config = NULL, tz = .okx_default_tz)
   query_string <- .okx_build_query(instId = inst_id)
   .gets$public_price_limit(query_string = query_string, config = config, tz = tz)
 }
+
+#' Get estimated delivery or exercise price
+#'
+#' Retrieve the estimated delivery, exercise, or settlement price for
+#' derivatives and events instruments.
+#'
+#' @param inst_type Character. Instrument type, such as `"FUTURES"`, `"OPTION"`,
+#'   `"SWAP"`, or `"EVENTS"`.
+#' @param inst_family Character or `NULL`. Instrument family filter.
+#' @param inst_id Character or `NULL`. Specific instrument ID filter.
+#' @param config Optional list. Public endpoint request options, such as
+#'   `timeout`; credentials are not required.
+#' @param tz Character. Time zone for parsing timestamps. Default `"Asia/Hong_Kong"`.
+#'
+#' @return A `data.frame` with `instType`, `instId`, `settlePx`, and `ts`.
+#'
+#' @export
+get_public_estimated_price <- function(inst_type, inst_family = NULL, inst_id = NULL, config = NULL, tz = .okx_default_tz) {
+  query_string <- .okx_build_query(
+    instType = inst_type,
+    instFamily = inst_family,
+    instId = inst_id
+  )
+  .gets$public_estimated_price(query_string = query_string, config = config, tz = tz)
+}
+
+#' Get collateral discount rate and interest-free quota
+#'
+#' Retrieve public collateral discount-rate tiers and interest-free quota
+#' information for supported currencies.
+#'
+#' @param ccy Character or `NULL`. Currency filter, e.g. `"BTC"`.
+#' @param discount_lv Character or `NULL`. Discount level filter.
+#' @param config Optional list. Public endpoint request options, such as
+#'   `timeout`; credentials are not required.
+#' @param tz Character. Time zone for parsing timestamps. Default `"Asia/Hong_Kong"`.
+#'
+#' @return A `data.frame` with top-level discount and interest-free quota
+#'   fields; nested tier details are JSON-encoded in `details`.
+#'
+#' @export
+get_public_discount_rate_interest_free_quota <- function(ccy = NULL, discount_lv = NULL, config = NULL, tz = .okx_default_tz) {
+  query_string <- .okx_build_query(
+    ccy = ccy,
+    discountLv = discount_lv
+  )
+  .gets$public_discount_rate_interest_free_quota(query_string = query_string, config = config, tz = tz)
+}
+
+#' Get interest rate and loan quota
+#'
+#' Retrieve public borrowing-rate and loan-quota tables.
+#'
+#' @param ccy Character or `NULL`. Currency filter.
+#' @param vip_level Character or `NULL`. VIP level filter when supported by OKX.
+#' @param config Optional list. Public endpoint request options, such as
+#'   `timeout`; credentials are not required.
+#' @param tz Character. Time zone for parsing timestamps. Default `"Asia/Hong_Kong"`.
+#'
+#' @return A `data.frame` where nested basic, VIP, regular, and custom quota
+#'   tables are JSON-encoded string columns.
+#'
+#' @export
+get_public_interest_rate_loan_quota <- function(ccy = NULL, vip_level = NULL, config = NULL, tz = .okx_default_tz) {
+  query_string <- .okx_build_query(
+    ccy = ccy,
+    vipLevel = vip_level
+  )
+  .gets$public_interest_rate_loan_quota(query_string = query_string, config = config, tz = tz)
+}
+
+#' Get security fund balance information
+#'
+#' Retrieve public insurance-fund or security-fund balance information.
+#'
+#' @param inst_type Character. Instrument type, such as `"MARGIN"`, `"SWAP"`,
+#'   `"FUTURES"`, or `"OPTION"`.
+#' @param type Character or `NULL`. Fund update type filter.
+#' @param inst_family Character or `NULL`. Instrument family filter for
+#'   derivatives.
+#' @param ccy Character or `NULL`. Currency filter for margin data.
+#' @param before Character or `NULL`. Pagination cursor for newer rows.
+#' @param after Character or `NULL`. Pagination cursor for older rows.
+#' @param limit Integer or `NULL`. Number of rows to request.
+#' @param config Optional list. Public endpoint request options, such as
+#'   `timeout`; credentials are not required.
+#' @param tz Character. Time zone for parsing timestamps. Default `"Asia/Hong_Kong"`.
+#'
+#' @return A `data.frame` with top-level fund totals; nested per-currency detail
+#'   rows are JSON-encoded in `details`.
+#'
+#' @export
+get_public_insurance_fund <- function(inst_type, type = NULL, inst_family = NULL, ccy = NULL, before = NULL, after = NULL, limit = NULL, config = NULL, tz = .okx_default_tz) {
+  query_string <- .okx_build_query(
+    instType = inst_type,
+    type = type,
+    instFamily = inst_family,
+    ccy = ccy,
+    before = before,
+    after = after,
+    limit = limit
+  )
+  .gets$public_insurance_fund(query_string = query_string, config = config, tz = tz)
+}
+
+#' Convert between contract size and currency amount
+#'
+#' Convert the crypto value to the number of contracts, or vice versa.
+#'
+#' @param inst_id Character. Instrument ID.
+#' @param sz Character or numeric. Quantity to convert.
+#' @param type Character or `NULL`. Convert type: `"1"` for currency to
+#'   contract, `"2"` for contract to currency.
+#' @param px Character, numeric, or `NULL`. Optional order price.
+#' @param unit Character or `NULL`. Currency unit, `"coin"` or `"usds"`.
+#' @param op_type Character or `NULL`. Order type for futures or swaps, such as
+#'   `"open"` or `"close"`.
+#' @param config Optional list. Public endpoint request options, such as
+#'   `timeout`; credentials are not required.
+#' @param tz Character. Time zone for parsing timestamps. Default `"Asia/Hong_Kong"`.
+#'
+#' @return A `data.frame` with conversion result fields `type`, `instId`, `px`,
+#'   `sz`, and `unit`.
+#'
+#' @export
+get_public_convert_contract_coin <- function(inst_id, sz, type = NULL, px = NULL, unit = NULL, op_type = NULL, config = NULL, tz = .okx_default_tz) {
+  query_string <- .okx_build_query(
+    type = type,
+    instId = inst_id,
+    sz = sz,
+    px = px,
+    unit = unit,
+    opType = op_type
+  )
+  .gets$public_convert_contract_coin(query_string = query_string, config = config, tz = tz)
+}
+
+#' Get option instrument tick bands
+#'
+#' Retrieve option tick-band information for one or more option instrument
+#' families.
+#'
+#' @param inst_type Character. Instrument type. Currently `"OPTION"`.
+#' @param inst_family Character or `NULL`. Instrument family filter.
+#' @param config Optional list. Public endpoint request options, such as
+#'   `timeout`; credentials are not required.
+#' @param tz Character. Time zone for parsing timestamps. Default `"Asia/Hong_Kong"`.
+#'
+#' @return A `data.frame` with `instType`, `instFamily`, and JSON-encoded
+#'   `tickBand` details.
+#'
+#' @export
+get_public_instrument_tick_bands <- function(inst_type = "OPTION", inst_family = NULL, config = NULL, tz = .okx_default_tz) {
+  query_string <- .okx_build_query(
+    instType = inst_type,
+    instFamily = inst_family
+  )
+  .gets$public_instrument_tick_bands(query_string = query_string, config = config, tz = tz)
+}
+
+#' Get premium history
+#'
+#' Retrieve premium-index history for an instrument.
+#'
+#' @param inst_id Character. Instrument ID.
+#' @param after Character or `NULL`. Pagination cursor for older rows.
+#' @param before Character or `NULL`. Pagination cursor for newer rows.
+#' @param bar Character or `NULL`. Bar size such as `"1m"` or `"1H"`.
+#' @param limit Integer or `NULL`. Number of rows to request.
+#' @param config Optional list. Public endpoint request options, such as
+#'   `timeout`; credentials are not required.
+#' @param tz Character. Time zone for parsing timestamps. Default `"Asia/Hong_Kong"`.
+#'
+#' @return A `data.frame` with `instId`, `premium`, and `ts`.
+#'
+#' @export
+get_public_premium_history <- function(inst_id, after = NULL, before = NULL, bar = NULL, limit = NULL, config = NULL, tz = .okx_default_tz) {
+  query_string <- .okx_build_query(
+    instId = inst_id,
+    after = after,
+    before = before,
+    bar = bar,
+    limit = limit
+  )
+  .gets$public_premium_history(query_string = query_string, config = config, tz = tz)
+}
+
+#' Get index tickers
+#'
+#' Retrieve the latest public index-price snapshots.
+#'
+#' @param quote_ccy Character or `NULL`. Quote currency filter.
+#' @param inst_id Character or `NULL`. Specific index ID filter.
+#' @param config Optional list. Public endpoint request options, such as
+#'   `timeout`; credentials are not required.
+#' @param tz Character. Time zone for parsing timestamps. Default `"Asia/Hong_Kong"`.
+#'
+#' @return A `data.frame` with one row per index ticker.
+#'
+#' @export
+get_market_index_tickers <- function(quote_ccy = NULL, inst_id = NULL, config = NULL, tz = .okx_default_tz) {
+  query_string <- .okx_build_query(
+    quoteCcy = quote_ccy,
+    instId = inst_id
+  )
+  .gets$market_index_tickers(query_string = query_string, config = config, tz = tz)
+}
+
+#' Get recent index candles
+#'
+#' Retrieve the latest candlestick data for an index.
+#'
+#' @param inst_id Character. Index ID.
+#' @param bar Character or `NULL`. Bar size.
+#' @param after Character or `NULL`. Pagination cursor for older rows.
+#' @param before Character or `NULL`. Pagination cursor for newer rows.
+#' @param limit Integer. Number of rows to request. Default `100L`.
+#' @param config Optional list. Public endpoint request options, such as
+#'   `timeout`; credentials are not required.
+#' @param tz Character. Time zone for parsing timestamps. Default `"Asia/Hong_Kong"`.
+#' @param standardize_names Logical. If `TRUE` (default), renames OHLC columns
+#'   to `timestamp`, `open`, `high`, `low`, and `close`.
+#'
+#' @return A `data.frame` of index candlesticks.
+#'
+#' @export
+get_market_index_candles <- function(inst_id, bar = NULL, after = NULL, before = NULL, limit = 100L, config = NULL, tz = .okx_default_tz, standardize_names = TRUE) {
+  query_string <- .okx_build_query(
+    instId = inst_id,
+    after = after,
+    before = before,
+    bar = bar,
+    limit = as.integer(limit)
+  )
+  df <- .gets$market_index_candles(query_string = query_string, config = config, tz = tz)
+  if (standardize_names) return(.okx_standardize_ohlcv_names(df))
+  df
+}
+
+#' Get historical index candles
+#'
+#' Retrieve historical candlestick data for an index.
+#'
+#' @param inst_id Character. Index ID.
+#' @param bar Character or `NULL`. Bar size.
+#' @param after Character or `NULL`. Pagination cursor for older rows.
+#' @param before Character or `NULL`. Pagination cursor for newer rows.
+#' @param limit Integer. Number of rows to request. Default `100L`.
+#' @param config Optional list. Public endpoint request options, such as
+#'   `timeout`; credentials are not required.
+#' @param tz Character. Time zone for parsing timestamps. Default `"Asia/Hong_Kong"`.
+#' @param standardize_names Logical. If `TRUE` (default), renames OHLC columns
+#'   to `timestamp`, `open`, `high`, `low`, and `close`.
+#'
+#' @return A `data.frame` of historical index candlesticks.
+#'
+#' @export
+get_market_history_index_candles <- function(inst_id, bar = NULL, after = NULL, before = NULL, limit = 100L, config = NULL, tz = .okx_default_tz, standardize_names = TRUE) {
+  query_string <- .okx_build_query(
+    instId = inst_id,
+    after = after,
+    before = before,
+    bar = bar,
+    limit = as.integer(limit)
+  )
+  df <- .gets$market_history_index_candles(query_string = query_string, config = config, tz = tz)
+  if (standardize_names) return(.okx_standardize_ohlcv_names(df))
+  df
+}
+
+#' Get option trades by instrument family
+#'
+#' Retrieve recent option trades for all instruments under the same instrument
+#' family.
+#'
+#' @param inst_family Character. Instrument family, e.g. `"BTC-USD"`.
+#' @param config Optional list. Public endpoint request options, such as
+#'   `timeout`; credentials are not required.
+#' @param tz Character. Time zone for parsing timestamps. Default `"Asia/Hong_Kong"`.
+#'
+#' @return A `data.frame` with recent option trades under the requested
+#'   instrument family, including `instId`, `tradeId`, `px`, `sz`, `side`, and
+#'   `ts`.
+#'
+#' @export
+get_market_option_instrument_family_trades <- function(inst_family, config = NULL, tz = .okx_default_tz) {
+  query_string <- .okx_build_query(instFamily = inst_family)
+  .gets$market_option_instrument_family_trades(query_string = query_string, config = config, tz = tz)
+}
+
+#' Get public option trades
+#'
+#' Retrieve recent public option trades filtered by instrument ID or instrument
+#' family.
+#'
+#' @param inst_id Character or `NULL`. Specific option instrument ID.
+#' @param inst_family Character or `NULL`. Option instrument family, e.g.
+#'   `"BTC-USD"`. Either `inst_id` or `inst_family` should be supplied.
+#' @param opt_type Character or `NULL`. Option type filter: `"C"` for call or
+#'   `"P"` for put.
+#' @param config Optional list. Public endpoint request options, such as
+#'   `timeout`; credentials are not required.
+#' @param tz Character. Time zone for parsing timestamps. Default `"Asia/Hong_Kong"`.
+#'
+#' @return A `data.frame` with recent option trade rows, including option
+#'   instrument identifiers, trade price and size, option side/type, forward,
+#'   index and mark prices, implied volatility, and trade time.
+#'
+#' @export
+get_public_option_trades <- function(inst_id = NULL, inst_family = NULL, opt_type = NULL, config = NULL, tz = .okx_default_tz) {
+  query_string <- .okx_build_query(
+    instId = inst_id,
+    instFamily = inst_family,
+    optType = opt_type
+  )
+  .gets$public_option_trades(query_string = query_string, config = config, tz = tz)
+}

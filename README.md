@@ -9,7 +9,7 @@ copy trading, with shared request signing and schema-based response parsing.
 `okxr` is available on CRAN. Install the stable release from CRAN or use the
 GitHub repository for development versions between CRAN releases.
 
-Current development release: `v0.2.5`
+Current development release: `v0.3.0`
 
 ## Installation
 
@@ -123,12 +123,29 @@ get_copy_trade_current_subpos(config = config)
 | market | GET | `get_market_candles()` |
 | market | GET | `get_market_tickers()` |
 | market | GET | `get_market_trades()` |
+| market | GET | `get_market_index_tickers()` |
+| market | GET | `get_market_index_candles()` |
 | public | GET | `get_public_time()` |
+| public | GET | `get_public_estimated_price()` |
+| public | GET | `get_public_discount_rate_interest_free_quota()` |
+| public | GET | `get_public_interest_rate_loan_quota()` |
+| public | GET | `get_public_insurance_fund()` |
+| public | GET | `get_public_convert_contract_coin()` |
+| public | GET | `get_public_instrument_tick_bands()` |
+| public | GET | `get_public_premium_history()` |
+| public | GET | `get_public_option_trades()` |
 | account | GET | `get_account_balance()` |
+| account | GET | `get_account_instruments()` |
+| account | GET | `get_account_position_risk()` |
+| account | GET | `get_account_max_size()` |
+| account | GET | `get_account_max_avail_size()` |
+| account | GET | `get_account_trade_fee()` |
+| account | GET | `get_account_interest_rate()` |
 | account | GET | `get_account_bills()` |
 | asset | GET | `get_asset_balances()` |
 | asset | GET | `get_asset_currencies()` |
 | trade | GET | `get_trade_order()` |
+| trade | GET | `get_trade_account_rate_limit()` |
 | trade | GET | `get_trade_fills()` |
 | trade | POST | `post_trade_order()` |
 | trade | POST | `post_trade_cancel_order()` |
@@ -156,6 +173,8 @@ See [NEWS.md](NEWS.md) for release history.
 * [x] Final CRAN submission metadata update
 * [x] CRAN reviewer-requested DESCRIPTION and Rd fixes
 * [x] First CRAN release published
+* [x] First post-CRAN endpoint expansion batch
+* [x] Expanded public reference and index market coverage
 * [ ] Websocket support
 
 ## License
@@ -165,3 +184,4 @@ MIT
 ## Author
 
 Oliver Zhou
+Lily Li

@@ -256,6 +256,19 @@ set_okxr_options <- function(raw_data = NULL, timeout = NULL) {
     ),
     parser_mode = "named"
   ),
+
+  #----trade_account_rate_limit----
+  trade_account_rate_limit = list(
+    okx_path     = "/api/v5/trade/account-rate-limit",
+    parser_schema = data.frame(
+      check.names = FALSE,
+      okx    = c("accRateLimit", "fillRatio", "mainFillRatio", "nextAccRateLimit", "ts"),
+      formal = c("Account rate limit", "Sub-account fill ratio", "Main-account fill ratio", "Next account rate limit", "Request time"),
+      type   = c("integer", "numeric", "numeric", "integer", "time"),
+      stringsAsFactors = FALSE
+    ),
+    parser_mode = "named"
+  ),
   
   #----copy_trade_settings----
   copy_trade_settings = list(
@@ -367,6 +380,84 @@ set_okxr_options <- function(raw_data = NULL, timeout = NULL) {
     parser_mode = "named"
   ),
   
+  #----account_instruments----
+  account_instruments = list(
+    okx_path = "/api/v5/account/instruments",
+    parser_schema = data.frame(
+      check.names = FALSE,
+      okx    = c("instType", "instId", "uly", "instFamily", "baseCcy", "quoteCcy", "settleCcy", "ctVal", "ctMult", "ctValCcy", "listTime", "openType", "expTime", "lever", "tickSz", "lotSz", "minSz", "ctType", "state"),
+      formal = c("Instrument type", "Instrument ID", "Underlying", "Instrument family", "Base currency", "Quote currency", "Settlement and margin currency", "Contract value", "Contract multiplier", "Contract value currency", "Listing time", "Open type", "Expiry time", "Max Leverage", "Tick size", "Lot size", "Minimum order size", "Contract type", "Instrument status"),
+      type   = c("string", "string", "string", "string", "string", "string", "string", "numeric", "numeric", "numeric", "time", "string", "time", "numeric", "numeric", "numeric", "numeric", "string", "string"),
+      stringsAsFactors = FALSE
+    ),
+    parser_mode = "named"
+  ),
+
+  #----account_position_risk----
+  account_position_risk = list(
+    okx_path = "/api/v5/account/account-position-risk",
+    parser_schema = data.frame(
+      check.names = FALSE,
+      okx    = c("adjEq", "balData", "posData", "ts"),
+      formal = c("Adjusted equity", "Balance snapshot data", "Position snapshot data", "Snapshot time"),
+      type   = c("numeric", "string", "string", "time"),
+      stringsAsFactors = FALSE
+    ),
+    parser_mode = "named"
+  ),
+
+  #----account_max_size----
+  account_max_size = list(
+    okx_path = "/api/v5/account/max-size",
+    parser_schema = data.frame(
+      check.names = FALSE,
+      okx    = c("instId", "ccy", "maxBuy", "maxSell"),
+      formal = c("Instrument ID", "Margin currency", "Maximum buy size", "Maximum sell size"),
+      type   = c("string", "string", "numeric", "numeric"),
+      stringsAsFactors = FALSE
+    ),
+    parser_mode = "named"
+  ),
+
+  #----account_max_avail_size----
+  account_max_avail_size = list(
+    okx_path = "/api/v5/account/max-avail-size",
+    parser_schema = data.frame(
+      check.names = FALSE,
+      okx    = c("instId", "availBuy", "availSell"),
+      formal = c("Instrument ID", "Maximum available buy amount", "Maximum available sell amount"),
+      type   = c("string", "numeric", "numeric"),
+      stringsAsFactors = FALSE
+    ),
+    parser_mode = "named"
+  ),
+
+  #----account_trade_fee----
+  account_trade_fee = list(
+    okx_path = "/api/v5/account/trade-fee",
+    parser_schema = data.frame(
+      check.names = FALSE,
+      okx    = c("level", "feeGroup", "delivery", "exercise", "instType", "ts", "taker", "maker", "takerU", "makerU", "takerUSDC", "makerUSDC", "ruleType", "category", "fiat", "settle"),
+      formal = c("Fee rate level", "Fee groups", "Delivery fee rate", "Exercise fee rate", "Instrument type", "Data return time", "Taker fee rate", "Maker fee rate", "USDT-margined taker fee rate", "USDT-margined maker fee rate", "USDC or USD stablecoin taker fee rate", "USDC or USD stablecoin maker fee rate", "Trading rule type", "Currency category", "Deprecated fiat fee detail", "Settlement fee rate"),
+      type   = c("string", "string", "numeric", "numeric", "string", "time", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "string", "string", "string", "numeric"),
+      stringsAsFactors = FALSE
+    ),
+    parser_mode = "named"
+  ),
+
+  #----account_interest_rate----
+  account_interest_rate = list(
+    okx_path = "/api/v5/account/interest-rate",
+    parser_schema = data.frame(
+      check.names = FALSE,
+      okx    = c("interestRate", "ccy"),
+      formal = c("Hourly borrowing interest rate", "Currency"),
+      type   = c("numeric", "string"),
+      stringsAsFactors = FALSE
+    ),
+    parser_mode = "named"
+  ),
+
   #----account_balance----
   account_balance = list(
     okx_path     = "/api/v5/account/balance",
@@ -522,6 +613,58 @@ set_okxr_options <- function(raw_data = NULL, timeout = NULL) {
     ),
     parser_mode = "named"
   ),
+
+  #----market_option_instrument_family_trades----
+  market_option_instrument_family_trades = list(
+    okx_path     = "/api/v5/market/option/instrument-family-trades",
+    parser_schema = data.frame(
+      check.names = FALSE,
+      okx    = c("instId", "tradeId", "px", "sz", "side", "ts"),
+      formal = c("Instrument ID", "Trade ID", "Trade price", "Trade quantity", "Trade side", "Trade time"),
+      type   = c("string", "string", "numeric", "numeric", "string", "time"),
+      stringsAsFactors = FALSE
+    ),
+    parser_mode = "named"
+  ),
+
+  #----market_index_tickers----
+  market_index_tickers = list(
+    okx_path     = "/api/v5/market/index-tickers",
+    parser_schema = data.frame(
+      check.names = FALSE,
+      okx    = c("instId", "idxPx", "high24h", "low24h", "open24h", "sodUtc0", "sodUtc8", "ts"),
+      formal = c("Index ID", "Latest index price", "Highest price in the past 24 hours", "Lowest price in the past 24 hours", "Open price in the past 24 hours", "UTC 0 open price", "UTC 8 open price", "Index price update time"),
+      type   = c("string", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "time"),
+      stringsAsFactors = FALSE
+    ),
+    parser_mode = "named"
+  ),
+
+  #----market_index_candles----
+  market_index_candles = list(
+    okx_path     = "/api/v5/market/index-candles",
+    parser_schema = data.frame(
+      check.names = FALSE,
+      okx    = c("ts", "o", "h", "l", "c", "confirm"),
+      formal = c("Timestamp", "Open price", "Highest price", "Lowest price", "Close price", "The state of candlesticks"),
+      type   = c("time", "numeric", "numeric", "numeric", "numeric", "integer"),
+      stringsAsFactors = FALSE
+    ),
+    parser_mode = "positional"
+  ),
+
+  #----market_history_index_candles----
+  market_history_index_candles = list(
+    okx_path     = "/api/v5/market/history-index-candles",
+    parser_schema = data.frame(
+      check.names = FALSE,
+      okx    = c("ts", "o", "h", "l", "c", "confirm"),
+      formal = c("Timestamp", "Open price", "Highest price", "Lowest price", "Close price", "The state of candlesticks"),
+      type   = c("time", "numeric", "numeric", "numeric", "numeric", "integer"),
+      stringsAsFactors = FALSE
+    ),
+    parser_mode = "positional"
+  ),
   
   #----market_candles----
   market_candles = list(
@@ -638,6 +781,110 @@ set_okxr_options <- function(raw_data = NULL, timeout = NULL) {
       stringsAsFactors = FALSE
     ),
     parser_mode = "named"
+  ),
+
+  #----public_estimated_price----
+  public_estimated_price = list(
+    okx_path = "/api/v5/public/estimated-price",
+    parser_schema = data.frame(
+      check.names = FALSE,
+      okx    = c("instType", "instId", "settlePx", "ts"),
+      formal = c("Instrument type", "Instrument ID", "Estimated delivery or exercise price", "Data return time"),
+      type   = c("string", "string", "numeric", "time"),
+      stringsAsFactors = FALSE
+    ),
+    parser_mode = "named"
+  ),
+
+  #----public_discount_rate_interest_free_quota----
+  public_discount_rate_interest_free_quota = list(
+    okx_path = "/api/v5/public/discount-rate-interest-free-quota",
+    parser_schema = data.frame(
+      check.names = FALSE,
+      okx    = c("ccy", "colRes", "collateralRestrict", "amt", "discountLv", "minDiscountRate", "details"),
+      formal = c("Currency", "Platform level collateral restriction status", "Deprecated collateral restriction flag", "Interest-free quota", "Deprecated discount level", "Minimum discount rate", "Discount tier details"),
+      type   = c("string", "string", "logical", "numeric", "string", "numeric", "string"),
+      stringsAsFactors = FALSE
+    ),
+    parser_mode = "named"
+  ),
+
+  #----public_interest_rate_loan_quota----
+  public_interest_rate_loan_quota = list(
+    okx_path = "/api/v5/public/interest-rate-loan-quota",
+    parser_schema = data.frame(
+      check.names = FALSE,
+      okx    = c("basic", "vip", "regular", "configCcyList", "config"),
+      formal = c("Basic interest-rate table", "VIP interest information", "Regular-user interest information", "Currencies with customized quota configuration", "Customized quota configuration"),
+      type   = c("string", "string", "string", "string", "string"),
+      stringsAsFactors = FALSE
+    ),
+    parser_mode = "named"
+  ),
+
+  #----public_insurance_fund----
+  public_insurance_fund = list(
+    okx_path = "/api/v5/public/insurance-fund",
+    parser_schema = data.frame(
+      check.names = FALSE,
+      okx    = c("total", "instFamily", "instType", "details"),
+      formal = c("Total security fund balance in USD", "Instrument family", "Instrument type", "Security fund details"),
+      type   = c("numeric", "string", "string", "string"),
+      stringsAsFactors = FALSE
+    ),
+    parser_mode = "named"
+  ),
+
+  #----public_convert_contract_coin----
+  public_convert_contract_coin = list(
+    okx_path = "/api/v5/public/convert-contract-coin",
+    parser_schema = data.frame(
+      check.names = FALSE,
+      okx    = c("type", "instId", "px", "sz", "unit"),
+      formal = c("Convert type", "Instrument ID", "Order price", "Converted quantity", "Currency unit"),
+      type   = c("string", "string", "numeric", "numeric", "string"),
+      stringsAsFactors = FALSE
+    ),
+    parser_mode = "named"
+  ),
+
+  #----public_instrument_tick_bands----
+  public_instrument_tick_bands = list(
+    okx_path = "/api/v5/public/instrument-tick-bands",
+    parser_schema = data.frame(
+      check.names = FALSE,
+      okx    = c("instType", "instFamily", "tickBand"),
+      formal = c("Instrument type", "Instrument family", "Tick size band"),
+      type   = c("string", "string", "string"),
+      stringsAsFactors = FALSE
+    ),
+    parser_mode = "named"
+  ),
+
+  #----public_premium_history----
+  public_premium_history = list(
+    okx_path = "/api/v5/public/premium-history",
+    parser_schema = data.frame(
+      check.names = FALSE,
+      okx    = c("instId", "premium", "ts"),
+      formal = c("Instrument ID", "Premium index", "Data generation time"),
+      type   = c("string", "numeric", "time"),
+      stringsAsFactors = FALSE
+    ),
+    parser_mode = "named"
+  ),
+
+  #----public_option_trades----
+  public_option_trades = list(
+    okx_path = "/api/v5/public/option-trades",
+    parser_schema = data.frame(
+      check.names = FALSE,
+      okx    = c("instId", "instFamily", "tradeId", "px", "sz", "side", "optType", "fillVol", "fwdPx", "idxPx", "markPx", "ts"),
+      formal = c("Instrument ID", "Instrument family", "Trade ID", "Trade price", "Trade quantity", "Trade side", "Option type", "Implied volatility while trading", "Forward price while trading", "Index price while trading", "Mark price while trading", "Trade time"),
+      type   = c("string", "string", "string", "numeric", "numeric", "string", "string", "numeric", "numeric", "numeric", "numeric", "time"),
+      stringsAsFactors = FALSE
+    ),
+    parser_mode = "named"
   )
 )
 
@@ -647,15 +894,27 @@ set_okxr_options <- function(raw_data = NULL, timeout = NULL) {
   "market_books",
   "market_trades",
   "market_history_trades",
+  "market_option_instrument_family_trades",
+  "market_index_tickers",
+  "market_index_candles",
+  "market_history_index_candles",
   "market_candles",
   "market_history_candles",
   "public_instruments",
+  "public_estimated_price",
+  "public_discount_rate_interest_free_quota",
   "public_mark_price",
+  "public_interest_rate_loan_quota",
+  "public_insurance_fund",
+  "public_convert_contract_coin",
+  "public_instrument_tick_bands",
+  "public_premium_history",
   "public_funding_rate",
   "public_funding_rate_history",
   "public_open_interest",
   "public_time",
-  "public_price_limit"
+  "public_price_limit",
+  "public_option_trades"
 )
 
 .api_GET_specs[.public_GET_spec_names] <- lapply(

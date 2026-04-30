@@ -1,5 +1,27 @@
 # okxr news
 
+## okxr 0.3.0
+
+* Added `get_account_instruments()` for account-scoped instrument metadata.
+* Added `get_account_position_risk()` for account and position risk snapshots.
+* Added `get_account_max_size()` and `get_account_max_avail_size()` for
+  account-level sizing checks before order placement.
+* Added `get_account_trade_fee()` and `get_account_interest_rate()` for
+  account fee and borrowing-rate inspection.
+* Added `get_trade_account_rate_limit()` for rate-limit and fill-ratio
+  monitoring.
+* Added `get_public_estimated_price()`,
+  `get_public_discount_rate_interest_free_quota()`,
+  `get_public_interest_rate_loan_quota()`, `get_public_insurance_fund()`,
+  `get_public_convert_contract_coin()`, `get_public_instrument_tick_bands()`,
+  and `get_public_premium_history()` for public reference and risk metadata.
+* Added `get_market_index_tickers()`, `get_market_index_candles()`, and
+  `get_market_history_index_candles()` for public index market data.
+* Added `get_market_option_instrument_family_trades()` and
+  `get_public_option_trades()` for option trade market data.
+* Extended tests and package documentation for the first post-CRAN endpoint
+  expansion batch.
+
 ## okxr 0.2.5
 
 * Updated README status and installation guidance now that `okxr` is available

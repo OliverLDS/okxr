@@ -1,8 +1,12 @@
 Package: okxr
 Title: R Interface to the 'OKX' REST API
-Version: 0.2.5
-Authors@R: person('Oliver', 'Zhou', email = 'oliver.yxzhou@gmail.com', role = c('aut', 'cre'))
-Author: Oliver Zhou [aut, cre]
+Version: 0.3.0
+Authors@R: c(
+    person('Oliver', 'Zhou', email = 'oliver.yxzhou@gmail.com', role = c('aut', 'cre')),
+    person('Lily', 'Li', email = 'lilyli.qc.hk@gmail.com', role = 'aut')
+    )
+Author: Oliver Zhou [aut, cre],
+    Lily Li [aut]
 Maintainer: Oliver Zhou <oliver.yxzhou@gmail.com>
 Description: Provides lightweight R wrappers for the 'OKX' REST API, covering 
     endpoints for market data, trading, account management, asset balances, 

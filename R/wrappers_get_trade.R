@@ -191,3 +191,23 @@ get_trade_fills_history <- function(inst_type, inst_family = NULL, inst_id = NUL
   )
   .gets$trade_fills_history(query_string = query_string, config = config, tz = tz)
 }
+
+#' Get trade account rate limit
+#'
+#' Retrieve account rate limit information related to new and amended order
+#' requests.
+#'
+#' @details
+#' Wraps `/api/v5/trade/account-rate-limit`. Returns one row containing the
+#' current account rate limit and fill-ratio metrics used by OKX.
+#'
+#' @param config List. API credentials/config.
+#' @param tz Character. Time zone for parsing timestamps. Default `"Asia/Hong_Kong"`.
+#'
+#' @return A one-row `data.frame` with rate-limit metrics such as
+#'   `accRateLimit`, `fillRatio`, `mainFillRatio`, `nextAccRateLimit`, and `ts`.
+#'
+#' @export
+get_trade_account_rate_limit <- function(config, tz = .okx_default_tz) {
+  .gets$trade_account_rate_limit(query_string = "", config = config, tz = tz)
+}
