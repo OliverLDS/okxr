@@ -6,10 +6,25 @@ copy trading, with shared request signing and schema-based response parsing.
 
 ## Status
 
-`okxr` is a CRAN-targeted release candidate. It has not been submitted to CRAN
-yet; until acceptance, install the development release from GitHub.
+`okxr` is available on CRAN. Install the stable release from CRAN or use the
+GitHub repository for development versions between CRAN releases.
 
-Current release: `v0.2.4`
+Current development release: `v0.2.5`
+
+## Installation
+
+Stable CRAN release:
+
+```r
+install.packages("okxr")
+```
+
+Development release from GitHub:
+
+```r
+# install.packages("devtools")
+devtools::install_github("OliverLDS/okxr")
+```
 
 ## Features
 
@@ -18,20 +33,6 @@ Current release: `v0.2.4`
 * Shared internal GET/POST generators backed by endpoint specs
 * User-facing wrappers for account, asset, market, trade, and copy-trading APIs
 * Configurable raw vs parsed return mode via `set_okxr_options()`
-
-## Installation
-
-```r
-# Development release
-# install.packages("devtools")
-devtools::install_github("OliverLDS/okxr")
-```
-
-After CRAN acceptance, installation will use:
-
-```r
-install.packages("okxr")
-```
 
 ## Setup
 
@@ -154,6 +155,7 @@ See [NEWS.md](NEWS.md) for release history.
 * [x] CRAN submission checklist for final manual steps
 * [x] Final CRAN submission metadata update
 * [x] CRAN reviewer-requested DESCRIPTION and Rd fixes
+* [x] First CRAN release published
 * [ ] Websocket support
 
 ## License

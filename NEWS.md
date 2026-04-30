@@ -1,5 +1,13 @@
 # okxr news
 
+## okxr 0.2.5
+
+* Updated README status and installation guidance now that `okxr` is available
+  on CRAN.
+* Distinguished the stable CRAN install path from the GitHub development
+  release.
+* Added post-acceptance release metadata cleanup for the first CRAN release.
+
 ## okxr 0.2.4
 
 * Added an API web reference to `DESCRIPTION` as requested by CRAN.
