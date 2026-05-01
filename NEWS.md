@@ -1,5 +1,27 @@
 # okxr news
 
+## okxr 0.3.2
+
+* Added `get_account_interest_accrued()` and
+  `get_account_interest_limits()` for borrowing-cost and borrowing-limit
+  inspection.
+* Added `get_account_max_withdrawal()`, `get_account_risk_state()`,
+  `get_account_greeks()`, `get_account_position_tiers()`, and
+  `get_account_collateral_assets()` for broader account risk and margin
+  coverage.
+* Added `get_account_mmp_config()`,
+  `get_account_move_positions_history()`,
+  `get_account_precheck_set_delta_neutral()`, and
+  `get_account_set_account_switch_precheck()` for operational account
+  inspection and precheck workflows.
+* Added `get_account_bills_history_archive()`,
+  `get_account_subaccount_balances()`,
+  `get_account_subaccount_max_withdrawal()`, and
+  `get_account_spot_borrow_repay_history()` for historical export,
+  sub-account, and spot borrow/repay coverage.
+* Normalized source documentation text to ASCII for safer local package builds
+  under restrictive locale settings.
+
 ## okxr 0.3.1
 
 * Added `get_market_mark_price_candles()` and

@@ -70,7 +70,7 @@ get_trade_order <- function(inst_id, ord_id = NULL, cl_ord_id = NULL, config, tz
 #' A `data.frame` with one row per pending order and columns following the OKX
 #' schema (e.g., `cTime`, `ordId`, `clOrdId`, `tag`, `instId`, `ordType`, `px`,
 #' `sz`, `side`, `posSide`, `tdMode`, `accFillSz`, `fillPx`, `fillSz`,
-#' `fillTime`, `avgPx`, `state`, `lever`, …). Timestamp columns are `POSIXct`.
+#' `fillTime`, `avgPx`, `state`, `lever`, ...). Timestamp columns are `POSIXct`.
 #'
 #' @section Common errors:
 #' - HTTP 401 Unauthorized (missing/invalid credentials)

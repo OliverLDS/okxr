@@ -1,4 +1,4 @@
-#' Build a typed OKX JSON response parser (named or positional) → data.table
+#' Build a typed OKX JSON response parser (named or positional) to data.table
 #'
 #' Constructs and returns a parser function that converts an OKX REST API JSON
 #' response into a typed \code{data.table}, using a provided field schema and a
@@ -35,11 +35,11 @@
 #'   are interpreted as UNIX \emph{milliseconds}.
 #'   \item \strong{Modes}:
 #'     \itemize{
-#'       \item \code{"named"} — fields accessed via \code{okx} keys; a single object
+#'       \item \code{"named"} - fields accessed via \code{okx} keys; a single object
 #'         in \code{$data} is wrapped to one row.
-#'       \item \code{"positional"} — fields accessed by index order of \code{schema}.
+#'       \item \code{"positional"} - fields accessed by index order of \code{schema}.
 #'     }
-#'   \item \strong{Attributes}: \code{attr(DT, "var_labels")} maps \code{okx} → \code{formal}.
+#'   \item \strong{Attributes}: \code{attr(DT, "var_labels")} maps \code{okx} to \code{formal}.
 #' }
 #'
 #' @section Errors & warnings:

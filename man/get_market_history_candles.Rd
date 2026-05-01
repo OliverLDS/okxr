@@ -41,7 +41,7 @@ Retrieve candlestick data before a specific datetime.
 }
 \details{
 Wraps `/api/v5/market/history-candles`. If `before` is supplied, it is
-converted to milliseconds since epoch (in `tz`) and sent as `after=…`
+converted to milliseconds since epoch (in `tz`) and sent as `after=...`
 (per OKX semantics: *return data before this time*).
 }
 \note{

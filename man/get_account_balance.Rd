@@ -15,7 +15,7 @@ get_account_balance(config, tz = .okx_default_tz)
 \value{
 A `data.frame` with account balance and margin metrics (e.g.,
 `totalEq`, `isoEq`, `adjEq`, `availEq`, `ordFroz`, `imr`, `mmr`, `upl`,
-`mgnRatio`, …). Timestamp columns (`uTime`) are `POSIXct`.
+`mgnRatio`, ...). Timestamp columns (`uTime`) are `POSIXct`.
 }
 \description{
 Retrieve account-level margin and equity information for your OKX account.

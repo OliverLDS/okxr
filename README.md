@@ -9,7 +9,7 @@ copy trading, with shared request signing and schema-based response parsing.
 `okxr` is available on CRAN. Install the stable release from CRAN or use the
 GitHub repository for development versions between CRAN releases.
 
-Current development release: `v0.3.1`
+Current development release: `v0.3.2`
 
 ## Installation
 
@@ -151,6 +151,21 @@ get_copy_trade_current_subpos(config = config)
 | account | GET | `get_account_max_avail_size()` |
 | account | GET | `get_account_trade_fee()` |
 | account | GET | `get_account_interest_rate()` |
+| account | GET | `get_account_interest_accrued()` |
+| account | GET | `get_account_max_withdrawal()` |
+| account | GET | `get_account_risk_state()` |
+| account | GET | `get_account_interest_limits()` |
+| account | GET | `get_account_greeks()` |
+| account | GET | `get_account_position_tiers()` |
+| account | GET | `get_account_collateral_assets()` |
+| account | GET | `get_account_mmp_config()` |
+| account | GET | `get_account_move_positions_history()` |
+| account | GET | `get_account_precheck_set_delta_neutral()` |
+| account | GET | `get_account_bills_history_archive()` |
+| account | GET | `get_account_subaccount_balances()` |
+| account | GET | `get_account_subaccount_max_withdrawal()` |
+| account | GET | `get_account_set_account_switch_precheck()` |
+| account | GET | `get_account_spot_borrow_repay_history()` |
 | account | GET | `get_account_bills()` |
 | asset | GET | `get_asset_balances()` |
 | asset | GET | `get_asset_currencies()` |
@@ -185,7 +200,7 @@ See [NEWS.md](NEWS.md) for release history.
 * [x] First CRAN release published
 * [x] First post-CRAN endpoint expansion batch
 * [x] Expanded public reference and index market coverage
-* [x] Broader public and account GET coverage for v0.3.1
+* [x] Broader account inspection and sub-account GET coverage for v0.3.2
 * [ ] Websocket support
 
 ## License

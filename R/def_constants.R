@@ -71,7 +71,7 @@ set_okxr_options <- function(raw_data = NULL, timeout = NULL) {
 #' A named list describing how to call and parse selected **POST** endpoints.
 #'
 #' Each entry has:
-#' - `okx_path` (character): REST path beginning with `/api/…`.
+#' - `okx_path` (character): REST path beginning with `/api/...`.
 #' - `parser_schema` (`data.frame`): three columns
 #'   - `okx`: field name as returned by OKX
 #'   - `formal`: human-readable label
@@ -162,7 +162,7 @@ set_okxr_options <- function(raw_data = NULL, timeout = NULL) {
 #' A named list describing how to call and parse selected **POST** endpoints.
 #'
 #' Each entry has:
-#' - `okx_path` (character): REST path beginning with `/api/…`.
+#' - `okx_path` (character): REST path beginning with `/api/...`.
 #' - `parser_schema` (`data.frame`): three columns
 #'   - `okx`: field name as returned by OKX
 #'   - `formal`: human-readable label
@@ -492,6 +492,201 @@ set_okxr_options <- function(raw_data = NULL, timeout = NULL) {
       okx    = c("instId", "mgnMode", "mgnCcy", "maxLoan", "ccy", "side"),
       formal = c("Instrument ID", "Margin mode", "Margin currency", "Maximum loan", "Currency", "Order side"),
       type   = c("string", "string", "string", "numeric", "string", "string"),
+      stringsAsFactors = FALSE
+    ),
+    parser_mode = "named"
+  ),
+
+  #----account_interest_accrued----
+  account_interest_accrued = list(
+    okx_path = "/api/v5/account/interest-accrued",
+    parser_schema = data.frame(
+      check.names = FALSE,
+      okx    = c("type", "ccy", "instId", "mgnMode", "interest", "interestRate", "liab", "totalLiab", "interestFreeLiab", "ts"),
+      formal = c("Loan type", "Loan currency", "Instrument ID", "Margin mode", "Interest accrued", "Hourly borrowing interest rate", "Liability", "Total liability", "Interest-free liability", "Timestamp"),
+      type   = c("string", "string", "string", "string", "numeric", "numeric", "numeric", "numeric", "numeric", "time"),
+      stringsAsFactors = FALSE
+    ),
+    parser_mode = "named"
+  ),
+
+  #----account_max_withdrawal----
+  account_max_withdrawal = list(
+    okx_path = "/api/v5/account/max-withdrawal",
+    parser_schema = data.frame(
+      check.names = FALSE,
+      okx    = c("ccy", "maxWd", "maxWdEx", "spotOffsetMaxWd", "spotOffsetMaxWdEx"),
+      formal = c("Currency", "Maximum withdrawal", "Maximum withdrawal including borrowed assets", "Spot offset maximum withdrawal", "Spot offset maximum withdrawal including borrowed assets"),
+      type   = c("string", "numeric", "numeric", "numeric", "numeric"),
+      stringsAsFactors = FALSE
+    ),
+    parser_mode = "named"
+  ),
+
+  #----account_risk_state----
+  account_risk_state = list(
+    okx_path = "/api/v5/account/risk-state",
+    parser_schema = data.frame(
+      check.names = FALSE,
+      okx    = c("atRisk", "atRiskIdx", "atRiskMgn", "ts"),
+      formal = c("Account at risk", "Derivatives risk units", "Margin risk units", "Timestamp"),
+      type   = c("logical", "string", "string", "time"),
+      stringsAsFactors = FALSE
+    ),
+    parser_mode = "named"
+  ),
+
+  #----account_interest_limits----
+  account_interest_limits = list(
+    okx_path = "/api/v5/account/interest-limits",
+    parser_schema = data.frame(
+      check.names = FALSE,
+      okx    = c("debt", "interest", "loanAlloc", "nextDiscountTime", "nextInterestTime", "records"),
+      formal = c("Current debt in USD", "Current interest in USD", "VIP loan allocation", "Next discount time", "Next accrual time", "Per-currency loan records"),
+      type   = c("numeric", "numeric", "numeric", "time", "time", "string"),
+      stringsAsFactors = FALSE
+    ),
+    parser_mode = "named"
+  ),
+
+  #----account_greeks----
+  account_greeks = list(
+    okx_path = "/api/v5/account/greeks",
+    parser_schema = data.frame(
+      check.names = FALSE,
+      okx    = c("thetaBS", "thetaPA", "deltaBS", "deltaPA", "gammaBS", "gammaPA", "vegaBS", "vegaPA", "ccy", "ts"),
+      formal = c("Black-Scholes theta", "Coin theta", "Black-Scholes delta", "Coin delta", "Black-Scholes gamma", "Coin gamma", "Black-Scholes vega", "Coin vega", "Currency", "Timestamp"),
+      type   = c("numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "string", "time"),
+      stringsAsFactors = FALSE
+    ),
+    parser_mode = "named"
+  ),
+
+  #----account_position_tiers----
+  account_position_tiers = list(
+    okx_path = "/api/v5/account/position-tiers",
+    parser_schema = data.frame(
+      check.names = FALSE,
+      okx    = c("uly", "instFamily", "maxSz", "posType"),
+      formal = c("Underlying", "Instrument family", "Maximum position size", "Position limitation type"),
+      type   = c("string", "string", "numeric", "string"),
+      stringsAsFactors = FALSE
+    ),
+    parser_mode = "named"
+  ),
+
+  #----account_collateral_assets----
+  account_collateral_assets = list(
+    okx_path = "/api/v5/account/collateral-assets",
+    parser_schema = data.frame(
+      check.names = FALSE,
+      okx    = c("ccy", "collateralEnabled"),
+      formal = c("Currency", "Collateral enabled"),
+      type   = c("string", "logical"),
+      stringsAsFactors = FALSE
+    ),
+    parser_mode = "named"
+  ),
+
+  #----account_mmp_config----
+  account_mmp_config = list(
+    okx_path = "/api/v5/account/mmp-config",
+    parser_schema = data.frame(
+      check.names = FALSE,
+      okx    = c("instFamily", "mmpFrozen", "mmpFrozenUntil", "timeInterval", "frozenInterval", "qtyLimit"),
+      formal = c("Instrument family", "MMP frozen", "MMP frozen until", "Monitoring interval", "Frozen interval", "Quantity limit"),
+      type   = c("string", "logical", "numeric", "numeric", "numeric", "numeric"),
+      stringsAsFactors = FALSE
+    ),
+    parser_mode = "named"
+  ),
+
+  #----account_move_positions_history----
+  account_move_positions_history = list(
+    okx_path = "/api/v5/account/move-positions-history",
+    parser_schema = data.frame(
+      check.names = FALSE,
+      okx    = c("clientId", "blockTdId", "state", "ts", "fromAcct", "toAcct", "legs"),
+      formal = c("Client-supplied ID", "Block trade ID", "Transfer state", "Processed time", "Source account", "Destination account", "Position transfer legs"),
+      type   = c("string", "string", "string", "time", "string", "string", "string"),
+      stringsAsFactors = FALSE
+    ),
+    parser_mode = "named"
+  ),
+
+  #----account_precheck_set_delta_neutral----
+  account_precheck_set_delta_neutral = list(
+    okx_path = "/api/v5/account/precheck-set-delta-neutral",
+    parser_schema = data.frame(
+      check.names = FALSE,
+      okx    = c("unmatchedInfoCheck"),
+      formal = c("Delta-neutral unmatched information"),
+      type   = c("string"),
+      stringsAsFactors = FALSE
+    ),
+    parser_mode = "named"
+  ),
+
+  #----account_bills_history_archive----
+  account_bills_history_archive = list(
+    okx_path = "/api/v5/account/bills-history-archive",
+    parser_schema = data.frame(
+      check.names = FALSE,
+      okx    = c("fileHref", "state", "ts"),
+      formal = c("Download file link", "Download link status", "Request time"),
+      type   = c("string", "string", "time"),
+      stringsAsFactors = FALSE
+    ),
+    parser_mode = "named"
+  ),
+
+  #----account_subaccount_balances----
+  account_subaccount_balances = list(
+    okx_path = "/api/v5/account/subaccount/balances",
+    parser_schema = data.frame(
+      check.names = FALSE,
+      okx    = c("uTime", "totalEq", "isoEq", "adjEq", "availEq", "ordFroz", "imr", "mmr", "borrowFroz", "mgnRatio", "notionalUsd", "notionalUsdForBorrow", "notionalUsdForSwap", "notionalUsdForFutures", "notionalUsdForOption", "upl", "delta", "deltaLever", "deltaNeutralStatus", "details"),
+      formal = c("Update time", "Total equity", "Isolated margin equity", "Adjusted / Effective equity", "Available equity", "Frozen order margin", "Initial margin requirement", "Maintenance margin requirement", "Potential borrowing IMR", "Maintenance margin ratio", "Notional USD", "Notional USD for borrow", "Notional USD for swaps", "Notional USD for futures", "Notional USD for options", "Unrealized profit and loss", "Delta", "Delta leverage", "Delta neutral status", "Per-currency balance details"),
+      type   = c("time", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "string", "string"),
+      stringsAsFactors = FALSE
+    ),
+    parser_mode = "named"
+  ),
+
+  #----account_subaccount_max_withdrawal----
+  account_subaccount_max_withdrawal = list(
+    okx_path = "/api/v5/account/subaccount/max-withdrawal",
+    parser_schema = data.frame(
+      check.names = FALSE,
+      okx    = c("ccy", "maxWd", "maxWdEx", "spotOffsetMaxWd", "spotOffsetMaxWdEx"),
+      formal = c("Currency", "Maximum withdrawal", "Maximum withdrawal including borrowed assets", "Spot offset maximum withdrawal", "Spot offset maximum withdrawal including borrowed assets"),
+      type   = c("string", "numeric", "numeric", "numeric", "numeric"),
+      stringsAsFactors = FALSE
+    ),
+    parser_mode = "named"
+  ),
+
+  #----account_set_account_switch_precheck----
+  account_set_account_switch_precheck = list(
+    okx_path = "/api/v5/account/set-account-switch-precheck",
+    parser_schema = data.frame(
+      check.names = FALSE,
+      okx    = c("acctLv", "curAcctLv", "mgnAft", "mgnBf", "posList", "posTierCheck", "riskOffsetType", "sCode", "unmatchedInfoCheck"),
+      formal = c("Target account mode", "Current account mode", "Margin after switch", "Margin before switch", "Position list", "Position tier check", "Risk offset type", "Status code", "Unmatched information"),
+      type   = c("string", "string", "string", "string", "string", "string", "string", "string", "string"),
+      stringsAsFactors = FALSE
+    ),
+    parser_mode = "named"
+  ),
+
+  #----account_spot_borrow_repay_history----
+  account_spot_borrow_repay_history = list(
+    okx_path = "/api/v5/account/spot-borrow-repay-history",
+    parser_schema = data.frame(
+      check.names = FALSE,
+      okx    = c("ccy", "type", "amt", "accBorrowed", "ts"),
+      formal = c("Currency", "Event type", "Amount", "Accumulated borrowed amount", "Timestamp"),
+      type   = c("string", "string", "numeric", "numeric", "time"),
       stringsAsFactors = FALSE
     ),
     parser_mode = "named"

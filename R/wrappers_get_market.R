@@ -60,7 +60,7 @@ get_market_candles <- function(inst_id, bar, limit = 100L, config = NULL, tz = .
 #'
 #' @details
 #' Wraps `/api/v5/market/history-candles`. If `before` is supplied, it is
-#' converted to milliseconds since epoch (in `tz`) and sent as `after=…`
+#' converted to milliseconds since epoch (in `tz`) and sent as `after=...`
 #' (per OKX semantics: *return data before this time*).
 #'
 #' @param inst_id Character. Instrument ID, e.g. `"BTC-USDT"`.
@@ -405,7 +405,7 @@ get_market_block_tickers <- function(inst_type, inst_family = NULL, config = NUL
 #' @return
 #' A `data.frame` with instrument metadata (e.g., `instType`, `instId`, `uly`,
 #' `baseCcy`, `quoteCcy`, `settleCcy`, `ctVal`, `ctMult`, `tickSz`, `lotSz`,
-#' `minSz`, `expTime`, `lever`, `state`, …).
+#' `minSz`, `expTime`, `lever`, `state`, ...).
 #'
 #' @examples
 #' \dontrun{

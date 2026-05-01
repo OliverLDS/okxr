@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils_parser.R
 \name{.make_parser}
 \alias{.make_parser}
-\title{Build a typed OKX JSON response parser (named or positional) → data.table}
+\title{Build a typed OKX JSON response parser (named or positional) to data.table}
 \usage{
 .make_parser(schema, mode = c("named", "positional", "vector"))
 }
@@ -45,11 +45,11 @@ single object, the parser wraps it as a one-row table.
   are interpreted as UNIX \emph{milliseconds}.
   \item \strong{Modes}:
     \itemize{
-      \item \code{"named"} — fields accessed via \code{okx} keys; a single object
+      \item \code{"named"} - fields accessed via \code{okx} keys; a single object
         in \code{$data} is wrapped to one row.
-      \item \code{"positional"} — fields accessed by index order of \code{schema}.
+      \item \code{"positional"} - fields accessed by index order of \code{schema}.
     }
-  \item \strong{Attributes}: \code{attr(DT, "var_labels")} maps \code{okx} → \code{formal}.
+  \item \strong{Attributes}: \code{attr(DT, "var_labels")} maps \code{okx} to \code{formal}.
 }
 }
 \section{Errors & warnings}{

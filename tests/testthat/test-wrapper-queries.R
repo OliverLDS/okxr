@@ -48,6 +48,21 @@ test_that("GET wrappers build expected query strings", {
       account_max_avail_size = function(query_string, config, tz) query_string,
       account_trade_fee = function(query_string, config, tz) query_string,
       account_interest_rate = function(query_string, config, tz) query_string,
+      account_interest_accrued = function(query_string, config, tz) query_string,
+      account_max_withdrawal = function(query_string, config, tz) query_string,
+      account_risk_state = function(query_string, config, tz) query_string,
+      account_interest_limits = function(query_string, config, tz) query_string,
+      account_greeks = function(query_string, config, tz) query_string,
+      account_position_tiers = function(query_string, config, tz) query_string,
+      account_collateral_assets = function(query_string, config, tz) query_string,
+      account_mmp_config = function(query_string, config, tz) query_string,
+      account_move_positions_history = function(query_string, config, tz) query_string,
+      account_precheck_set_delta_neutral = function(query_string, config, tz) query_string,
+      account_bills_history_archive = function(query_string, config, tz) query_string,
+      account_subaccount_balances = function(query_string, config, tz) query_string,
+      account_subaccount_max_withdrawal = function(query_string, config, tz) query_string,
+      account_set_account_switch_precheck = function(query_string, config, tz) query_string,
+      account_spot_borrow_repay_history = function(query_string, config, tz) query_string,
       asset_currencies = function(query_string, config, tz) query_string,
       trade_fills_history = function(query_string, config, tz) query_string,
       trade_account_rate_limit = function(query_string, config, tz) query_string
@@ -219,6 +234,66 @@ test_that("GET wrappers build expected query strings", {
   expect_equal(
     okxr::get_account_interest_rate(ccy = "BTC", config = cfg),
     "?ccy=BTC"
+  )
+  expect_equal(
+    okxr::get_account_interest_accrued(ccy = "BTC", mgn_mode = "cross", limit = 10, config = cfg),
+    "?ccy=BTC&mgnMode=cross&limit=10"
+  )
+  expect_equal(
+    okxr::get_account_max_withdrawal(ccy = "BTC,ETH", config = cfg),
+    "?ccy=BTC%2CETH"
+  )
+  expect_equal(
+    okxr::get_account_risk_state(config = cfg),
+    ""
+  )
+  expect_equal(
+    okxr::get_account_interest_limits(type = "2", ccy = "BTC", config = cfg),
+    "?type=2&ccy=BTC"
+  )
+  expect_equal(
+    okxr::get_account_greeks(ccy = "BTC", config = cfg),
+    "?ccy=BTC"
+  )
+  expect_equal(
+    okxr::get_account_position_tiers(inst_type = "SWAP", inst_family = "BTC-USDT", config = cfg),
+    "?instType=SWAP&instFamily=BTC-USDT"
+  )
+  expect_equal(
+    okxr::get_account_collateral_assets(ccy = "BTC,ETH", collateral_enabled = TRUE, config = cfg),
+    "?ccy=BTC%2CETH&collateralEnabled=TRUE"
+  )
+  expect_equal(
+    okxr::get_account_mmp_config(inst_family = "BTC-USD", config = cfg),
+    "?instFamily=BTC-USD"
+  )
+  expect_equal(
+    okxr::get_account_move_positions_history(client_id = "move-1", state = "filled", limit = 5, config = cfg),
+    "?clientId=move-1&limit=5&state=filled"
+  )
+  expect_equal(
+    okxr::get_account_precheck_set_delta_neutral(stgy_type = 1, config = cfg),
+    "?stgyType=1"
+  )
+  expect_equal(
+    okxr::get_account_bills_history_archive(year = 2024, quarter = "Q1", type = "1,2", config = cfg),
+    "?year=2024&quarter=Q1&type=1%2C2"
+  )
+  expect_equal(
+    okxr::get_account_subaccount_balances(sub_acct = "desk_1", config = cfg),
+    "?subAcct=desk_1"
+  )
+  expect_equal(
+    okxr::get_account_subaccount_max_withdrawal(sub_acct = "desk_1", ccy = "BTC", config = cfg),
+    "?subAcct=desk_1&ccy=BTC"
+  )
+  expect_equal(
+    okxr::get_account_set_account_switch_precheck(acct_lv = 3, config = cfg),
+    "?acctLv=3"
+  )
+  expect_equal(
+    okxr::get_account_spot_borrow_repay_history(ccy = "USDT", type = "auto_repay", limit = 20, config = cfg),
+    "?ccy=USDT&type=auto_repay&limit=20"
   )
   expect_equal(
     okxr::get_account_bills(ccy = "USDT", sub_type = "1", config = cfg),

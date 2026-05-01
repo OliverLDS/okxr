@@ -15,7 +15,7 @@
 #' @return
 #' A `data.frame` with account balance and margin metrics (e.g.,
 #' `totalEq`, `isoEq`, `adjEq`, `availEq`, `ordFroz`, `imr`, `mmr`, `upl`,
-#' `mgnRatio`, …). Timestamp columns (`uTime`) are `POSIXct`.
+#' `mgnRatio`, ...). Timestamp columns (`uTime`) are `POSIXct`.
 #'
 #' @examples
 #' \dontrun{
@@ -464,4 +464,307 @@ get_account_max_loan <- function(mgn_mode, inst_id = NULL, ccy = NULL, mgn_ccy =
     tradeQuoteCcy = trade_quote_ccy
   )
   .gets$account_max_loan(query_string = query_string, config = config, tz = tz)
+}
+
+#' Get account interest accrued history
+#'
+#' Retrieve accrued borrowing interest records for the past year.
+#'
+#' @param type Character or `NULL`. Loan type. Currently `"2"` for market loans.
+#' @param ccy Character or `NULL`. Loan currency.
+#' @param inst_id Character or `NULL`. Instrument ID.
+#' @param mgn_mode Character or `NULL`. Margin mode.
+#' @param after Character or `NULL`. Pagination cursor for earlier rows.
+#' @param before Character or `NULL`. Pagination cursor for newer rows.
+#' @param limit Integer or `NULL`. Number of rows to request.
+#' @param config List. API credentials/config.
+#' @param tz Character. Time zone for parsing timestamps. Default `"Asia/Hong_Kong"`.
+#'
+#' @return A `data.frame` with one row per accrued-interest event.
+#'
+#' @export
+get_account_interest_accrued <- function(type = NULL, ccy = NULL, inst_id = NULL, mgn_mode = NULL, after = NULL, before = NULL, limit = NULL, config, tz = .okx_default_tz) {
+  query_string <- .okx_build_query(
+    type = type,
+    ccy = ccy,
+    instId = inst_id,
+    mgnMode = mgn_mode,
+    after = after,
+    before = before,
+    limit = limit
+  )
+  .gets$account_interest_accrued(query_string = query_string, config = config, tz = tz)
+}
+
+#' Get account maximum withdrawals
+#'
+#' Retrieve the maximum transferable amount from trading to funding account.
+#'
+#' @param ccy Character or `NULL`. One currency or a comma-separated list of up
+#'   to 20 currencies.
+#' @param config List. API credentials/config.
+#' @param tz Character. Time zone for parsing timestamps. Default `"Asia/Hong_Kong"`.
+#'
+#' @return A `data.frame` with per-currency maximum withdrawal values.
+#'
+#' @export
+get_account_max_withdrawal <- function(ccy = NULL, config, tz = .okx_default_tz) {
+  query_string <- .okx_build_query(ccy = ccy)
+  .gets$account_max_withdrawal(query_string = query_string, config = config, tz = tz)
+}
+
+#' Get account risk state
+#'
+#' Retrieve portfolio-margin account risk flags and affected risk units.
+#'
+#' @param config List. API credentials/config.
+#' @param tz Character. Time zone for parsing timestamps. Default `"Asia/Hong_Kong"`.
+#'
+#' @return A one-row `data.frame` with the account risk flag and JSON-encoded
+#'   risk-unit arrays.
+#'
+#' @export
+get_account_risk_state <- function(config, tz = .okx_default_tz) {
+  .gets$account_risk_state(query_string = "", config = config, tz = tz)
+}
+
+#' Get account borrow interest and limits
+#'
+#' Retrieve account-level debt, next accrual timestamps, and nested per-currency
+#' borrowing-limit records.
+#'
+#' @param type Character or `NULL`. Loan type. Currently `"2"` for market loans.
+#' @param ccy Character or `NULL`. Loan currency.
+#' @param config List. API credentials/config.
+#' @param tz Character. Time zone for parsing timestamps. Default `"Asia/Hong_Kong"`.
+#'
+#' @return A `data.frame` with account-level limit fields; nested per-currency
+#'   `records` are JSON-encoded.
+#'
+#' @export
+get_account_interest_limits <- function(type = NULL, ccy = NULL, config, tz = .okx_default_tz) {
+  query_string <- .okx_build_query(type = type, ccy = ccy)
+  .gets$account_interest_limits(query_string = query_string, config = config, tz = tz)
+}
+
+#' Get account Greeks
+#'
+#' Retrieve currency-level Greeks across the account.
+#'
+#' @param ccy Character or `NULL`. Currency filter.
+#' @param config List. API credentials/config.
+#' @param tz Character. Time zone for parsing timestamps. Default `"Asia/Hong_Kong"`.
+#'
+#' @return A `data.frame` with one row per currency and Greek metrics in both
+#'   Black-Scholes and coin terms.
+#'
+#' @export
+get_account_greeks <- function(ccy = NULL, config, tz = .okx_default_tz) {
+  query_string <- .okx_build_query(ccy = ccy)
+  .gets$account_greeks(query_string = query_string, config = config, tz = tz)
+}
+
+#' Get account position tiers
+#'
+#' Retrieve portfolio-margin position limits for one or more instrument
+#' families.
+#'
+#' @param inst_type Character. Instrument type: `"SWAP"`, `"FUTURES"`, or
+#'   `"OPTION"`.
+#' @param inst_family Character. One instrument family or a comma-separated list
+#'   of up to five families.
+#' @param config List. API credentials/config.
+#' @param tz Character. Time zone for parsing timestamps. Default `"Asia/Hong_Kong"`.
+#'
+#' @return A `data.frame` with instrument-family position limits.
+#'
+#' @export
+get_account_position_tiers <- function(inst_type, inst_family, config, tz = .okx_default_tz) {
+  query_string <- .okx_build_query(instType = inst_type, instFamily = inst_family)
+  .gets$account_position_tiers(query_string = query_string, config = config, tz = tz)
+}
+
+#' Get account collateral assets
+#'
+#' Retrieve collateral-enabled status for one or more currencies.
+#'
+#' @param ccy Character or `NULL`. One currency or a comma-separated list of up
+#'   to 20 currencies.
+#' @param collateral_enabled Logical, character, or `NULL`. Filter by collateral
+#'   status.
+#' @param config List. API credentials/config.
+#' @param tz Character. Time zone for parsing timestamps. Default `"Asia/Hong_Kong"`.
+#'
+#' @return A `data.frame` with currency-level collateral flags.
+#'
+#' @export
+get_account_collateral_assets <- function(ccy = NULL, collateral_enabled = NULL, config, tz = .okx_default_tz) {
+  query_string <- .okx_build_query(ccy = ccy, collateralEnabled = collateral_enabled)
+  .gets$account_collateral_assets(query_string = query_string, config = config, tz = tz)
+}
+
+#' Get account MMP configuration
+#'
+#' Retrieve option-market-maker-protection configuration for one or more
+#' instrument families.
+#'
+#' @param inst_family Character or `NULL`. Instrument family filter.
+#' @param config List. API credentials/config.
+#' @param tz Character. Time zone for parsing timestamps. Default `"Asia/Hong_Kong"`.
+#'
+#' @return A `data.frame` with MMP configuration fields.
+#'
+#' @export
+get_account_mmp_config <- function(inst_family = NULL, config, tz = .okx_default_tz) {
+  query_string <- .okx_build_query(instFamily = inst_family)
+  .gets$account_mmp_config(query_string = query_string, config = config, tz = tz)
+}
+
+#' Get account move positions history
+#'
+#' Retrieve move-position requests from the last three days.
+#'
+#' @param block_td_id Character or `NULL`. OKX block trade identifier.
+#' @param client_id Character or `NULL`. Client-supplied identifier.
+#' @param begin_ts Character or `NULL`. Inclusive start timestamp in
+#'   milliseconds.
+#' @param end_ts Character or `NULL`. Inclusive end timestamp in milliseconds.
+#' @param limit Integer or `NULL`. Number of rows to request.
+#' @param state Character or `NULL`. Transfer state filter, `"filled"` or
+#'   `"pending"`.
+#' @param config List. API credentials/config.
+#' @param tz Character. Time zone for parsing timestamps. Default `"Asia/Hong_Kong"`.
+#'
+#' @return A `data.frame` with top-level move-position metadata; nested `legs`
+#'   are JSON-encoded.
+#'
+#' @export
+get_account_move_positions_history <- function(block_td_id = NULL, client_id = NULL, begin_ts = NULL, end_ts = NULL, limit = NULL, state = NULL, config, tz = .okx_default_tz) {
+  query_string <- .okx_build_query(
+    blockTdId = block_td_id,
+    clientId = client_id,
+    beginTs = begin_ts,
+    endTs = end_ts,
+    limit = limit,
+    state = state
+  )
+  .gets$account_move_positions_history(query_string = query_string, config = config, tz = tz)
+}
+
+#' Precheck delta-neutral strategy switch
+#'
+#' Retrieve unmatched information that blocks switching into the requested
+#' strategy type.
+#'
+#' @param stgy_type Character or numeric. Strategy type. `"0"` for general or
+#'   `"1"` for delta neutral.
+#' @param config List. API credentials/config.
+#' @param tz Character. Time zone for parsing timestamps. Default `"Asia/Hong_Kong"`.
+#'
+#' @return A one-row `data.frame` with JSON-encoded unmatched information.
+#'
+#' @export
+get_account_precheck_set_delta_neutral <- function(stgy_type, config, tz = .okx_default_tz) {
+  query_string <- .okx_build_query(stgyType = stgy_type)
+  .gets$account_precheck_set_delta_neutral(query_string = query_string, config = config, tz = tz)
+}
+
+#' Get archived account bill export links
+#'
+#' Retrieve the generated CSV export link for historical account bills since
+#' 2021.
+#'
+#' @param year Character or numeric. Four-digit year.
+#' @param quarter Character. Quarter code, one of `"Q1"` to `"Q4"`.
+#' @param type Character or `NULL`. Optional comma-separated bill type filter.
+#' @param config List. API credentials/config.
+#' @param tz Character. Time zone for parsing timestamps. Default `"Asia/Hong_Kong"`.
+#'
+#' @return A `data.frame` with file-link status rows.
+#'
+#' @export
+get_account_bills_history_archive <- function(year, quarter, type = NULL, config, tz = .okx_default_tz) {
+  query_string <- .okx_build_query(year = year, quarter = quarter, type = type)
+  .gets$account_bills_history_archive(query_string = query_string, config = config, tz = tz)
+}
+
+#' Get sub-account trading balances
+#'
+#' Retrieve account-level trading balances for a sub-account from the master
+#' account.
+#'
+#' @param sub_acct Character. Sub-account name.
+#' @param config List. API credentials/config.
+#' @param tz Character. Time zone for parsing timestamps. Default `"Asia/Hong_Kong"`.
+#'
+#' @return A `data.frame` with account-level balance fields; nested per-currency
+#'   `details` are JSON-encoded.
+#'
+#' @export
+get_account_subaccount_balances <- function(sub_acct, config, tz = .okx_default_tz) {
+  query_string <- .okx_build_query(subAcct = sub_acct)
+  .gets$account_subaccount_balances(query_string = query_string, config = config, tz = tz)
+}
+
+#' Get sub-account maximum withdrawals
+#'
+#' Retrieve the maximum withdrawal information for a sub-account from the master
+#' account.
+#'
+#' @param sub_acct Character. Sub-account name.
+#' @param ccy Character or `NULL`. One currency or a comma-separated list of up
+#'   to 20 currencies.
+#' @param config List. API credentials/config.
+#' @param tz Character. Time zone for parsing timestamps. Default `"Asia/Hong_Kong"`.
+#'
+#' @return A `data.frame` with per-currency maximum withdrawal values.
+#'
+#' @export
+get_account_subaccount_max_withdrawal <- function(sub_acct, ccy = NULL, config, tz = .okx_default_tz) {
+  query_string <- .okx_build_query(subAcct = sub_acct, ccy = ccy)
+  .gets$account_subaccount_max_withdrawal(query_string = query_string, config = config, tz = tz)
+}
+
+#' Precheck account mode switch
+#'
+#' Retrieve precheck information and any unmatched requirements for switching to
+#' a target account mode.
+#'
+#' @param acct_lv Character or numeric. Target account mode.
+#' @param config List. API credentials/config.
+#' @param tz Character. Time zone for parsing timestamps. Default `"Asia/Hong_Kong"`.
+#'
+#' @return A `data.frame` with switch-precheck fields; nested margin and
+#'   unmatched-information structures are JSON-encoded.
+#'
+#' @export
+get_account_set_account_switch_precheck <- function(acct_lv, config, tz = .okx_default_tz) {
+  query_string <- .okx_build_query(acctLv = acct_lv)
+  .gets$account_set_account_switch_precheck(query_string = query_string, config = config, tz = tz)
+}
+
+#' Get spot borrow and repay history
+#'
+#' Retrieve spot-mode borrow and repay history.
+#'
+#' @param ccy Character or `NULL`. Currency filter.
+#' @param type Character or `NULL`. Event type filter.
+#' @param after Character or `NULL`. Pagination cursor for earlier rows.
+#' @param before Character or `NULL`. Pagination cursor for newer rows.
+#' @param limit Integer or `NULL`. Number of rows to request.
+#' @param config List. API credentials/config.
+#' @param tz Character. Time zone for parsing timestamps. Default `"Asia/Hong_Kong"`.
+#'
+#' @return A `data.frame` with one row per borrow or repay event.
+#'
+#' @export
+get_account_spot_borrow_repay_history <- function(ccy = NULL, type = NULL, after = NULL, before = NULL, limit = NULL, config, tz = .okx_default_tz) {
+  query_string <- .okx_build_query(
+    ccy = ccy,
+    type = type,
+    after = after,
+    before = before,
+    limit = limit
+  )
+  .gets$account_spot_borrow_repay_history(query_string = query_string, config = config, tz = tz)
 }
