@@ -1,5 +1,31 @@
 # okxr news
 
+## okxr 0.3.3
+
+* Added `get_trade_orders_history()` and
+  `get_trade_orders_history_archive()` for broader trade history coverage
+  beyond pending orders and the earlier 7-day wrapper.
+* Added `get_trade_easy_convert_currency_list()`,
+  `get_trade_easy_convert_history()`,
+  `get_trade_one_click_repay_currency_list()`,
+  `get_trade_one_click_repay_history()`,
+  `get_trade_one_click_repay_currency_list_v2()`, and
+  `get_trade_one_click_repay_history_v2()` for convert and repay workflow
+  inspection.
+* Added `get_trade_order_algo()`,
+  `get_trade_orders_algo_pending()`, and
+  `get_trade_orders_algo_history()` for read-only algo-order inspection.
+* Added `get_asset_non_tradable_assets()`,
+  `get_asset_asset_valuation()`,
+  `get_asset_transfer_state()`,
+  `get_asset_bills()`,
+  `get_asset_bills_history()`,
+  `get_asset_deposit_withdraw_status()`, and
+  `get_asset_exchange_list()` for broader funding-account inspection.
+* Added `get_asset_convert_currencies()`,
+  `get_asset_convert_currency_pair()`, and
+  `get_asset_convert_history()` for asset convert metadata and history.
+
 ## okxr 0.3.2
 
 * Added `get_account_interest_accrued()` and

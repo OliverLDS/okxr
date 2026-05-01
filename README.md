@@ -9,7 +9,7 @@ copy trading, with shared request signing and schema-based response parsing.
 `okxr` is available on CRAN. Install the stable release from CRAN or use the
 GitHub repository for development versions between CRAN releases.
 
-Current development release: `v0.3.2`
+Current development release: `v0.3.3`
 
 ## Installation
 
@@ -169,7 +169,16 @@ get_copy_trade_current_subpos(config = config)
 | account | GET | `get_account_bills()` |
 | asset | GET | `get_asset_balances()` |
 | asset | GET | `get_asset_currencies()` |
+| asset | GET | `get_asset_non_tradable_assets()` |
+| asset | GET | `get_asset_asset_valuation()` |
+| asset | GET | `get_asset_bills()` |
+| asset | GET | `get_asset_transfer_state()` |
+| asset | GET | `get_asset_convert_history()` |
 | trade | GET | `get_trade_order()` |
+| trade | GET | `get_trade_orders_history()` |
+| trade | GET | `get_trade_orders_algo_pending()` |
+| trade | GET | `get_trade_easy_convert_history()` |
+| trade | GET | `get_trade_one_click_repay_history_v2()` |
 | trade | GET | `get_trade_account_rate_limit()` |
 | trade | GET | `get_trade_fills()` |
 | trade | POST | `post_trade_order()` |
@@ -201,6 +210,7 @@ See [NEWS.md](NEWS.md) for release history.
 * [x] First post-CRAN endpoint expansion batch
 * [x] Expanded public reference and index market coverage
 * [x] Broader account inspection and sub-account GET coverage for v0.3.2
+* [x] Broader trade history, algo-order, asset billing, and convert GET coverage for v0.3.3
 * [ ] Websocket support
 
 ## License

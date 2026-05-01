@@ -1318,6 +1318,217 @@ set_okxr_options <- function(raw_data = NULL, timeout = NULL) {
   )
 )
 
+.api_GET_specs$trade_orders_history <- list(
+  okx_path = "/api/v5/trade/orders-history",
+  parser_schema = .api_GET_specs$trade_orders_history_7d$parser_schema,
+  parser_mode = "named"
+)
+
+.api_GET_specs$trade_orders_history_archive <- list(
+  okx_path = "/api/v5/trade/orders-history-archive",
+  parser_schema = .api_GET_specs$trade_orders_history_7d$parser_schema,
+  parser_mode = "named"
+)
+
+.api_GET_specs$trade_easy_convert_currency_list <- list(
+  okx_path = "/api/v5/trade/easy-convert-currency-list",
+  parser_schema = data.frame(
+    okx = c("fromData", "toCcy"),
+    formal = c("Source currency data", "Target currency list"),
+    type = c("string", "string"),
+    stringsAsFactors = FALSE
+  ),
+  parser_mode = "named"
+)
+
+.api_GET_specs$trade_easy_convert_history <- list(
+  okx_path = "/api/v5/trade/easy-convert-history",
+  parser_schema = data.frame(
+    okx = c("fromCcy", "fillFromSz", "toCcy", "fillToSz", "acct", "status", "uTime"),
+    formal = c("Source currency", "Filled source size", "Target currency", "Filled target size", "Account type", "Conversion status", "Trade time"),
+    type = c("string", "numeric", "string", "numeric", "string", "string", "time"),
+    stringsAsFactors = FALSE
+  ),
+  parser_mode = "named"
+)
+
+.api_GET_specs$trade_one_click_repay_currency_list <- list(
+  okx_path = "/api/v5/trade/one-click-repay-currency-list",
+  parser_schema = data.frame(
+    okx = c("debtType", "debtData", "repayData"),
+    formal = c("Debt type", "Debt currency data", "Repay currency data"),
+    type = c("string", "string", "string"),
+    stringsAsFactors = FALSE
+  ),
+  parser_mode = "named"
+)
+
+.api_GET_specs$trade_one_click_repay_history <- list(
+  okx_path = "/api/v5/trade/one-click-repay-history",
+  parser_schema = data.frame(
+    okx = c("debtCcy", "fillDebtSz", "repayCcy", "fillRepaySz", "status", "uTime"),
+    formal = c("Debt currency", "Filled debt size", "Repay currency", "Filled repay size", "Repay status", "Trade time"),
+    type = c("string", "numeric", "string", "numeric", "string", "time"),
+    stringsAsFactors = FALSE
+  ),
+  parser_mode = "named"
+)
+
+.api_GET_specs$trade_one_click_repay_currency_list_v2 <- list(
+  okx_path = "/api/v5/trade/one-click-repay-currency-list-v2",
+  parser_schema = data.frame(
+    okx = c("debtData", "repayData"),
+    formal = c("Debt currency data", "Repay currency data"),
+    type = c("string", "string"),
+    stringsAsFactors = FALSE
+  ),
+  parser_mode = "named"
+)
+
+.api_GET_specs$trade_one_click_repay_history_v2 <- list(
+  okx_path = "/api/v5/trade/one-click-repay-history-v2",
+  parser_schema = data.frame(
+    okx = c("debtCcy", "repayCcyList", "fillDebtSz", "status", "ordIdInfo", "ts"),
+    formal = c("Debt currency", "Repay currency list", "Filled debt size", "Repay status", "Repay order details", "Request time"),
+    type = c("string", "string", "numeric", "string", "string", "time"),
+    stringsAsFactors = FALSE
+  ),
+  parser_mode = "named"
+)
+
+.trade_algo_schema <- data.frame(
+  okx = c("algoId", "algoClOrdId", "instType", "instId", "ordType", "state", "side", "posSide", "tdMode", "sz", "cTime", "uTime", "attachAlgoOrds", "linkedOrd", "triggerParams", "failCode"),
+  formal = c("Algo order ID", "Client algo order ID", "Instrument type", "Instrument ID", "Algo order type", "Algo order state", "Order side", "Position side", "Trade mode", "Order size", "Creation time", "Update time", "Attached algo orders", "Linked order detail", "Trigger parameters", "Failure code"),
+  type = c("string", "string", "string", "string", "string", "string", "string", "string", "string", "numeric", "time", "time", "string", "string", "string", "string"),
+  stringsAsFactors = FALSE
+)
+
+.api_GET_specs$trade_order_algo <- list(
+  okx_path = "/api/v5/trade/order-algo",
+  parser_schema = .trade_algo_schema,
+  parser_mode = "named"
+)
+
+.api_GET_specs$trade_orders_algo_pending <- list(
+  okx_path = "/api/v5/trade/orders-algo-pending",
+  parser_schema = .trade_algo_schema,
+  parser_mode = "named"
+)
+
+.api_GET_specs$trade_orders_algo_history <- list(
+  okx_path = "/api/v5/trade/orders-algo-history",
+  parser_schema = .trade_algo_schema,
+  parser_mode = "named"
+)
+
+.api_GET_specs$asset_non_tradable_assets <- list(
+  okx_path = "/api/v5/asset/non-tradable-assets",
+  parser_schema = data.frame(
+    okx = c("ccy", "chain", "name", "bal", "canWd", "minWd", "wdAll", "fee", "feeCcy", "burningFeeRate", "needTag", "logoLink", "ctAddr", "wdTickSz"),
+    formal = c("Currency", "Chain", "Asset name", "Balance", "Can withdraw", "Minimum withdrawal", "Withdraw-all amount", "Withdrawal fee", "Fee currency", "Burning fee rate", "Requires tag", "Logo URL", "Contract address suffix", "Withdrawal tick size"),
+    type = c("string", "string", "string", "numeric", "logical", "numeric", "numeric", "numeric", "string", "numeric", "logical", "string", "string", "numeric"),
+    stringsAsFactors = FALSE
+  ),
+  parser_mode = "named"
+)
+
+.api_GET_specs$asset_asset_valuation <- list(
+  okx_path = "/api/v5/asset/asset-valuation",
+  parser_schema = data.frame(
+    okx = c("totalBal", "ts", "details"),
+    formal = c("Total balance in valuation currency", "Valuation time", "Valuation details"),
+    type = c("numeric", "time", "string"),
+    stringsAsFactors = FALSE
+  ),
+  parser_mode = "named"
+)
+
+.api_GET_specs$asset_transfer_state <- list(
+  okx_path = "/api/v5/asset/transfer-state",
+  parser_schema = data.frame(
+    okx = c("transId", "clientId", "ccy", "amt", "type", "from", "to", "subAcct", "state"),
+    formal = c("Transfer ID", "Client ID", "Currency", "Transfer amount", "Transfer type", "From account", "To account", "Sub-account", "Transfer state"),
+    type = c("string", "string", "string", "numeric", "string", "string", "string", "string", "string"),
+    stringsAsFactors = FALSE
+  ),
+  parser_mode = "named"
+)
+
+.asset_bills_schema <- data.frame(
+  okx = c("billId", "ccy", "clientId", "balChg", "bal", "type", "notes", "ts"),
+  formal = c("Bill ID", "Currency", "Client ID", "Balance change", "Balance", "Bill type", "Notes", "Creation time"),
+  type = c("string", "string", "string", "numeric", "numeric", "string", "string", "time"),
+  stringsAsFactors = FALSE
+)
+
+.api_GET_specs$asset_bills <- list(
+  okx_path = "/api/v5/asset/bills",
+  parser_schema = .asset_bills_schema,
+  parser_mode = "named"
+)
+
+.api_GET_specs$asset_bills_history <- list(
+  okx_path = "/api/v5/asset/bills-history",
+  parser_schema = .asset_bills_schema,
+  parser_mode = "named"
+)
+
+.api_GET_specs$asset_deposit_withdraw_status <- list(
+  okx_path = "/api/v5/asset/deposit-withdraw-status",
+  parser_schema = data.frame(
+    okx = c("wdId", "txId", "state", "estCompleteTime"),
+    formal = c("Withdrawal ID", "Transaction hash", "Detailed status", "Estimated completion time"),
+    type = c("string", "string", "string", "string"),
+    stringsAsFactors = FALSE
+  ),
+  parser_mode = "named"
+)
+
+.api_GET_specs$asset_exchange_list <- list(
+  okx_path = "/api/v5/asset/exchange-list",
+  auth = FALSE,
+  parser_schema = data.frame(
+    okx = c("exchName", "exchId"),
+    formal = c("Exchange name", "Exchange ID"),
+    type = c("string", "string"),
+    stringsAsFactors = FALSE
+  ),
+  parser_mode = "named"
+)
+
+.api_GET_specs$asset_convert_currencies <- list(
+  okx_path = "/api/v5/asset/convert/currencies",
+  parser_schema = data.frame(
+    okx = c("ccy", "min", "max"),
+    formal = c("Currency", "Minimum amount (deprecated)", "Maximum amount (deprecated)"),
+    type = c("string", "numeric", "numeric"),
+    stringsAsFactors = FALSE
+  ),
+  parser_mode = "named"
+)
+
+.api_GET_specs$asset_convert_currency_pair <- list(
+  okx_path = "/api/v5/asset/convert/currency-pair",
+  parser_schema = data.frame(
+    okx = c("instId", "baseCcy", "baseCcyMax", "baseCcyMin", "quoteCcy", "quoteCcyMax", "quoteCcyMin"),
+    formal = c("Currency pair", "Base currency", "Base currency maximum", "Base currency minimum", "Quote currency", "Quote currency maximum", "Quote currency minimum"),
+    type = c("string", "string", "numeric", "numeric", "string", "numeric", "numeric"),
+    stringsAsFactors = FALSE
+  ),
+  parser_mode = "named"
+)
+
+.api_GET_specs$asset_convert_history <- list(
+  okx_path = "/api/v5/asset/convert/history",
+  parser_schema = data.frame(
+    okx = c("clTReqId", "instId", "side", "fillPx", "baseCcy", "quoteCcy", "fillBaseSz", "state", "tradeId", "fillQuoteSz", "ts"),
+    formal = c("Client trade request ID", "Currency pair", "Trade side", "Filled price", "Base currency", "Quote currency", "Filled base size", "Trade state", "Trade ID", "Filled quote size", "Trade time"),
+    type = c("string", "string", "string", "numeric", "string", "string", "numeric", "string", "string", "numeric", "time"),
+    stringsAsFactors = FALSE
+  ),
+  parser_mode = "named"
+)
+
 .public_GET_spec_names <- c(
   "market_ticker",
   "market_tickers",

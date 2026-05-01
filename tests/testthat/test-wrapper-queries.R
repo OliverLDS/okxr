@@ -64,6 +64,27 @@ test_that("GET wrappers build expected query strings", {
       account_set_account_switch_precheck = function(query_string, config, tz) query_string,
       account_spot_borrow_repay_history = function(query_string, config, tz) query_string,
       asset_currencies = function(query_string, config, tz) query_string,
+      asset_non_tradable_assets = function(query_string, config, tz) query_string,
+      asset_asset_valuation = function(query_string, config, tz) query_string,
+      asset_transfer_state = function(query_string, config, tz) query_string,
+      asset_bills = function(query_string, config, tz) query_string,
+      asset_bills_history = function(query_string, config, tz) query_string,
+      asset_deposit_withdraw_status = function(query_string, config, tz) query_string,
+      asset_exchange_list = function(query_string, config, tz) query_string,
+      asset_convert_currencies = function(query_string, config, tz) query_string,
+      asset_convert_currency_pair = function(query_string, config, tz) query_string,
+      asset_convert_history = function(query_string, config, tz) query_string,
+      trade_orders_history = function(query_string, config, tz) query_string,
+      trade_orders_history_archive = function(query_string, config, tz) query_string,
+      trade_easy_convert_currency_list = function(query_string, config, tz) query_string,
+      trade_easy_convert_history = function(query_string, config, tz) query_string,
+      trade_one_click_repay_currency_list = function(query_string, config, tz) query_string,
+      trade_one_click_repay_history = function(query_string, config, tz) query_string,
+      trade_one_click_repay_currency_list_v2 = function(query_string, config, tz) query_string,
+      trade_one_click_repay_history_v2 = function(query_string, config, tz) query_string,
+      trade_order_algo = function(query_string, config, tz) query_string,
+      trade_orders_algo_pending = function(query_string, config, tz) query_string,
+      trade_orders_algo_history = function(query_string, config, tz) query_string,
       trade_fills_history = function(query_string, config, tz) query_string,
       trade_account_rate_limit = function(query_string, config, tz) query_string
     ),
@@ -302,6 +323,90 @@ test_that("GET wrappers build expected query strings", {
   expect_equal(
     okxr::get_asset_currencies(ccy = "BTC,ETH", config = cfg),
     "?ccy=BTC%2CETH"
+  )
+  expect_equal(
+    okxr::get_asset_non_tradable_assets(ccy = "ETH", config = cfg),
+    "?ccy=ETH"
+  )
+  expect_equal(
+    okxr::get_asset_asset_valuation(ccy = "USD", config = cfg),
+    "?ccy=USD"
+  )
+  expect_equal(
+    okxr::get_asset_transfer_state(trans_id = "1", type = "0", config = cfg),
+    "?transId=1&type=0"
+  )
+  expect_equal(
+    okxr::get_asset_bills(ccy = "USDT", type = "2", limit = 10, config = cfg),
+    "?ccy=USDT&type=2&limit=10"
+  )
+  expect_equal(
+    okxr::get_asset_bills_history(ccy = "USDT", paging_type = "2", limit = 10, config = cfg),
+    "?ccy=USDT&limit=10&pagingType=2"
+  )
+  expect_equal(
+    okxr::get_asset_deposit_withdraw_status(wd_id = "200045249", config = cfg),
+    "?wdId=200045249"
+  )
+  expect_equal(
+    okxr::get_asset_exchange_list(),
+    ""
+  )
+  expect_equal(
+    okxr::get_asset_convert_currencies(config = cfg),
+    ""
+  )
+  expect_equal(
+    okxr::get_asset_convert_currency_pair(from_ccy = "USDT", to_ccy = "BTC", convert_mode = "1", config = cfg),
+    "?fromCcy=USDT&toCcy=BTC&convertMode=1"
+  )
+  expect_equal(
+    okxr::get_asset_convert_history(cl_t_req_id = "req-1", limit = 10, tag = "desk", config = cfg),
+    "?clTReqId=req-1&limit=10&tag=desk"
+  )
+  expect_equal(
+    okxr::get_trade_orders_history(inst_type = "SPOT", ord_type = "ioc", limit = 10, config = cfg),
+    "?instType=SPOT&ordType=ioc&limit=10"
+  )
+  expect_equal(
+    okxr::get_trade_orders_history_archive(inst_type = "SPOT", category = "delivery", config = cfg),
+    "?instType=SPOT&category=delivery"
+  )
+  expect_equal(
+    okxr::get_trade_easy_convert_currency_list(source = "funding", config = cfg),
+    "?source=funding"
+  )
+  expect_equal(
+    okxr::get_trade_easy_convert_history(limit = 20, config = cfg),
+    "?limit=20"
+  )
+  expect_equal(
+    okxr::get_trade_one_click_repay_currency_list(debt_type = "1", config = cfg),
+    "?debtType=1"
+  )
+  expect_equal(
+    okxr::get_trade_one_click_repay_history(limit = 20, config = cfg),
+    "?limit=20"
+  )
+  expect_equal(
+    okxr::get_trade_one_click_repay_currency_list_v2(config = cfg),
+    ""
+  )
+  expect_equal(
+    okxr::get_trade_one_click_repay_history_v2(limit = 20, config = cfg),
+    "?limit=20"
+  )
+  expect_equal(
+    okxr::get_trade_order_algo(algo_id = "123", config = cfg),
+    "?algoId=123"
+  )
+  expect_equal(
+    okxr::get_trade_orders_algo_pending(ord_type = "conditional", inst_id = "BTC-USDT", config = cfg),
+    "?ordType=conditional&instId=BTC-USDT"
+  )
+  expect_equal(
+    okxr::get_trade_orders_algo_history(ord_type = "conditional", state = "effective", config = cfg),
+    "?ordType=conditional&state=effective"
   )
   expect_equal(
     okxr::get_trade_fills_history(inst_type = "SPOT", limit = 10, config = cfg),
