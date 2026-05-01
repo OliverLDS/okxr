@@ -140,13 +140,15 @@ get_trade_orders_history_7d <- function(inst_type = "SWAP", config, tz = .okx_de
 #' @param after Character or `NULL`. Pagination cursor for earlier records.
 #' @param before Character or `NULL`. Pagination cursor for newer records.
 #' @param limit Integer or `NULL`. Number of rows to request.
+#' @param begin Character or `NULL`. Begin timestamp in milliseconds.
+#' @param end Character or `NULL`. End timestamp in milliseconds.
 #' @param config List. API credentials/config.
 #' @param tz Character. Time zone for parsing timestamps. Default `"Asia/Hong_Kong"`.
 #'
 #' @return A `data.frame` with fill rows.
 #'
 #' @export
-get_trade_fills <- function(inst_type = NULL, inst_family = NULL, inst_id = NULL, ord_id = NULL, sub_type = NULL, after = NULL, before = NULL, limit = NULL, config, tz = .okx_default_tz) {
+get_trade_fills <- function(inst_type = NULL, inst_family = NULL, inst_id = NULL, ord_id = NULL, sub_type = NULL, after = NULL, before = NULL, limit = NULL, begin = NULL, end = NULL, config, tz = .okx_default_tz) {
   query_string <- .okx_build_query(
     instType = inst_type,
     instFamily = inst_family,
@@ -155,7 +157,9 @@ get_trade_fills <- function(inst_type = NULL, inst_family = NULL, inst_id = NULL
     subType = sub_type,
     after = after,
     before = before,
-    limit = limit
+    limit = limit,
+    begin = begin,
+    end = end
   )
   .gets$trade_fills(query_string = query_string, config = config, tz = tz)
 }
@@ -172,13 +176,15 @@ get_trade_fills <- function(inst_type = NULL, inst_family = NULL, inst_id = NULL
 #' @param after Character or `NULL`. Pagination cursor for earlier records.
 #' @param before Character or `NULL`. Pagination cursor for newer records.
 #' @param limit Integer or `NULL`. Number of rows to request.
+#' @param begin Character or `NULL`. Begin timestamp in milliseconds.
+#' @param end Character or `NULL`. End timestamp in milliseconds.
 #' @param config List. API credentials/config.
 #' @param tz Character. Time zone for parsing timestamps. Default `"Asia/Hong_Kong"`.
 #'
 #' @return A `data.frame` with historical fill rows.
 #'
 #' @export
-get_trade_fills_history <- function(inst_type, inst_family = NULL, inst_id = NULL, ord_id = NULL, sub_type = NULL, after = NULL, before = NULL, limit = NULL, config, tz = .okx_default_tz) {
+get_trade_fills_history <- function(inst_type, inst_family = NULL, inst_id = NULL, ord_id = NULL, sub_type = NULL, after = NULL, before = NULL, limit = NULL, begin = NULL, end = NULL, config, tz = .okx_default_tz) {
   query_string <- .okx_build_query(
     instType = inst_type,
     instFamily = inst_family,
@@ -187,7 +193,9 @@ get_trade_fills_history <- function(inst_type, inst_family = NULL, inst_id = NUL
     subType = sub_type,
     after = after,
     before = before,
-    limit = limit
+    limit = limit,
+    begin = begin,
+    end = end
   )
   .gets$trade_fills_history(query_string = query_string, config = config, tz = tz)
 }

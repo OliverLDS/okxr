@@ -317,6 +317,169 @@ set_okxr_options <- function(raw_data = NULL, timeout = NULL) {
     ),
     parser_mode = "named"
   ),
+
+  #----copy_trade_instruments----
+  copy_trade_instruments = list(
+    okx_path     = "/api/v5/copytrading/instruments",
+    parser_schema = data.frame(
+      okx    = c("instId", "enabled"),
+      formal = c("Instrument ID", "Copy trading enabled"),
+      type   = c("string", "logical"),
+      stringsAsFactors = FALSE
+    ),
+    parser_mode = "named"
+  ),
+
+  #----copy_trade_config----
+  copy_trade_config = list(
+    okx_path     = "/api/v5/copytrading/config",
+    parser_schema = data.frame(
+      okx    = c("uniqueCode", "nickName", "portLink", "details"),
+      formal = c("Lead trader unique code", "Nick name", "Portfolio link", "Copy trading configuration details"),
+      type   = c("string", "string", "string", "string"),
+      stringsAsFactors = FALSE
+    ),
+    parser_mode = "named"
+  ),
+
+  #----copy_trade_public_config----
+  copy_trade_public_config = list(
+    okx_path     = "/api/v5/copytrading/public-config",
+    auth         = FALSE,
+    parser_schema = data.frame(
+      okx    = c("maxCopyAmt", "minCopyAmt", "maxCopyTotalAmt", "minCopyRatio", "maxCopyRatio", "maxTpRatio", "maxSlRatio"),
+      formal = c("Maximum copy amount", "Minimum copy amount", "Maximum total copy amount", "Minimum copy ratio", "Maximum copy ratio", "Maximum take-profit ratio", "Maximum stop-loss ratio"),
+      type   = c("numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric"),
+      stringsAsFactors = FALSE
+    ),
+    parser_mode = "named"
+  ),
+
+  #----copy_trade_public_copy_traders----
+  copy_trade_public_copy_traders = list(
+    okx_path     = "/api/v5/copytrading/public-copy-traders",
+    auth         = FALSE,
+    parser_schema = data.frame(
+      okx    = c("ccy", "copyTotalPnl", "copyTraderNumChg", "copyTraderNumChgRatio", "copyTraders"),
+      formal = c("Profit currency", "Total copy trader profit and loss", "Copy trader count change", "Copy trader count change ratio", "Copy trader details"),
+      type   = c("string", "numeric", "integer", "numeric", "string"),
+      stringsAsFactors = FALSE
+    ),
+    parser_mode = "named"
+  ),
+
+  #----copy_trade_public_current_subpositions----
+  copy_trade_public_current_subpositions = list(
+    okx_path     = "/api/v5/copytrading/public-current-subpositions",
+    auth         = FALSE,
+    parser_schema = data.frame(
+      okx    = c("ccy", "instId", "instType", "lever", "margin", "markPx", "mgnMode", "openAvgPx", "openTime", "posSide", "subPos", "subPosId", "uniqueCode", "upl", "uplRatio"),
+      formal = c("Margin currency", "Instrument ID", "Instrument type", "Leverage", "Margin", "Mark price", "Margin mode", "Average open price", "Open time", "Position side", "Subposition size", "Subposition ID", "Lead trader unique code", "Unrealized profit and loss", "Unrealized profit and loss ratio"),
+      type   = c("string", "string", "string", "numeric", "numeric", "numeric", "string", "numeric", "time", "string", "numeric", "string", "string", "numeric", "numeric"),
+      stringsAsFactors = FALSE
+    ),
+    parser_mode = "named"
+  ),
+
+  #----copy_trade_public_subpositions_history----
+  copy_trade_public_subpositions_history = list(
+    okx_path     = "/api/v5/copytrading/public-subpositions-history",
+    auth         = FALSE,
+    parser_schema = data.frame(
+      okx    = c("ccy", "closeAvgPx", "closeTime", "instId", "instType", "lever", "margin", "mgnMode", "openAvgPx", "openTime", "pnl", "pnlRatio", "posSide", "subPos", "subPosId", "uniqueCode"),
+      formal = c("Margin currency", "Average close price", "Close time", "Instrument ID", "Instrument type", "Leverage", "Margin", "Margin mode", "Average open price", "Open time", "Profit and loss", "Profit and loss ratio", "Position side", "Subposition size", "Subposition ID", "Lead trader unique code"),
+      type   = c("string", "numeric", "time", "string", "string", "numeric", "numeric", "string", "numeric", "time", "numeric", "numeric", "string", "numeric", "string", "string"),
+      stringsAsFactors = FALSE
+    ),
+    parser_mode = "named"
+  ),
+
+  #----copy_trade_public_pnl----
+  copy_trade_public_pnl = list(
+    okx_path     = "/api/v5/copytrading/public-pnl",
+    auth         = FALSE,
+    parser_schema = data.frame(
+      okx    = c("beginTs", "pnl", "pnlRatio"),
+      formal = c("Window start time", "Profit and loss", "Profit and loss ratio"),
+      type   = c("time", "numeric", "numeric"),
+      stringsAsFactors = FALSE
+    ),
+    parser_mode = "named"
+  ),
+
+  #----copy_trade_public_stats----
+  copy_trade_public_stats = list(
+    okx_path     = "/api/v5/copytrading/public-stats",
+    auth         = FALSE,
+    parser_schema = data.frame(
+      okx    = c("avgSubPosNotional", "ccy", "curCopyTraderPnl", "investAmt", "lossDays", "profitDays", "winRatio"),
+      formal = c("Average subposition notional", "Quote currency", "Current copy trader profit and loss", "Invested amount", "Loss days", "Profit days", "Win ratio"),
+      type   = c("numeric", "string", "numeric", "numeric", "integer", "integer", "numeric"),
+      stringsAsFactors = FALSE
+    ),
+    parser_mode = "named"
+  ),
+
+  #----copy_trade_public_weekly_pnl----
+  copy_trade_public_weekly_pnl = list(
+    okx_path     = "/api/v5/copytrading/public-weekly-pnl",
+    auth         = FALSE,
+    parser_schema = data.frame(
+      okx    = c("beginTs", "pnl", "pnlRatio"),
+      formal = c("Week start time", "Profit and loss", "Profit and loss ratio"),
+      type   = c("time", "numeric", "numeric"),
+      stringsAsFactors = FALSE
+    ),
+    parser_mode = "named"
+  ),
+
+  #----copy_trade_profit_sharing_details----
+  copy_trade_profit_sharing_details = list(
+    okx_path     = "/api/v5/copytrading/profit-sharing-details",
+    parser_schema = data.frame(
+      okx    = c("ccy", "nickName", "profitSharingAmt", "profitSharingId", "portLink", "ts", "instType"),
+      formal = c("Settlement currency", "Nick name", "Profit sharing amount", "Profit sharing ID", "Portfolio link", "Settlement time", "Instrument type"),
+      type   = c("string", "string", "numeric", "string", "string", "time", "string"),
+      stringsAsFactors = FALSE
+    ),
+    parser_mode = "named"
+  ),
+
+  #----copy_trade_unrealized_profit_sharing_details----
+  copy_trade_unrealized_profit_sharing_details = list(
+    okx_path     = "/api/v5/copytrading/unrealized-profit-sharing-details",
+    parser_schema = data.frame(
+      okx    = c("ccy", "nickName", "portLink", "ts", "unrealizedProfitSharingAmt", "instType"),
+      formal = c("Settlement currency", "Nick name", "Portfolio link", "Observation time", "Unrealized profit sharing amount", "Instrument type"),
+      type   = c("string", "string", "string", "time", "numeric", "string"),
+      stringsAsFactors = FALSE
+    ),
+    parser_mode = "named"
+  ),
+
+  #----copy_trade_total_profit_sharing----
+  copy_trade_total_profit_sharing = list(
+    okx_path     = "/api/v5/copytrading/total-profit-sharing",
+    parser_schema = data.frame(
+      okx    = c("ccy", "totalProfitSharingAmt", "instType"),
+      formal = c("Settlement currency", "Total profit sharing amount", "Instrument type"),
+      type   = c("string", "numeric", "string"),
+      stringsAsFactors = FALSE
+    ),
+    parser_mode = "named"
+  ),
+
+  #----copy_trade_total_unrealized_profit_sharing----
+  copy_trade_total_unrealized_profit_sharing = list(
+    okx_path     = "/api/v5/copytrading/total-unrealized-profit-sharing",
+    parser_schema = data.frame(
+      okx    = c("profitSharingTs", "totalUnrealizedProfitSharingAmt"),
+      formal = c("Profit sharing snapshot time", "Total unrealized profit sharing amount"),
+      type   = c("time", "numeric"),
+      stringsAsFactors = FALSE
+    ),
+    parser_mode = "named"
+  ),
   
   #----asset_balances----
   asset_balances = list(
@@ -334,9 +497,9 @@ set_okxr_options <- function(raw_data = NULL, timeout = NULL) {
   asset_deposit_history = list(
     okx_path     = "/api/v5/asset/deposit-history",
     parser_schema       = data.frame(
-      okx    = c("ts", "amt", "ccy"),
-      formal = c("Timestamp", "Amount", "Currency"),
-      type   = c("time", "numeric", "string"),
+      okx    = c("actualDepBlkConfirm", "amt", "areaCodeFrom", "ccy", "chain", "depId", "from", "fromWdId", "state", "to", "ts", "txId"),
+      formal = c("Actual deposit block confirmations", "Amount", "Origin area code", "Currency", "Chain", "Deposit ID", "Origin address", "Source withdrawal ID", "Deposit state", "Destination address", "Timestamp", "Transaction hash"),
+      type   = c("numeric", "numeric", "string", "string", "string", "string", "string", "string", "string", "string", "time", "string"),
       stringsAsFactors = FALSE
     ),
     parser_mode = "named"
@@ -346,9 +509,9 @@ set_okxr_options <- function(raw_data = NULL, timeout = NULL) {
   asset_withdrawal_history = list(
     okx_path     = "/api/v5/asset/withdrawal-history",
     parser_schema       = data.frame(
-      okx    = c("ts", "amt", "ccy"),
-      formal = c("Timestamp", "Amount", "Currency"),
-      type   = c("time", "numeric", "string"),
+      okx    = c("note", "chain", "fee", "feeCcy", "ccy", "clientId", "toAddrType", "amt", "txId", "from", "areaCodeFrom", "to", "areaCodeTo", "state", "ts", "nonTradableAsset", "wdId"),
+      formal = c("Withdrawal note", "Chain", "Withdrawal fee", "Fee currency", "Currency", "Client ID", "Destination address type", "Amount", "Transaction hash", "Origin address", "Origin area code", "Destination address", "Destination area code", "Withdrawal state", "Timestamp", "Non-tradable asset", "Withdrawal ID"),
+      type   = c("string", "string", "numeric", "string", "string", "string", "string", "numeric", "string", "string", "string", "string", "string", "string", "time", "logical", "string"),
       stringsAsFactors = FALSE
     ),
     parser_mode = "named"

@@ -63,6 +63,21 @@ test_that("GET wrappers build expected query strings", {
       account_subaccount_max_withdrawal = function(query_string, config, tz) query_string,
       account_set_account_switch_precheck = function(query_string, config, tz) query_string,
       account_spot_borrow_repay_history = function(query_string, config, tz) query_string,
+      copy_trade_instruments = function(query_string, config, tz) query_string,
+      copy_trade_config = function(query_string, config, tz) query_string,
+      copy_trade_public_config = function(query_string, config, tz) query_string,
+      copy_trade_public_copy_traders = function(query_string, config, tz) query_string,
+      copy_trade_public_current_subpositions = function(query_string, config, tz) query_string,
+      copy_trade_public_subpositions_history = function(query_string, config, tz) query_string,
+      copy_trade_public_pnl = function(query_string, config, tz) query_string,
+      copy_trade_public_stats = function(query_string, config, tz) query_string,
+      copy_trade_public_weekly_pnl = function(query_string, config, tz) query_string,
+      copy_trade_profit_sharing_details = function(query_string, config, tz) query_string,
+      copy_trade_unrealized_profit_sharing_details = function(query_string, config, tz) query_string,
+      copy_trade_total_profit_sharing = function(query_string, config, tz) query_string,
+      copy_trade_total_unrealized_profit_sharing = function(query_string, config, tz) query_string,
+      asset_deposit_history = function(query_string, config, tz) query_string,
+      asset_withdrawal_history = function(query_string, config, tz) query_string,
       asset_currencies = function(query_string, config, tz) query_string,
       asset_non_tradable_assets = function(query_string, config, tz) query_string,
       asset_asset_valuation = function(query_string, config, tz) query_string,
@@ -85,6 +100,7 @@ test_that("GET wrappers build expected query strings", {
       trade_order_algo = function(query_string, config, tz) query_string,
       trade_orders_algo_pending = function(query_string, config, tz) query_string,
       trade_orders_algo_history = function(query_string, config, tz) query_string,
+      trade_fills = function(query_string, config, tz) query_string,
       trade_fills_history = function(query_string, config, tz) query_string,
       trade_account_rate_limit = function(query_string, config, tz) query_string
     ),
@@ -203,8 +219,60 @@ test_that("GET wrappers build expected query strings", {
     okxr::get_public_option_trades(inst_family = "BTC-USD", opt_type = "P"),
     "?instFamily=BTC-USD&optType=P"
   )
+  expect_equal(
+    okxr::get_copy_trade_public_config(inst_type = "SWAP"),
+    "?instType=SWAP"
+  )
+  expect_equal(
+    okxr::get_copy_trade_public_copy_traders(unique_code = "leader-1", inst_type = "SWAP", limit = 5),
+    "?uniqueCode=leader-1&instType=SWAP&limit=5"
+  )
+  expect_equal(
+    okxr::get_copy_trade_public_current_subpositions(unique_code = "leader-1", before = "200", limit = 10),
+    "?uniqueCode=leader-1&before=200&limit=10"
+  )
+  expect_equal(
+    okxr::get_copy_trade_public_subpositions_history(unique_code = "leader-1", after = "100", limit = 10),
+    "?uniqueCode=leader-1&after=100&limit=10"
+  )
+  expect_equal(
+    okxr::get_copy_trade_public_pnl(unique_code = "leader-1", last_days = "2", inst_type = "SWAP"),
+    "?uniqueCode=leader-1&lastDays=2&instType=SWAP"
+  )
+  expect_equal(
+    okxr::get_copy_trade_public_stats(unique_code = "leader-1", last_days = "4"),
+    "?uniqueCode=leader-1&lastDays=4"
+  )
+  expect_equal(
+    okxr::get_copy_trade_public_weekly_pnl(unique_code = "leader-1", inst_type = "SWAP"),
+    "?uniqueCode=leader-1&instType=SWAP"
+  )
 
   cfg <- list(api_key = "key", secret_key = "secret", passphrase = "pass")
+  expect_equal(
+    okxr::get_copy_trade_instruments(inst_type = "SWAP", config = cfg),
+    "?instType=SWAP"
+  )
+  expect_equal(
+    okxr::get_copy_trade_config(config = cfg),
+    ""
+  )
+  expect_equal(
+    okxr::get_copy_trade_profit_sharing_details(inst_type = "SWAP", after = "100", limit = 10, config = cfg),
+    "?instType=SWAP&after=100&limit=10"
+  )
+  expect_equal(
+    okxr::get_copy_trade_unrealized_profit_sharing_details(inst_type = "SPOT", config = cfg),
+    "?instType=SPOT"
+  )
+  expect_equal(
+    okxr::get_copy_trade_total_profit_sharing(inst_type = "SWAP", config = cfg),
+    "?instType=SWAP"
+  )
+  expect_equal(
+    okxr::get_copy_trade_total_unrealized_profit_sharing(inst_type = "SWAP", config = cfg),
+    "?instType=SWAP"
+  )
   expect_equal(
     okxr::get_public_economic_calendar(region = "united_states", importance = "3", config = cfg),
     "?region=united_states&importance=3"
@@ -321,6 +389,14 @@ test_that("GET wrappers build expected query strings", {
     "?ccy=USDT&subType=1"
   )
   expect_equal(
+    okxr::get_asset_deposit_history(ccy = "BTC", tx_id = "tx-1", state = "2", limit = 20, config = cfg),
+    "?ccy=BTC&txId=tx-1&state=2&limit=20"
+  )
+  expect_equal(
+    okxr::get_asset_withdrawal_history(ccy = "USDT", wd_id = "wd-1", client_id = "client-1", limit = 20, config = cfg),
+    "?ccy=USDT&wdId=wd-1&clientId=client-1&limit=20"
+  )
+  expect_equal(
     okxr::get_asset_currencies(ccy = "BTC,ETH", config = cfg),
     "?ccy=BTC%2CETH"
   )
@@ -409,8 +485,16 @@ test_that("GET wrappers build expected query strings", {
     "?ordType=conditional&state=effective"
   )
   expect_equal(
+    okxr::get_trade_fills(inst_type = "SPOT", begin = "1000", end = "2000", limit = 10, config = cfg),
+    "?instType=SPOT&limit=10&begin=1000&end=2000"
+  )
+  expect_equal(
     okxr::get_trade_fills_history(inst_type = "SPOT", limit = 10, config = cfg),
     "?instType=SPOT&limit=10"
+  )
+  expect_equal(
+    okxr::get_trade_fills_history(inst_type = "SPOT", begin = "1000", end = "2000", limit = 10, config = cfg),
+    "?instType=SPOT&limit=10&begin=1000&end=2000"
   )
   expect_equal(
     okxr::get_trade_account_rate_limit(config = cfg),

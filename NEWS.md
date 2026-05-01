@@ -1,5 +1,26 @@
 # okxr news
 
+## okxr 0.3.4
+
+* Added `get_copy_trade_instruments()`, `get_copy_trade_config()`,
+  `get_copy_trade_public_config()`, `get_copy_trade_public_copy_traders()`,
+  `get_copy_trade_public_current_subpositions()`, and
+  `get_copy_trade_public_subpositions_history()` for broader copy-trading
+  discovery and position inspection.
+* Added `get_copy_trade_public_pnl()`,
+  `get_copy_trade_public_stats()`,
+  `get_copy_trade_public_weekly_pnl()`,
+  `get_copy_trade_profit_sharing_details()`,
+  `get_copy_trade_unrealized_profit_sharing_details()`,
+  `get_copy_trade_total_profit_sharing()`, and
+  `get_copy_trade_total_unrealized_profit_sharing()` for public performance
+  and private profit-sharing coverage.
+* Expanded `get_asset_deposit_history()` and
+  `get_asset_withdrawal_history()` to support the documented filter surface
+  and richer parsed transfer metadata.
+* Expanded `get_trade_fills()` and `get_trade_fills_history()` with
+  `begin` and `end` timestamp filters.
+
 ## okxr 0.3.3
 
 * Added `get_trade_orders_history()` and

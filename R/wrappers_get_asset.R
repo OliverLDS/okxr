@@ -18,28 +18,68 @@ get_asset_balances <- function(config, tz = .okx_default_tz) {
 #'
 #' Retrieves a record of all asset deposits made to your account.
 #'
+#' @param ccy Character or `NULL`. Currency filter.
+#' @param dep_id Character or `NULL`. Deposit ID filter.
+#' @param from_wd_id Character or `NULL`. Source withdrawal ID filter.
+#' @param tx_id Character or `NULL`. Transaction hash filter.
+#' @param type Character or `NULL`. Deposit type filter.
+#' @param state Character or `NULL`. Deposit state filter.
+#' @param after Character or `NULL`. Pagination cursor for earlier records.
+#' @param before Character or `NULL`. Pagination cursor for newer records.
+#' @param limit Integer or `NULL`. Number of rows to request.
 #' @param config API credentials as a list with \code{api_key}, \code{secret_key}, and \code{passphrase}.
 #' @param tz Timezone string (default: \code{"Asia/Hong_Kong"}).
 #'
-#' @return A \code{data.frame} with deposit timestamps, amounts, and currencies.
+#' @return A \code{data.frame} with deposit history rows and detailed transfer metadata.
 #'
 #' @export
-get_asset_deposit_history <- function(config, tz = .okx_default_tz) {
-  .gets$asset_deposit_history(query_string = "", tz = tz, config = config)
+get_asset_deposit_history <- function(ccy = NULL, dep_id = NULL, from_wd_id = NULL, tx_id = NULL, type = NULL, state = NULL, after = NULL, before = NULL, limit = NULL, config, tz = .okx_default_tz) {
+  query_string <- .okx_build_query(
+    ccy = ccy,
+    depId = dep_id,
+    fromWdId = from_wd_id,
+    txId = tx_id,
+    type = type,
+    state = state,
+    after = after,
+    before = before,
+    limit = limit
+  )
+  .gets$asset_deposit_history(query_string = query_string, tz = tz, config = config)
 }
 
 #' Get asset withdrawal history
 #'
 #' Retrieves a record of all asset withdrawals from your account.
 #'
+#' @param ccy Character or `NULL`. Currency filter.
+#' @param wd_id Character or `NULL`. Withdrawal ID filter.
+#' @param client_id Character or `NULL`. Client withdrawal ID filter.
+#' @param tx_id Character or `NULL`. Transaction hash filter.
+#' @param type Character or `NULL`. Withdrawal type filter.
+#' @param state Character or `NULL`. Withdrawal state filter.
+#' @param after Character or `NULL`. Pagination cursor for earlier records.
+#' @param before Character or `NULL`. Pagination cursor for newer records.
+#' @param limit Integer or `NULL`. Number of rows to request.
 #' @param config API credentials as a list with \code{api_key}, \code{secret_key}, and \code{passphrase}.
 #' @param tz Timezone string (default: \code{"Asia/Hong_Kong"}).
 #'
-#' @return A \code{data.frame} with withdrawal timestamps, amounts, and currencies.
+#' @return A \code{data.frame} with withdrawal history rows and detailed transfer metadata.
 #'
 #' @export
-get_asset_withdrawal_history <- function(config, tz = .okx_default_tz) {
-  .gets$asset_withdrawal_history(query_string = "", tz = tz, config = config)
+get_asset_withdrawal_history <- function(ccy = NULL, wd_id = NULL, client_id = NULL, tx_id = NULL, type = NULL, state = NULL, after = NULL, before = NULL, limit = NULL, config, tz = .okx_default_tz) {
+  query_string <- .okx_build_query(
+    ccy = ccy,
+    wdId = wd_id,
+    clientId = client_id,
+    txId = tx_id,
+    type = type,
+    state = state,
+    after = after,
+    before = before,
+    limit = limit
+  )
+  .gets$asset_withdrawal_history(query_string = query_string, tz = tz, config = config)
 }
 
 #' Get funding currencies
