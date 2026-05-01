@@ -5,7 +5,7 @@
 \alias{.gets}
 \title{GET request function list}
 \format{
-An object of class \code{list} of length 54.
+An object of class \code{list} of length 72.
 }
 \usage{
 .gets

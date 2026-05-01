@@ -392,3 +392,76 @@ get_account_interest_rate <- function(ccy = NULL, config, tz = .okx_default_tz) 
   query_string <- .okx_build_query(ccy = ccy)
   .gets$account_interest_rate(query_string = query_string, config = config, tz = tz)
 }
+
+#' Get account bill subtypes
+#'
+#' Retrieve available account bill types and subtype descriptions.
+#'
+#' @param type Character or `NULL`. Bill type filter. Multiple values may be
+#'   provided as a comma-separated string.
+#' @param config List. API credentials/config.
+#' @param tz Character. Time zone for parsing timestamps. Default `"Asia/Hong_Kong"`.
+#'
+#' @return A `data.frame` with bill type descriptions and JSON-encoded
+#'   `subTypeDetails`.
+#'
+#' @export
+get_account_subtypes <- function(type = NULL, config, tz = .okx_default_tz) {
+  query_string <- .okx_build_query(type = type)
+  .gets$account_subtypes(query_string = query_string, config = config, tz = tz)
+}
+
+#' Get account leverage adjustment estimate
+#'
+#' Estimate account effects under a target leverage.
+#'
+#' @param inst_type Character. Instrument type: `"MARGIN"`, `"SWAP"`, or `"FUTURES"`.
+#' @param mgn_mode Character. Margin mode: `"cross"` or `"isolated"`.
+#' @param lever Character or numeric. Target leverage.
+#' @param inst_id Character or `NULL`. Instrument ID.
+#' @param ccy Character or `NULL`. Margin currency.
+#' @param pos_side Character or `NULL`. Position side.
+#' @param config List. API credentials/config.
+#' @param tz Character. Time zone for parsing timestamps. Default `"Asia/Hong_Kong"`.
+#'
+#' @return A one-row `data.frame` with estimated leverage-adjustment metrics.
+#'
+#' @export
+get_account_adjust_leverage_info <- function(inst_type, mgn_mode, lever, inst_id = NULL, ccy = NULL, pos_side = NULL, config, tz = .okx_default_tz) {
+  query_string <- .okx_build_query(
+    instType = inst_type,
+    mgnMode = mgn_mode,
+    lever = lever,
+    instId = inst_id,
+    ccy = ccy,
+    posSide = pos_side
+  )
+  .gets$account_adjust_leverage_info(query_string = query_string, config = config, tz = tz)
+}
+
+#' Get account maximum loan
+#'
+#' Retrieve the maximum loan for manual borrow or margin borrowing scenarios.
+#'
+#' @param mgn_mode Character. Margin mode: `"cross"` or `"isolated"`.
+#' @param inst_id Character or `NULL`. Instrument ID(s).
+#' @param ccy Character or `NULL`. Currency.
+#' @param mgn_ccy Character or `NULL`. Margin currency.
+#' @param trade_quote_ccy Character or `NULL`. Quote currency for trading.
+#' @param config List. API credentials/config.
+#' @param tz Character. Time zone for parsing timestamps. Default `"Asia/Hong_Kong"`.
+#'
+#' @return A `data.frame` with `instId`, `mgnMode`, `mgnCcy`, `maxLoan`, `ccy`,
+#'   and `side`.
+#'
+#' @export
+get_account_max_loan <- function(mgn_mode, inst_id = NULL, ccy = NULL, mgn_ccy = NULL, trade_quote_ccy = NULL, config, tz = .okx_default_tz) {
+  query_string <- .okx_build_query(
+    mgnMode = mgn_mode,
+    instId = inst_id,
+    ccy = ccy,
+    mgnCcy = mgn_ccy,
+    tradeQuoteCcy = trade_quote_ccy
+  )
+  .gets$account_max_loan(query_string = query_string, config = config, tz = tz)
+}

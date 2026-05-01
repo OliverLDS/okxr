@@ -1,5 +1,23 @@
 # okxr news
 
+## okxr 0.3.1
+
+* Added `get_market_mark_price_candles()` and
+  `get_market_history_mark_price_candles()` for mark-price candlestick data.
+* Added `get_market_exchange_rate()`, `get_market_index_components()`,
+  `get_market_platform_24_volume()`, `get_market_block_ticker()`, and
+  `get_market_block_tickers()` for additional public market data coverage.
+* Added `get_public_block_trades()`,
+  `get_public_delivery_exercise_history()`,
+  `get_public_estimated_settlement_info()`,
+  `get_public_settlement_history()`, `get_public_underlying()`,
+  `get_public_opt_summary()`, `get_public_position_tiers()`, and
+  `get_public_economic_calendar()` for broader public reference coverage.
+* Added `get_account_subtypes()`, `get_account_adjust_leverage_info()`, and
+  `get_account_max_loan()` for additional account-level inspection endpoints.
+* Extended the internal parser with vector-mode support for array-only payloads
+  such as `public/underlying`.
+
 ## okxr 0.3.0
 
 * Added `get_account_instruments()` for account-scoped instrument metadata.

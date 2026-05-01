@@ -9,7 +9,7 @@ copy trading, with shared request signing and schema-based response parsing.
 `okxr` is available on CRAN. Install the stable release from CRAN or use the
 GitHub repository for development versions between CRAN releases.
 
-Current development release: `v0.3.0`
+Current development release: `v0.3.1`
 
 ## Installation
 
@@ -123,20 +123,30 @@ get_copy_trade_current_subpos(config = config)
 | market | GET | `get_market_candles()` |
 | market | GET | `get_market_tickers()` |
 | market | GET | `get_market_trades()` |
+| market | GET | `get_market_mark_price_candles()` |
 | market | GET | `get_market_index_tickers()` |
 | market | GET | `get_market_index_candles()` |
+| market | GET | `get_market_index_components()` |
 | public | GET | `get_public_time()` |
+| public | GET | `get_public_underlying()` |
 | public | GET | `get_public_estimated_price()` |
+| public | GET | `get_public_estimated_settlement_info()` |
+| public | GET | `get_public_opt_summary()` |
+| public | GET | `get_public_position_tiers()` |
 | public | GET | `get_public_discount_rate_interest_free_quota()` |
 | public | GET | `get_public_interest_rate_loan_quota()` |
 | public | GET | `get_public_insurance_fund()` |
+| public | GET | `get_public_block_trades()` |
 | public | GET | `get_public_convert_contract_coin()` |
 | public | GET | `get_public_instrument_tick_bands()` |
 | public | GET | `get_public_premium_history()` |
 | public | GET | `get_public_option_trades()` |
 | account | GET | `get_account_balance()` |
 | account | GET | `get_account_instruments()` |
+| account | GET | `get_account_subtypes()` |
+| account | GET | `get_account_adjust_leverage_info()` |
 | account | GET | `get_account_position_risk()` |
+| account | GET | `get_account_max_loan()` |
 | account | GET | `get_account_max_size()` |
 | account | GET | `get_account_max_avail_size()` |
 | account | GET | `get_account_trade_fee()` |
@@ -175,6 +185,7 @@ See [NEWS.md](NEWS.md) for release history.
 * [x] First CRAN release published
 * [x] First post-CRAN endpoint expansion batch
 * [x] Expanded public reference and index market coverage
+* [x] Broader public and account GET coverage for v0.3.1
 * [ ] Websocket support
 
 ## License

@@ -48,7 +48,7 @@
 #' @importFrom httr content
 #' @importFrom data.table as.data.table
 #' @keywords internal
-.make_parser <- function(schema, mode = c("named", "positional")) {
+.make_parser <- function(schema, mode = c("named", "positional", "vector")) {
   mode <- match.arg(mode)
 
   function(res, tz) {
@@ -74,6 +74,15 @@
 
     data_list <- parsed$data
     if (length(data_list) == 0) return(NULL)
+
+    if (mode == "vector") {
+      okx_key <- schema$okx[[1]]
+      formal_name <- schema$formal[[1]]
+      values <- unlist(data_list, use.names = FALSE)
+      DT <- data.table::as.data.table(stats::setNames(list(as.character(values)), okx_key))
+      attr(DT, "var_labels") <- stats::setNames(formal_name, okx_key)
+      return(list(data_raw = data_list, data_dt = DT))
+    }
 
     # If it's a named single-entry, wrap in a list
     if (mode == "named" && is.list(data_list) && !is.list(data_list[[1]])) {

@@ -4,7 +4,7 @@
 \alias{.make_parser}
 \title{Build a typed OKX JSON response parser (named or positional) → data.table}
 \usage{
-.make_parser(schema, mode = c("named", "positional"))
+.make_parser(schema, mode = c("named", "positional", "vector"))
 }
 \arguments{
 \item{schema}{A \code{data.frame} describing the response fields with columns:

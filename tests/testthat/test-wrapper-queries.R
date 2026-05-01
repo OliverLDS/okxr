@@ -11,20 +11,38 @@ test_that("GET wrappers build expected query strings", {
     list(
       market_tickers = function(query_string, config, tz) query_string,
       market_history_trades = function(query_string, config, tz) query_string,
+      market_mark_price_candles = function(query_string, config, tz) query_string,
+      market_history_mark_price_candles = function(query_string, config, tz) query_string,
+      market_exchange_rate = function(query_string, config, tz) query_string,
+      market_index_components = function(query_string, config, tz) query_string,
+      market_platform_24_volume = function(query_string, config, tz) query_string,
+      market_block_ticker = function(query_string, config, tz) query_string,
+      market_block_tickers = function(query_string, config, tz) query_string,
       market_option_instrument_family_trades = function(query_string, config, tz) query_string,
       market_index_tickers = function(query_string, config, tz) query_string,
       market_index_candles = function(query_string, config, tz) query_string,
       market_history_index_candles = function(query_string, config, tz) query_string,
+      public_underlying = function(query_string, config, tz) query_string,
       public_estimated_price = function(query_string, config, tz) query_string,
+      public_delivery_exercise_history = function(query_string, config, tz) query_string,
+      public_estimated_settlement_info = function(query_string, config, tz) query_string,
+      public_settlement_history = function(query_string, config, tz) query_string,
       public_discount_rate_interest_free_quota = function(query_string, config, tz) query_string,
+      public_opt_summary = function(query_string, config, tz) query_string,
+      public_position_tiers = function(query_string, config, tz) query_string,
+      public_economic_calendar = function(query_string, config, tz) query_string,
       public_interest_rate_loan_quota = function(query_string, config, tz) query_string,
       public_insurance_fund = function(query_string, config, tz) query_string,
       public_convert_contract_coin = function(query_string, config, tz) query_string,
       public_instrument_tick_bands = function(query_string, config, tz) query_string,
       public_premium_history = function(query_string, config, tz) query_string,
+      public_block_trades = function(query_string, config, tz) query_string,
       public_option_trades = function(query_string, config, tz) query_string,
       account_bills = function(query_string, config, tz) query_string,
       account_instruments = function(query_string, config, tz) query_string,
+      account_subtypes = function(query_string, config, tz) query_string,
+      account_adjust_leverage_info = function(query_string, config, tz) query_string,
+      account_max_loan = function(query_string, config, tz) query_string,
       account_position_risk = function(query_string, config, tz) query_string,
       account_max_size = function(query_string, config, tz) query_string,
       account_max_avail_size = function(query_string, config, tz) query_string,
@@ -46,6 +64,34 @@ test_that("GET wrappers build expected query strings", {
     "?instId=BTC-USDT&type=1&limit=10"
   )
   expect_equal(
+    okxr::get_market_mark_price_candles("BTC-USD-SWAP", bar = "1H", limit = 20, standardize_names = FALSE),
+    "?instId=BTC-USD-SWAP&bar=1H&limit=20"
+  )
+  expect_equal(
+    okxr::get_market_history_mark_price_candles("BTC-USD-SWAP", before = "200", limit = 20, standardize_names = FALSE),
+    "?instId=BTC-USD-SWAP&before=200&limit=20"
+  )
+  expect_equal(
+    okxr::get_market_exchange_rate(),
+    ""
+  )
+  expect_equal(
+    okxr::get_market_index_components("BTC-USD"),
+    "?index=BTC-USD"
+  )
+  expect_equal(
+    okxr::get_market_platform_24_volume(),
+    ""
+  )
+  expect_equal(
+    okxr::get_market_block_ticker("BTC-USD-SWAP"),
+    "?instId=BTC-USD-SWAP"
+  )
+  expect_equal(
+    okxr::get_market_block_tickers(inst_type = "SWAP", inst_family = "BTC-USD"),
+    "?instType=SWAP&instFamily=BTC-USD"
+  )
+  expect_equal(
     okxr::get_market_index_tickers(quote_ccy = "USD"),
     "?quoteCcy=USD"
   )
@@ -62,16 +108,44 @@ test_that("GET wrappers build expected query strings", {
     "?instFamily=BTC-USD"
   )
   expect_equal(
+    okxr::get_public_underlying(inst_type = "FUTURES"),
+    "?instType=FUTURES"
+  )
+  expect_equal(
     okxr::get_public_estimated_price(inst_type = "FUTURES", inst_family = "BTC-USD"),
     "?instType=FUTURES&instFamily=BTC-USD"
+  )
+  expect_equal(
+    okxr::get_public_delivery_exercise_history(inst_type = "OPTION", inst_family = "BTC-USD", limit = 5),
+    "?instType=OPTION&instFamily=BTC-USD&limit=5"
+  )
+  expect_equal(
+    okxr::get_public_estimated_settlement_info("XRP-USDT-250307"),
+    "?instId=XRP-USDT-250307"
+  )
+  expect_equal(
+    okxr::get_public_settlement_history(inst_family = "XRP-USD", limit = 10),
+    "?instFamily=XRP-USD&limit=10"
   )
   expect_equal(
     okxr::get_public_discount_rate_interest_free_quota(ccy = "BTC", discount_lv = "1"),
     "?ccy=BTC&discountLv=1"
   )
   expect_equal(
+    okxr::get_public_opt_summary(inst_family = "BTC-USD", exp_time = "250328"),
+    "?instFamily=BTC-USD&expTime=250328"
+  )
+  expect_equal(
+    okxr::get_public_position_tiers(inst_type = "SWAP", td_mode = "cross", inst_family = "BTC-USDT"),
+    "?instType=SWAP&tdMode=cross&instFamily=BTC-USDT"
+  )
+  expect_equal(
     okxr::get_public_interest_rate_loan_quota(ccy = "USDT", vip_level = "VIP1"),
     "?ccy=USDT&vipLevel=VIP1"
+  )
+  expect_equal(
+    okxr::get_public_block_trades("BTC-USDT"),
+    "?instId=BTC-USDT"
   )
   expect_equal(
     okxr::get_public_insurance_fund(inst_type = "SWAP", inst_family = "BTC-USD", limit = 5),
@@ -96,8 +170,24 @@ test_that("GET wrappers build expected query strings", {
 
   cfg <- list(api_key = "key", secret_key = "secret", passphrase = "pass")
   expect_equal(
+    okxr::get_public_economic_calendar(region = "united_states", importance = "3", config = cfg),
+    "?region=united_states&importance=3"
+  )
+  expect_equal(
     okxr::get_account_instruments(inst_type = "SPOT", inst_id = "BTC-USDT", config = cfg),
     "?instType=SPOT&instId=BTC-USDT"
+  )
+  expect_equal(
+    okxr::get_account_subtypes(type = "1,2", config = cfg),
+    "?type=1%2C2"
+  )
+  expect_equal(
+    okxr::get_account_adjust_leverage_info(inst_type = "MARGIN", mgn_mode = "isolated", lever = 3, inst_id = "BTC-USDT", config = cfg),
+    "?instType=MARGIN&mgnMode=isolated&lever=3&instId=BTC-USDT"
+  )
+  expect_equal(
+    okxr::get_account_max_loan(mgn_mode = "cross", inst_id = "BTC-USDT", mgn_ccy = "BTC", config = cfg),
+    "?mgnMode=cross&instId=BTC-USDT&mgnCcy=BTC"
   )
   expect_equal(
     okxr::get_account_position_risk(inst_type = "SWAP", config = cfg),
