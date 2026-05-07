@@ -557,6 +557,48 @@ test_that("post_trade_order preserves supplied client order id", {
   expect_equal(body$clOrdId, "custom-id")
 })
 
+test_that("trade POST wrappers reject malformed identifier and batch inputs", {
+  cfg <- list(api_key = "key", secret_key = "secret", passphrase = "pass")
+
+  expect_error(
+    okxr::post_trade_cancel_order(inst_id = "BTC-USDT", config = cfg),
+    "Provide exactly one of `ord_id` or `cl_ord_id`"
+  )
+  expect_error(
+    okxr::post_trade_batch_orders(orders = list(), config = cfg),
+    "`orders` must be a non-empty list"
+  )
+  expect_error(
+    okxr::post_trade_cancel_batch_orders(
+      orders = list(list(inst_id = "BTC-USDT", ord_id = "1", cl_ord_id = "2")),
+      config = cfg
+    ),
+    "Provide exactly one of `ord_id` or `cl_ord_id`"
+  )
+  expect_error(
+    okxr::post_trade_amend_order(inst_id = "BTC-USDT", ord_id = "1", config = cfg),
+    "must include at least one of"
+  )
+  expect_error(
+    okxr::post_trade_amend_batch_orders(
+      orders = list(list(inst_id = "BTC-USDT", ord_id = "1")),
+      config = cfg
+    ),
+    "must include at least one of"
+  )
+  expect_error(
+    okxr::post_trade_cancel_algos(
+      orders = list(list(inst_id = "BTC-USDT", algo_id = "1", algo_cl_ord_id = "2")),
+      config = cfg
+    ),
+    "Provide exactly one of `algo_id` or `algo_cl_ord_id`"
+  )
+  expect_error(
+    okxr::post_trade_amend_algos(inst_id = "BTC-USDT", algo_id = "1", config = cfg),
+    "must include at least one of"
+  )
+})
+
 test_that("trade POST wrappers build expected request bodies", {
   ns <- asNamespace("okxr")
   old_posts <- get(".posts", envir = ns)
@@ -568,6 +610,7 @@ test_that("trade POST wrappers build expected request bodies", {
   assign(
     ".posts",
     list(
+      trade_cancel_order = function(body_list, tz, config) body_list,
       trade_batch_orders = function(body_list, tz, config) body_list,
       trade_cancel_batch_orders = function(body_list, tz, config) body_list,
       trade_amend_order = function(body_list, tz, config) body_list,
@@ -582,6 +625,14 @@ test_that("trade POST wrappers build expected request bodies", {
   )
 
   cfg <- list(api_key = "key", secret_key = "secret", passphrase = "pass")
+
+  cancel_order_body <- okxr::post_trade_cancel_order(
+    inst_id = "BTC-USDT",
+    cl_ord_id = "cancel-client-1",
+    config = cfg
+  )
+  expect_equal(cancel_order_body$instId, "BTC-USDT")
+  expect_equal(cancel_order_body$clOrdId, "cancel-client-1")
 
   batch_body <- okxr::post_trade_batch_orders(
     orders = list(
@@ -775,6 +826,11 @@ test_that("account operational POST wrappers build expected request bodies", {
 
   cfg <- list(api_key = "key", secret_key = "secret", passphrase = "pass")
 
+  expect_error(
+    okxr::post_account_move_positions(from_acct = "0", to_acct = "sub1", legs = list(), client_id = "move-1", config = cfg),
+    "`legs` must be a non-empty list"
+  )
+
   margin_body <- okxr::post_account_position_margin_balance(
     inst_id = "BTC-USDT-SWAP",
     pos_side = "short",
@@ -869,6 +925,11 @@ test_that("asset POST wrappers build expected request bodies", {
   )
 
   cfg <- list(api_key = "key", secret_key = "secret", passphrase = "pass")
+
+  expect_error(
+    okxr::post_asset_transfer(ccy = "USDT", amt = "100", from = "6", to = "6", config = cfg),
+    "`from` and `to` must be different account codes"
+  )
 
   transfer_body <- okxr::post_asset_transfer(
     ccy = "USDT",

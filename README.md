@@ -9,7 +9,7 @@ copy trading, with shared request signing and schema-based response parsing.
 `okxr` is available on CRAN. Install the stable release from CRAN or use the
 GitHub repository for development versions between CRAN releases.
 
-Current development release: `v0.4.4`
+Current development release: `v0.4.5`
 
 ## Installation
 
@@ -263,6 +263,7 @@ See [NEWS.md](NEWS.md) for release history.
 * [x] Account configuration action coverage for v0.4.2
 * [x] Account operational action coverage for v0.4.3
 * [x] Asset transfer, withdrawal, and convert action coverage for v0.4.4
+* [x] POST wrapper validation and cancellation parameter completeness for v0.4.5
 * [ ] Websocket support
 
 ## License

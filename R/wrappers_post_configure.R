@@ -286,6 +286,7 @@ post_account_mmp_config <- function(inst_family, time_interval, frozen_interval,
 #' @return A `data.frame` describing the move-position request result.
 #' @export
 post_account_move_positions <- function(from_acct, to_acct, legs, client_id, tz = .okx_default_tz, config) {
+  .okx_assert_non_empty_list(legs, "legs")
   .posts$account_move_positions(
     body_list = list(
       fromAcct = from_acct,

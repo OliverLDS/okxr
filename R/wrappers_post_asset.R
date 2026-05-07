@@ -27,6 +27,9 @@
 #' @return A `data.frame` describing the submitted transfer request.
 #' @export
 post_asset_transfer <- function(ccy, amt, from, to, type = "0", sub_acct = NULL, loan_trans = NULL, omit_pos_risk = NULL, client_id = NULL, tz = .okx_default_tz, config) {
+  if (identical(from, to)) {
+    stop("`from` and `to` must be different account codes.", call. = FALSE)
+  }
   body <- .okx_asset_compact_body(list(
     type = type,
     ccy = ccy,

@@ -196,15 +196,22 @@ post_trade_order <- function(
 #' Submits a cancellation request for a previously placed trade order.
 #'
 #' @param inst_id Instrument ID (e.g., \code{"BTC-USDT"}).
-#' @param ord_id Order ID to cancel. Alternatively, you can modify the function to accept \code{clOrdId}.
+#' @param ord_id Optional OKX order ID to cancel.
+#' @param cl_ord_id Optional client order ID to cancel. Provide this or
+#'   `ord_id`.
 #' @param config A list with API credentials: \code{api_key}, \code{secret_key}, \code{passphrase}.
 #' @param tz Timezone for parsing any timestamps (default: \code{"Asia/Hong_Kong"}).
 #'
 #' @return A \code{data.frame} containing cancellation result and timestamp.
 #'
 #' @export
-post_trade_cancel_order <- function(inst_id, ord_id, config, tz = .okx_default_tz) {
-  .posts$trade_cancel_order(body_list = list(instId = inst_id, ordId = ord_id), tz = tz, config = config)
+post_trade_cancel_order <- function(inst_id, ord_id = NULL, cl_ord_id = NULL, config, tz = .okx_default_tz) {
+  .okx_assert_exactly_one_present(ord_id, cl_ord_id, names = c("ord_id", "cl_ord_id"))
+  .posts$trade_cancel_order(
+    body_list = .okx_compact_body(list(instId = inst_id, ordId = ord_id, clOrdId = cl_ord_id)),
+    tz = tz,
+    config = config
+  )
 }
 
 #' Close a Position
@@ -237,9 +244,12 @@ post_trade_close_position <- function(inst_id, mgn_mode, pos_side, tz = .okx_def
 #' @return A `data.frame` with one row per submitted order result.
 #' @export
 post_trade_batch_orders <- function(orders, config, tz = .okx_default_tz) {
+  .okx_assert_non_empty_list(orders, "orders")
   body_list <- lapply(
-    orders,
-    function(order) {
+    seq_along(orders),
+    function(i) {
+      order <- orders[[i]]
+      .okx_assert_has_fields(order, c("inst_id", "td_mode", "side", "ord_type", "sz"), paste0("orders[[", i, "]]"))
       if (is.null(order$cl_ord_id)) {
         order$cl_ord_id <- .okx_generate_client_order_id()
       }
@@ -261,9 +271,13 @@ post_trade_batch_orders <- function(orders, config, tz = .okx_default_tz) {
 #' @return A `data.frame` with one row per cancellation result.
 #' @export
 post_trade_cancel_batch_orders <- function(orders, config, tz = .okx_default_tz) {
+  .okx_assert_non_empty_list(orders, "orders")
   body_list <- lapply(
-    orders,
-    function(order) {
+    seq_along(orders),
+    function(i) {
+      order <- orders[[i]]
+      .okx_assert_has_fields(order, "inst_id", paste0("orders[[", i, "]]"))
+      .okx_assert_exactly_one_present(order$ord_id, order$cl_ord_id, names = c("ord_id", "cl_ord_id"))
       .okx_compact_body(list(
         instId = order$inst_id,
         ordId = order$ord_id,
@@ -297,6 +311,21 @@ post_trade_cancel_batch_orders <- function(orders, config, tz = .okx_default_tz)
 #' @return A `data.frame` describing the amendment request result.
 #' @export
 post_trade_amend_order <- function(inst_id, ord_id = NULL, cl_ord_id = NULL, req_id = NULL, new_sz = NULL, new_px = NULL, cxl_on_fail = NULL, new_px_usd = NULL, new_px_vol = NULL, px_amend_type = NULL, attach_algo_ords = NULL, speed_bump = NULL, config, tz = .okx_default_tz) {
+  .okx_assert_exactly_one_present(ord_id, cl_ord_id, names = c("ord_id", "cl_ord_id"))
+  .okx_assert_any_field_present(
+    list(
+      new_sz = new_sz,
+      new_px = new_px,
+      cxl_on_fail = cxl_on_fail,
+      new_px_usd = new_px_usd,
+      new_px_vol = new_px_vol,
+      px_amend_type = px_amend_type,
+      attach_algo_ords = attach_algo_ords,
+      speed_bump = speed_bump
+    ),
+    c("new_sz", "new_px", "cxl_on_fail", "new_px_usd", "new_px_vol", "px_amend_type", "attach_algo_ords", "speed_bump"),
+    "amendment request"
+  )
   body_list <- .okx_trade_amend_body(
     inst_id = inst_id,
     ord_id = ord_id,
@@ -326,9 +355,20 @@ post_trade_amend_order <- function(inst_id, ord_id = NULL, cl_ord_id = NULL, req
 #' @return A `data.frame` with one row per amendment result.
 #' @export
 post_trade_amend_batch_orders <- function(orders, config, tz = .okx_default_tz) {
+  .okx_assert_non_empty_list(orders, "orders")
   body_list <- lapply(
-    orders,
-    function(order) do.call(.okx_trade_amend_body, order)
+    seq_along(orders),
+    function(i) {
+      order <- orders[[i]]
+      .okx_assert_has_fields(order, "inst_id", paste0("orders[[", i, "]]"))
+      .okx_assert_exactly_one_present(order$ord_id, order$cl_ord_id, names = c("ord_id", "cl_ord_id"))
+      .okx_assert_any_field_present(
+        order,
+        c("new_sz", "new_px", "cxl_on_fail", "new_px_usd", "new_px_vol", "px_amend_type", "attach_algo_ords", "speed_bump"),
+        paste0("orders[[", i, "]]")
+      )
+      do.call(.okx_trade_amend_body, order)
+    }
   )
   .posts$trade_amend_batch_orders(body_list = body_list, tz = tz, config = config)
 }
@@ -406,9 +446,15 @@ post_trade_cancel_all_after <- function(time_out, tag = NULL, config, tz = .okx_
 #' @return A `data.frame` with one row per algo cancellation result.
 #' @export
 post_trade_cancel_algos <- function(orders, config, tz = .okx_default_tz) {
+  .okx_assert_non_empty_list(orders, "orders")
   body_list <- lapply(
-    orders,
-    function(order) do.call(.okx_trade_algo_cancel_body, order)
+    seq_along(orders),
+    function(i) {
+      order <- orders[[i]]
+      .okx_assert_has_fields(order, "inst_id", paste0("orders[[", i, "]]"))
+      .okx_assert_exactly_one_present(order$algo_id, order$algo_cl_ord_id, names = c("algo_id", "algo_cl_ord_id"))
+      do.call(.okx_trade_algo_cancel_body, order)
+    }
   )
   .posts$trade_cancel_algos(body_list = body_list, tz = tz, config = config)
 }
@@ -440,6 +486,25 @@ post_trade_cancel_algos <- function(orders, config, tz = .okx_default_tz) {
 #' @return A `data.frame` describing the algo amendment result.
 #' @export
 post_trade_amend_algos <- function(inst_id, algo_id = NULL, algo_cl_ord_id = NULL, cxl_on_fail = NULL, req_id = NULL, new_sz = NULL, new_tp_trigger_px = NULL, new_tp_ord_px = NULL, new_sl_trigger_px = NULL, new_sl_ord_px = NULL, new_tp_trigger_px_type = NULL, new_sl_trigger_px_type = NULL, new_trigger_px = NULL, new_ord_px = NULL, new_trigger_px_type = NULL, attach_algo_ords = NULL, config, tz = .okx_default_tz) {
+  .okx_assert_exactly_one_present(algo_id, algo_cl_ord_id, names = c("algo_id", "algo_cl_ord_id"))
+  .okx_assert_any_field_present(
+    list(
+      cxl_on_fail = cxl_on_fail,
+      new_sz = new_sz,
+      new_tp_trigger_px = new_tp_trigger_px,
+      new_tp_ord_px = new_tp_ord_px,
+      new_sl_trigger_px = new_sl_trigger_px,
+      new_sl_ord_px = new_sl_ord_px,
+      new_tp_trigger_px_type = new_tp_trigger_px_type,
+      new_sl_trigger_px_type = new_sl_trigger_px_type,
+      new_trigger_px = new_trigger_px,
+      new_ord_px = new_ord_px,
+      new_trigger_px_type = new_trigger_px_type,
+      attach_algo_ords = attach_algo_ords
+    ),
+    c("cxl_on_fail", "new_sz", "new_tp_trigger_px", "new_tp_ord_px", "new_sl_trigger_px", "new_sl_ord_px", "new_tp_trigger_px_type", "new_sl_trigger_px_type", "new_trigger_px", "new_ord_px", "new_trigger_px_type", "attach_algo_ords"),
+    "algo amendment request"
+  )
   body_list <- .okx_trade_algo_amend_body(
     inst_id = inst_id,
     algo_id = algo_id,

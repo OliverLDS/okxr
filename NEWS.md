@@ -1,5 +1,17 @@
 # okxr news
 
+## okxr 0.4.5
+
+* Expanded `post_trade_cancel_order()` so it accepts either `ord_id` or
+  `cl_ord_id`, matching the documented OKX cancellation surface more closely.
+* Added shared internal POST validation helpers for required fields,
+  exactly-one identifier checks, non-empty batch inputs, and amend-request
+  payload validation.
+* Added client-side guardrails for empty move-position legs and invalid
+  asset transfers with identical source and destination account codes.
+* Added mocked tests covering the new POST validation paths and malformed
+  request rejection behavior.
+
 ## okxr 0.4.4
 
 * Added `post_asset_transfer()` for signed internal and sub-account asset
