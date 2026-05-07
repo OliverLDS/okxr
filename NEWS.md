@@ -1,5 +1,19 @@
 # okxr news
 
+## okxr 0.4.0
+
+* Added `post_trade_batch_orders()` and `post_trade_cancel_batch_orders()`
+  for grouped order placement and cancellation workflows.
+* Added `post_trade_amend_order()` and
+  `post_trade_amend_batch_orders()` for modifying live orders with the
+  documented amend request fields.
+* Added `post_trade_order_precheck()` for signed order validation before
+  placement.
+* Added `post_trade_cancel_all_after()` for exchange-side cancel-after
+  safeguards.
+* Refactored internal trade request-body shaping so single-order, batch-order,
+  amend, and precheck wrappers share the same field mapping logic.
+
 ## okxr 0.3.5
 
 * Added `get_copy_trade_public_lead_traders()` and

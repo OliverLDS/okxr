@@ -102,6 +102,20 @@ set_okxr_options <- function(raw_data = NULL, timeout = NULL) {
 #' @note Since okxr 0.1.1
 #' @keywords internal
 #' @noRd
+.trade_cancel_response_schema <- data.frame(
+  okx    = c("ts", "ordId", "clOrdId", "sCode", "sMsg"),
+  formal = c("Timestamp", "Order ID", "Client Order ID", "Code of the execution result", "Execution message"),
+  type   = c("time", "string", "string", "string", "string"),
+  stringsAsFactors = FALSE
+)
+
+.trade_amend_response_schema <- data.frame(
+  okx    = c("ts", "ordId", "clOrdId", "reqId", "sCode", "sMsg", "subCode"),
+  formal = c("Timestamp", "Order ID", "Client Order ID", "Client request ID", "Code of the execution result", "Execution message", "Execution sub-code"),
+  type   = c("time", "string", "string", "string", "string", "string", "string"),
+  stringsAsFactors = FALSE
+)
+
 .api_POST_specs <- list(
   
   #----account_set_leverage----
@@ -131,12 +145,7 @@ set_okxr_options <- function(raw_data = NULL, timeout = NULL) {
   #----trade_cancel_order----
   trade_cancel_order = list(
     okx_path     = "/api/v5/trade/cancel-order",
-    parser_schema       = data.frame(
-      okx    = c("ts", "ordId", "clOrdId", "sCode"),
-      formal = c("Timestamp", "Order ID", "Client Order ID", "Code of the execution result"),
-      type   = c("time", "string", "string", "string"),
-      stringsAsFactors = FALSE
-    ),
+    parser_schema       = .trade_cancel_response_schema,
     parser_mode = "named"
   ),
   
@@ -147,6 +156,63 @@ set_okxr_options <- function(raw_data = NULL, timeout = NULL) {
       okx    = c("instId", "posSide", "clOrdId", "tag"),
       formal = c("Instrument ID", "Position side", "Client Order ID", "Order tag"),
       type   = c("string", "string", "string", "string"),
+      stringsAsFactors = FALSE
+    ),
+    parser_mode = "named"
+  ),
+
+  #----trade_batch_orders----
+  trade_batch_orders = list(
+    okx_path     = "/api/v5/trade/batch-orders",
+    parser_schema = data.frame(
+      okx    = c("ts", "ordId", "clOrdId", "tag", "sCode", "sMsg"),
+      formal = c("Timestamp", "Order ID", "Client Order ID", "Order tag", "Code of the execution result", "Execution message"),
+      type   = c("time", "string", "string", "string", "string", "string"),
+      stringsAsFactors = FALSE
+    ),
+    parser_mode = "named"
+  ),
+
+  #----trade_cancel_batch_orders----
+  trade_cancel_batch_orders = list(
+    okx_path     = "/api/v5/trade/cancel-batch-orders",
+    parser_schema = .trade_cancel_response_schema,
+    parser_mode = "named"
+  ),
+
+  #----trade_amend_order----
+  trade_amend_order = list(
+    okx_path     = "/api/v5/trade/amend-order",
+    parser_schema = .trade_amend_response_schema,
+    parser_mode = "named"
+  ),
+
+  #----trade_amend_batch_orders----
+  trade_amend_batch_orders = list(
+    okx_path     = "/api/v5/trade/amend-batch-orders",
+    parser_schema = .trade_amend_response_schema,
+    parser_mode = "named"
+  ),
+
+  #----trade_cancel_all_after----
+  trade_cancel_all_after = list(
+    okx_path     = "/api/v5/trade/cancel-all-after",
+    parser_schema = data.frame(
+      okx    = c("triggerTime", "tag", "ts"),
+      formal = c("Trigger time", "Cancel-all-after tag", "Request time"),
+      type   = c("numeric", "string", "numeric"),
+      stringsAsFactors = FALSE
+    ),
+    parser_mode = "named"
+  ),
+
+  #----trade_order_precheck----
+  trade_order_precheck = list(
+    okx_path     = "/api/v5/trade/order-precheck",
+    parser_schema = data.frame(
+      okx    = c("adjEq", "adjEqChg", "availBal", "availBalChg", "imr", "imrChg", "liab", "liabChg", "liabChgCcy", "liqPx", "liqPxDiff", "liqPxDiffRatio", "mgnRatio", "mgnRatioChg", "mmr", "mmrChg", "posBal", "posBalChg", "type"),
+      formal = c("Adjusted equity", "Adjusted equity change", "Available balance", "Available balance change", "Initial margin requirement", "Initial margin requirement change", "Liability", "Liability change", "Liability change currency", "Liquidation price", "Liquidation price change", "Liquidation price change ratio", "Margin ratio", "Margin ratio change", "Maintenance margin requirement", "Maintenance margin requirement change", "Position balance", "Position balance change", "Type"),
+      type   = c("numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "string", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "string", "string", "string"),
       stringsAsFactors = FALSE
     ),
     parser_mode = "named"

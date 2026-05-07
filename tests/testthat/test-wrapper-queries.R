@@ -556,3 +556,89 @@ test_that("post_trade_order preserves supplied client order id", {
 
   expect_equal(body$clOrdId, "custom-id")
 })
+
+test_that("trade POST wrappers build expected request bodies", {
+  ns <- asNamespace("okxr")
+  old_posts <- get(".posts", envir = ns)
+  unlockBinding(".posts", ns)
+  on.exit({
+    assign(".posts", old_posts, envir = ns)
+    lockBinding(".posts", ns)
+  }, add = TRUE)
+  assign(
+    ".posts",
+    list(
+      trade_batch_orders = function(body_list, tz, config) body_list,
+      trade_cancel_batch_orders = function(body_list, tz, config) body_list,
+      trade_amend_order = function(body_list, tz, config) body_list,
+      trade_amend_batch_orders = function(body_list, tz, config) body_list,
+      trade_order_precheck = function(body_list, tz, config) body_list,
+      trade_cancel_all_after = function(body_list, tz, config) body_list
+    ),
+    envir = ns
+  )
+
+  cfg <- list(api_key = "key", secret_key = "secret", passphrase = "pass")
+
+  batch_body <- okxr::post_trade_batch_orders(
+    orders = list(
+      list(inst_id = "BTC-USDT", td_mode = "cash", side = "buy", ord_type = "limit", px = "2.15", sz = "2", cl_ord_id = "b15"),
+      list(inst_id = "BTC-USDT", td_mode = "cash", side = "buy", ord_type = "limit", px = "2.15", sz = "2", cl_ord_id = "b16")
+    ),
+    config = cfg
+  )
+  expect_equal(batch_body[[1]]$clOrdId, "b15")
+  expect_equal(batch_body[[2]]$clOrdId, "b16")
+
+  cancel_batch_body <- okxr::post_trade_cancel_batch_orders(
+    orders = list(
+      list(inst_id = "BTC-USDT", ord_id = "123"),
+      list(inst_id = "BTC-USDT", cl_ord_id = "client-2")
+    ),
+    config = cfg
+  )
+  expect_equal(cancel_batch_body[[1]]$ordId, "123")
+  expect_equal(cancel_batch_body[[2]]$clOrdId, "client-2")
+
+  amend_body <- okxr::post_trade_amend_order(
+    inst_id = "BTC-USDT",
+    ord_id = "123",
+    req_id = "amend-1",
+    new_sz = "2",
+    cxl_on_fail = TRUE,
+    config = cfg
+  )
+  expect_equal(amend_body$reqId, "amend-1")
+  expect_equal(amend_body$cxlOnFail, "true")
+
+  amend_batch_body <- okxr::post_trade_amend_batch_orders(
+    orders = list(
+      list(inst_id = "BTC-USDT", ord_id = "123", new_sz = "2"),
+      list(inst_id = "BTC-USDT", cl_ord_id = "client-2", new_px = "2.20")
+    ),
+    config = cfg
+  )
+  expect_equal(amend_batch_body[[1]]$newSz, "2")
+  expect_equal(amend_batch_body[[2]]$newPx, "2.20")
+
+  precheck_body <- okxr::post_trade_order_precheck(
+    inst_id = "BTC-USDT",
+    td_mode = "cash",
+    side = "buy",
+    ord_type = "limit",
+    px = "2.15",
+    sz = "2",
+    reduce_only = TRUE,
+    config = cfg
+  )
+  expect_equal(precheck_body$reduceOnly, "true")
+  expect_equal(precheck_body$ordType, "limit")
+
+  caa_body <- okxr::post_trade_cancel_all_after(
+    time_out = 60,
+    tag = "desk1",
+    config = cfg
+  )
+  expect_equal(caa_body$timeOut, "60")
+  expect_equal(caa_body$tag, "desk1")
+})
