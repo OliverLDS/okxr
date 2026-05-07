@@ -1,5 +1,20 @@
 # okxr news
 
+## okxr 0.4.3
+
+* Added `post_account_position_margin_balance()` for margin add/reduce
+  operations on existing positions.
+* Added `post_account_spot_manual_borrow_repay()` for manual spot-mode
+  borrow and repay requests.
+* Added `post_account_account_level_switch_preset()` for storing account-mode
+  switch presets before a mode change.
+* Added `post_account_mmp_reset()` and `post_account_mmp_config()` for
+  options MMP reset and configuration workflows.
+* Added `post_account_move_positions()` for move-position requests between
+  accounts under the same master account.
+* Added parser specs and mocked request-body tests for the new account
+  operational action wrappers.
+
 ## okxr 0.4.2
 
 * Added `post_account_set_position_mode()` for account position-mode changes.

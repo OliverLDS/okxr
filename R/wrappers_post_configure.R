@@ -156,3 +156,144 @@ post_account_set_collateral_assets <- function(type, collateral_enabled, ccy_lis
     config = config
   )
 }
+
+#' Adjust Position Margin Balance
+#'
+#' Increase or reduce margin for an existing position.
+#'
+#' @param inst_id Instrument ID.
+#' @param pos_side Position side.
+#' @param type Margin adjustment type, typically `"add"` or `"reduce"`.
+#' @param amt Amount to add or reduce.
+#' @param ccy Optional currency for isolated margin orders.
+#' @param tz Timezone used for any timestamp parsing.
+#' @param config A list containing API credentials.
+#'
+#' @return A `data.frame` describing the applied margin adjustment.
+#' @export
+post_account_position_margin_balance <- function(inst_id, pos_side, type, amt, ccy = NULL, tz = .okx_default_tz, config) {
+  body <- list(
+    instId = inst_id,
+    posSide = pos_side,
+    type = type,
+    amt = amt
+  )
+  if (!is.null(ccy)) {
+    body$ccy <- ccy
+  }
+  .posts$account_position_margin_balance(body_list = body, tz = tz, config = config)
+}
+
+#' Submit Spot Manual Borrow or Repay
+#'
+#' Manually borrow or repay under spot mode.
+#'
+#' @param ccy Currency.
+#' @param side Action side, typically `"borrow"` or `"repay"`.
+#' @param amt Amount.
+#' @param tz Timezone used for any timestamp parsing.
+#' @param config A list containing API credentials.
+#'
+#' @return A `data.frame` describing the executed borrow/repay request.
+#' @export
+post_account_spot_manual_borrow_repay <- function(ccy, side, amt, tz = .okx_default_tz, config) {
+  .posts$account_spot_manual_borrow_repay(
+    body_list = list(ccy = ccy, side = side, amt = amt),
+    tz = tz,
+    config = config
+  )
+}
+
+#' Preset Account Level Switch
+#'
+#' Preset required values before switching account mode.
+#'
+#' @param acct_lv Target account level.
+#' @param lever Optional leverage preset.
+#' @param risk_offset_type Optional deprecated risk offset type field.
+#' @param tz Timezone used for any timestamp parsing.
+#' @param config A list containing API credentials.
+#'
+#' @return A `data.frame` describing the stored preset values.
+#' @export
+post_account_account_level_switch_preset <- function(acct_lv, lever = NULL, risk_offset_type = NULL, tz = .okx_default_tz, config) {
+  body <- list(acctLv = acct_lv)
+  if (!is.null(lever)) {
+    body$lever <- lever
+  }
+  if (!is.null(risk_offset_type)) {
+    body$riskOffsetType <- risk_offset_type
+  }
+  .posts$account_account_level_switch_preset(body_list = body, tz = tz, config = config)
+}
+
+#' Reset MMP Status
+#'
+#' Reset market maker protection status for an instrument family.
+#'
+#' @param inst_family Instrument family.
+#' @param inst_type Optional instrument type. Defaults to `"OPTION"` on OKX.
+#' @param tz Timezone used for any timestamp parsing.
+#' @param config A list containing API credentials.
+#'
+#' @return A `data.frame` with the request result.
+#' @export
+post_account_mmp_reset <- function(inst_family, inst_type = NULL, tz = .okx_default_tz, config) {
+  body <- list(instFamily = inst_family)
+  if (!is.null(inst_type)) {
+    body$instType <- inst_type
+  }
+  .posts$account_mmp_reset(body_list = body, tz = tz, config = config)
+}
+
+#' Configure MMP
+#'
+#' Set market maker protection thresholds for an options instrument family.
+#'
+#' @param inst_family Instrument family.
+#' @param time_interval Time window in milliseconds.
+#' @param frozen_interval Frozen interval in milliseconds.
+#' @param qty_limit Quantity limit in number of contracts.
+#' @param tz Timezone used for any timestamp parsing.
+#' @param config A list containing API credentials.
+#'
+#' @return A `data.frame` describing the applied MMP configuration.
+#' @export
+post_account_mmp_config <- function(inst_family, time_interval, frozen_interval, qty_limit, tz = .okx_default_tz, config) {
+  .posts$account_mmp_config(
+    body_list = list(
+      instFamily = inst_family,
+      timeInterval = time_interval,
+      frozenInterval = frozen_interval,
+      qtyLimit = qty_limit
+    ),
+    tz = tz,
+    config = config
+  )
+}
+
+#' Move Positions Between Accounts
+#'
+#' Move positions between accounts under the same master account.
+#'
+#' @param from_acct Source account name.
+#' @param to_acct Destination account name.
+#' @param legs List of move-position leg objects in the documented OKX shape.
+#' @param client_id Client-supplied request ID.
+#' @param tz Timezone used for any timestamp parsing.
+#' @param config A list containing API credentials.
+#'
+#' @return A `data.frame` describing the move-position request result.
+#' @export
+post_account_move_positions <- function(from_acct, to_acct, legs, client_id, tz = .okx_default_tz, config) {
+  .posts$account_move_positions(
+    body_list = list(
+      fromAcct = from_acct,
+      toAcct = to_acct,
+      legs = legs,
+      clientId = client_id
+    ),
+    tz = tz,
+    config = config
+  )
+}

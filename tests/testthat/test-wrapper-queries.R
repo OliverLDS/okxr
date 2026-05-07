@@ -751,3 +751,99 @@ test_that("account POST wrappers build expected request bodies", {
   expect_identical(collateral_body$collateralEnabled, FALSE)
   expect_equal(collateral_body$ccyList, c("BTC", "ETH"))
 })
+
+test_that("account operational POST wrappers build expected request bodies", {
+  ns <- asNamespace("okxr")
+  old_posts <- get(".posts", envir = ns)
+  unlockBinding(".posts", ns)
+  on.exit({
+    assign(".posts", old_posts, envir = ns)
+    lockBinding(".posts", ns)
+  }, add = TRUE)
+  assign(
+    ".posts",
+    list(
+      account_position_margin_balance = function(body_list, tz, config) body_list,
+      account_spot_manual_borrow_repay = function(body_list, tz, config) body_list,
+      account_account_level_switch_preset = function(body_list, tz, config) body_list,
+      account_mmp_reset = function(body_list, tz, config) body_list,
+      account_mmp_config = function(body_list, tz, config) body_list,
+      account_move_positions = function(body_list, tz, config) body_list
+    ),
+    envir = ns
+  )
+
+  cfg <- list(api_key = "key", secret_key = "secret", passphrase = "pass")
+
+  margin_body <- okxr::post_account_position_margin_balance(
+    inst_id = "BTC-USDT-SWAP",
+    pos_side = "short",
+    type = "add",
+    amt = "1",
+    ccy = "BTC",
+    config = cfg
+  )
+  expect_equal(margin_body$instId, "BTC-USDT-SWAP")
+  expect_equal(margin_body$posSide, "short")
+  expect_equal(margin_body$type, "add")
+  expect_equal(margin_body$ccy, "BTC")
+
+  borrow_body <- okxr::post_account_spot_manual_borrow_repay(
+    ccy = "USDT",
+    side = "borrow",
+    amt = "100",
+    config = cfg
+  )
+  expect_equal(borrow_body$ccy, "USDT")
+  expect_equal(borrow_body$side, "borrow")
+  expect_equal(borrow_body$amt, "100")
+
+  preset_body <- okxr::post_account_account_level_switch_preset(
+    acct_lv = "2",
+    lever = "10",
+    risk_offset_type = "1",
+    config = cfg
+  )
+  expect_equal(preset_body$acctLv, "2")
+  expect_equal(preset_body$lever, "10")
+  expect_equal(preset_body$riskOffsetType, "1")
+
+  mmp_reset_body <- okxr::post_account_mmp_reset(
+    inst_family = "BTC-USD",
+    inst_type = "OPTION",
+    config = cfg
+  )
+  expect_equal(mmp_reset_body$instFamily, "BTC-USD")
+  expect_equal(mmp_reset_body$instType, "OPTION")
+
+  mmp_config_body <- okxr::post_account_mmp_config(
+    inst_family = "BTC-USD",
+    time_interval = "5000",
+    frozen_interval = "2000",
+    qty_limit = "100",
+    config = cfg
+  )
+  expect_equal(mmp_config_body$instFamily, "BTC-USD")
+  expect_equal(mmp_config_body$timeInterval, "5000")
+  expect_equal(mmp_config_body$frozenInterval, "2000")
+  expect_equal(mmp_config_body$qtyLimit, "100")
+
+  legs <- list(
+    list(
+      from = list(posId = "pos-1", side = "sell", sz = "1"),
+      to = list(posSide = "net", tdMode = "cross")
+    )
+  )
+  move_body <- okxr::post_account_move_positions(
+    from_acct = "0",
+    to_acct = "sub1",
+    legs = legs,
+    client_id = "move-1",
+    config = cfg
+  )
+  expect_equal(move_body$fromAcct, "0")
+  expect_equal(move_body$toAcct, "sub1")
+  expect_equal(move_body$clientId, "move-1")
+  expect_equal(move_body$legs[[1]]$from$posId, "pos-1")
+  expect_equal(move_body$legs[[1]]$to$tdMode, "cross")
+})

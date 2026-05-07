@@ -179,6 +179,48 @@ set_okxr_options <- function(raw_data = NULL, timeout = NULL) {
   stringsAsFactors = FALSE
 )
 
+.account_margin_balance_schema <- data.frame(
+  okx    = c("instId", "posSide", "amt", "type", "leverage", "ccy"),
+  formal = c("Instrument ID", "Position side", "Amount", "Margin action type", "Leverage", "Currency"),
+  type   = c("string", "string", "string", "string", "string", "string"),
+  stringsAsFactors = FALSE
+)
+
+.account_borrow_repay_schema <- data.frame(
+  okx    = c("ccy", "side", "amt"),
+  formal = c("Currency", "Side", "Amount"),
+  type   = c("string", "string", "string"),
+  stringsAsFactors = FALSE
+)
+
+.account_switch_preset_schema <- data.frame(
+  okx    = c("curAcctLv", "acctLv", "lever", "riskOffsetType"),
+  formal = c("Current account mode", "Target account mode", "Preset leverage", "Risk offset type"),
+  type   = c("string", "string", "string", "string"),
+  stringsAsFactors = FALSE
+)
+
+.account_result_schema <- data.frame(
+  okx    = c("result"),
+  formal = c("Result"),
+  type   = c("logical"),
+  stringsAsFactors = FALSE
+)
+
+.account_mmp_config_schema <- data.frame(
+  okx    = c("instFamily", "timeInterval", "frozenInterval", "qtyLimit"),
+  formal = c("Instrument family", "Time interval", "Frozen interval", "Quantity limit"),
+  type   = c("string", "string", "string", "string"),
+  stringsAsFactors = FALSE
+)
+
+.account_move_positions_schema <- data.frame(
+  okx    = c("clientId", "blockTdId", "state", "ts", "fromAcct", "toAcct", "legs"),
+  formal = c("Client ID", "Block trade ID", "State", "Timestamp", "Source account", "Destination account", "Legs"),
+  type   = c("string", "string", "string", "time", "string", "string", "string"),
+  stringsAsFactors = FALSE
+)
+
 .api_POST_specs <- list(
   
   #----account_set_leverage----
@@ -239,6 +281,48 @@ set_okxr_options <- function(raw_data = NULL, timeout = NULL) {
   account_set_collateral_assets = list(
     okx_path     = "/api/v5/account/set-collateral-assets",
     parser_schema = .account_collateral_assets_schema,
+    parser_mode = "named"
+  ),
+
+  #----account_position_margin_balance----
+  account_position_margin_balance = list(
+    okx_path     = "/api/v5/account/position/margin-balance",
+    parser_schema = .account_margin_balance_schema,
+    parser_mode = "named"
+  ),
+
+  #----account_spot_manual_borrow_repay----
+  account_spot_manual_borrow_repay = list(
+    okx_path     = "/api/v5/account/spot-manual-borrow-repay",
+    parser_schema = .account_borrow_repay_schema,
+    parser_mode = "named"
+  ),
+
+  #----account_account_level_switch_preset----
+  account_account_level_switch_preset = list(
+    okx_path     = "/api/v5/account/account-level-switch-preset",
+    parser_schema = .account_switch_preset_schema,
+    parser_mode = "named"
+  ),
+
+  #----account_mmp_reset----
+  account_mmp_reset = list(
+    okx_path     = "/api/v5/account/mmp-reset",
+    parser_schema = .account_result_schema,
+    parser_mode = "named"
+  ),
+
+  #----account_mmp_config----
+  account_mmp_config = list(
+    okx_path     = "/api/v5/account/mmp-config",
+    parser_schema = .account_mmp_config_schema,
+    parser_mode = "named"
+  ),
+
+  #----account_move_positions----
+  account_move_positions = list(
+    okx_path     = "/api/v5/account/move-positions",
+    parser_schema = .account_move_positions_schema,
     parser_mode = "named"
   ),
   
