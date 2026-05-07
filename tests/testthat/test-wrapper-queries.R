@@ -573,7 +573,10 @@ test_that("trade POST wrappers build expected request bodies", {
       trade_amend_order = function(body_list, tz, config) body_list,
       trade_amend_batch_orders = function(body_list, tz, config) body_list,
       trade_order_precheck = function(body_list, tz, config) body_list,
-      trade_cancel_all_after = function(body_list, tz, config) body_list
+      trade_cancel_all_after = function(body_list, tz, config) body_list,
+      trade_cancel_algos = function(body_list, tz, config) body_list,
+      trade_amend_algos = function(body_list, tz, config) body_list,
+      trade_mass_cancel = function(body_list, tz, config) body_list
     ),
     envir = ns
   )
@@ -641,4 +644,39 @@ test_that("trade POST wrappers build expected request bodies", {
   )
   expect_equal(caa_body$timeOut, "60")
   expect_equal(caa_body$tag, "desk1")
+
+  cancel_algos_body <- okxr::post_trade_cancel_algos(
+    orders = list(
+      list(inst_id = "BTC-USDT", algo_id = "algo-1"),
+      list(inst_id = "BTC-USDT", algo_cl_ord_id = "algo-client-2")
+    ),
+    config = cfg
+  )
+  expect_equal(cancel_algos_body[[1]]$algoId, "algo-1")
+  expect_equal(cancel_algos_body[[2]]$algoClOrdId, "algo-client-2")
+
+  amend_algos_body <- okxr::post_trade_amend_algos(
+    inst_id = "BTC-USDT",
+    algo_id = "algo-1",
+    req_id = "algo-amend-1",
+    new_sz = "2",
+    cxl_on_fail = TRUE,
+    new_trigger_px = "62000",
+    new_ord_px = "-1",
+    config = cfg
+  )
+  expect_equal(amend_algos_body$algoId, "algo-1")
+  expect_equal(amend_algos_body$reqId, "algo-amend-1")
+  expect_equal(amend_algos_body$cxlOnFail, "true")
+  expect_equal(amend_algos_body$newTriggerPx, "62000")
+
+  mass_cancel_body <- okxr::post_trade_mass_cancel(
+    inst_type = "OPTION",
+    inst_family = "BTC-USD",
+    lock_interval = "500",
+    config = cfg
+  )
+  expect_equal(mass_cancel_body$instType, "OPTION")
+  expect_equal(mass_cancel_body$instFamily, "BTC-USD")
+  expect_equal(mass_cancel_body$lockInterval, "500")
 })

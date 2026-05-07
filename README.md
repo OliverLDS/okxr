@@ -9,7 +9,7 @@ copy trading, with shared request signing and schema-based response parsing.
 `okxr` is available on CRAN. Install the stable release from CRAN or use the
 GitHub repository for development versions between CRAN releases.
 
-Current development release: `v0.4.0`
+Current development release: `v0.4.1`
 
 ## Installation
 
@@ -191,6 +191,9 @@ get_copy_trade_current_subpos(config = config)
 | trade | POST | `post_trade_amend_batch_orders()` |
 | trade | POST | `post_trade_order_precheck()` |
 | trade | POST | `post_trade_cancel_all_after()` |
+| trade | POST | `post_trade_cancel_algos()` |
+| trade | POST | `post_trade_amend_algos()` |
+| trade | POST | `post_trade_mass_cancel()` |
 | copy trading | GET | `get_copy_trade_my_leaders()` |
 | copy trading | GET | `get_copy_trade_settings()` |
 | copy trading | GET | `get_copy_trade_current_subpos()` |
@@ -237,6 +240,7 @@ See [NEWS.md](NEWS.md) for release history.
 * [x] Broader copy-trading coverage plus expanded asset history filter support for v0.3.4
 * [x] Remaining copy-trading GET endpoints and copy-trading parameter completeness fixes for v0.3.5
 * [x] First trade action expansion batch for v0.4.0
+* [x] Advanced trade algo and mass-cancel action coverage for v0.4.1
 * [ ] Websocket support
 
 ## License

@@ -84,6 +84,56 @@
   ))
 }
 
+.okx_trade_algo_cancel_body <- function(
+  inst_id,
+  algo_id = NULL,
+  algo_cl_ord_id = NULL
+) {
+  .okx_compact_body(list(
+    instId = inst_id,
+    algoId = algo_id,
+    algoClOrdId = algo_cl_ord_id
+  ))
+}
+
+.okx_trade_algo_amend_body <- function(
+  inst_id,
+  algo_id = NULL,
+  algo_cl_ord_id = NULL,
+  cxl_on_fail = NULL,
+  req_id = NULL,
+  new_sz = NULL,
+  new_tp_trigger_px = NULL,
+  new_tp_ord_px = NULL,
+  new_sl_trigger_px = NULL,
+  new_sl_ord_px = NULL,
+  new_tp_trigger_px_type = NULL,
+  new_sl_trigger_px_type = NULL,
+  new_trigger_px = NULL,
+  new_ord_px = NULL,
+  new_trigger_px_type = NULL,
+  attach_algo_ords = NULL
+) {
+  .okx_compact_body(list(
+    instId = inst_id,
+    algoId = algo_id,
+    algoClOrdId = algo_cl_ord_id,
+    cxlOnFail = if (is.null(cxl_on_fail)) NULL else tolower(as.character(cxl_on_fail)),
+    reqId = req_id,
+    newSz = new_sz,
+    newTpTriggerPx = new_tp_trigger_px,
+    newTpOrdPx = new_tp_ord_px,
+    newSlTriggerPx = new_sl_trigger_px,
+    newSlOrdPx = new_sl_ord_px,
+    newTpTriggerPxType = new_tp_trigger_px_type,
+    newSlTriggerPxType = new_sl_trigger_px_type,
+    newTriggerPx = new_trigger_px,
+    newOrdPx = new_ord_px,
+    newTriggerPxType = new_trigger_px_type,
+    attachAlgoOrds = attach_algo_ords
+  ))
+}
+
 #' Place a Trade Order
 #'
 #' Submits a trade order to the OKX exchange.
@@ -342,4 +392,92 @@ post_trade_order_precheck <- function(inst_id, td_mode, side, ord_type, sz, ccy 
 post_trade_cancel_all_after <- function(time_out, tag = NULL, config, tz = .okx_default_tz) {
   body_list <- .okx_compact_body(list(timeOut = as.character(time_out), tag = tag))
   .posts$trade_cancel_all_after(body_list = body_list, tz = tz, config = config)
+}
+
+#' Cancel Multiple Algo Orders
+#'
+#' Cancel up to 10 unfilled algo orders in one request.
+#'
+#' @param orders List of cancellation specification lists containing `inst_id`
+#'   plus either `algo_id` or `algo_cl_ord_id`.
+#' @param config A list with API credentials.
+#' @param tz Timezone for parsing response timestamps.
+#'
+#' @return A `data.frame` with one row per algo cancellation result.
+#' @export
+post_trade_cancel_algos <- function(orders, config, tz = .okx_default_tz) {
+  body_list <- lapply(
+    orders,
+    function(order) do.call(.okx_trade_algo_cancel_body, order)
+  )
+  .posts$trade_cancel_algos(body_list = body_list, tz = tz, config = config)
+}
+
+#' Amend an Algo Order
+#'
+#' Amend a supported unfilled algo order.
+#'
+#' @param inst_id Instrument ID.
+#' @param algo_id Algo order ID. Optional if `algo_cl_ord_id` is supplied.
+#' @param algo_cl_ord_id Client-supplied algo ID. Optional if `algo_id` is supplied.
+#' @param cxl_on_fail Optional logical. Whether to cancel the order if the
+#'   amendment fails.
+#' @param req_id Optional client amendment request ID.
+#' @param new_sz Optional new quantity after amendment.
+#' @param new_tp_trigger_px Optional new take-profit trigger price.
+#' @param new_tp_ord_px Optional new take-profit order price.
+#' @param new_sl_trigger_px Optional new stop-loss trigger price.
+#' @param new_sl_ord_px Optional new stop-loss order price.
+#' @param new_tp_trigger_px_type Optional new take-profit trigger price type.
+#' @param new_sl_trigger_px_type Optional new stop-loss trigger price type.
+#' @param new_trigger_px Optional new trigger price for trigger orders.
+#' @param new_ord_px Optional new order price for trigger orders.
+#' @param new_trigger_px_type Optional new trigger price type for trigger orders.
+#' @param attach_algo_ords Optional attached TP/SL amendment list.
+#' @param config A list with API credentials.
+#' @param tz Timezone for parsing response timestamps.
+#'
+#' @return A `data.frame` describing the algo amendment result.
+#' @export
+post_trade_amend_algos <- function(inst_id, algo_id = NULL, algo_cl_ord_id = NULL, cxl_on_fail = NULL, req_id = NULL, new_sz = NULL, new_tp_trigger_px = NULL, new_tp_ord_px = NULL, new_sl_trigger_px = NULL, new_sl_ord_px = NULL, new_tp_trigger_px_type = NULL, new_sl_trigger_px_type = NULL, new_trigger_px = NULL, new_ord_px = NULL, new_trigger_px_type = NULL, attach_algo_ords = NULL, config, tz = .okx_default_tz) {
+  body_list <- .okx_trade_algo_amend_body(
+    inst_id = inst_id,
+    algo_id = algo_id,
+    algo_cl_ord_id = algo_cl_ord_id,
+    cxl_on_fail = cxl_on_fail,
+    req_id = req_id,
+    new_sz = new_sz,
+    new_tp_trigger_px = new_tp_trigger_px,
+    new_tp_ord_px = new_tp_ord_px,
+    new_sl_trigger_px = new_sl_trigger_px,
+    new_sl_ord_px = new_sl_ord_px,
+    new_tp_trigger_px_type = new_tp_trigger_px_type,
+    new_sl_trigger_px_type = new_sl_trigger_px_type,
+    new_trigger_px = new_trigger_px,
+    new_ord_px = new_ord_px,
+    new_trigger_px_type = new_trigger_px_type,
+    attach_algo_ords = attach_algo_ords
+  )
+  .posts$trade_amend_algos(body_list = body_list, tz = tz, config = config)
+}
+
+#' Mass Cancel MMP Orders
+#'
+#' Cancel all MMP pending orders for an options instrument family.
+#'
+#' @param inst_type Instrument type. Currently `OPTION`.
+#' @param inst_family Instrument family.
+#' @param lock_interval Optional lock interval in milliseconds.
+#' @param config A list with API credentials.
+#' @param tz Timezone for parsing response timestamps.
+#'
+#' @return A `data.frame` with the request result.
+#' @export
+post_trade_mass_cancel <- function(inst_type, inst_family, lock_interval = NULL, config, tz = .okx_default_tz) {
+  body_list <- .okx_compact_body(list(
+    instType = inst_type,
+    instFamily = inst_family,
+    lockInterval = lock_interval
+  ))
+  .posts$trade_mass_cancel(body_list = body_list, tz = tz, config = config)
 }

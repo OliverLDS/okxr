@@ -116,6 +116,20 @@ set_okxr_options <- function(raw_data = NULL, timeout = NULL) {
   stringsAsFactors = FALSE
 )
 
+.trade_algo_cancel_response_schema <- data.frame(
+  okx    = c("algoId", "algoClOrdId", "clOrdId", "sCode", "sMsg", "tag"),
+  formal = c("Algo ID", "Client-supplied Algo ID", "Client Order ID", "Code of the execution result", "Execution message", "Order tag"),
+  type   = c("string", "string", "string", "string", "string", "string"),
+  stringsAsFactors = FALSE
+)
+
+.trade_algo_amend_response_schema <- data.frame(
+  okx    = c("algoId", "algoClOrdId", "reqId", "sCode", "sMsg"),
+  formal = c("Algo ID", "Client-supplied Algo ID", "Client request ID", "Code of the execution result", "Execution message"),
+  type   = c("string", "string", "string", "string", "string"),
+  stringsAsFactors = FALSE
+)
+
 .api_POST_specs <- list(
   
   #----account_set_leverage----
@@ -215,6 +229,32 @@ set_okxr_options <- function(raw_data = NULL, timeout = NULL) {
       type   = c("numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "string", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "string", "string", "string"),
       stringsAsFactors = FALSE
     ),
+    parser_mode = "named"
+  ),
+
+  #----trade_mass_cancel----
+  trade_mass_cancel = list(
+    okx_path     = "/api/v5/trade/mass-cancel",
+    parser_schema = data.frame(
+      okx    = c("result"),
+      formal = c("Result"),
+      type   = c("logical"),
+      stringsAsFactors = FALSE
+    ),
+    parser_mode = "named"
+  ),
+
+  #----trade_cancel_algos----
+  trade_cancel_algos = list(
+    okx_path     = "/api/v5/trade/cancel-algos",
+    parser_schema = .trade_algo_cancel_response_schema,
+    parser_mode = "named"
+  ),
+
+  #----trade_amend_algos----
+  trade_amend_algos = list(
+    okx_path     = "/api/v5/trade/amend-algos",
+    parser_schema = .trade_algo_amend_response_schema,
     parser_mode = "named"
   )
   

@@ -1,5 +1,15 @@
 # okxr news
 
+## okxr 0.4.1
+
+* Added `post_trade_cancel_algos()` for batch cancellation of supported
+  algo orders.
+* Added `post_trade_amend_algos()` for modifying supported algo orders with
+  documented trigger and TP/SL amendment fields.
+* Added `post_trade_mass_cancel()` for options MMP mass-cancel workflows.
+* Added parser specs and mocked request-body tests for the new trade action
+  wrappers.
+
 ## okxr 0.4.0
 
 * Added `post_trade_batch_orders()` and `post_trade_cancel_batch_orders()`
