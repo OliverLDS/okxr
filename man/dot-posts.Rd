@@ -5,7 +5,7 @@
 \alias{.posts}
 \title{POST request function list}
 \format{
-An object of class \code{list} of length 13.
+An object of class \code{list} of length 20.
 }
 \usage{
 .posts

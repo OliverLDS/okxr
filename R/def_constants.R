@@ -130,6 +130,55 @@ set_okxr_options <- function(raw_data = NULL, timeout = NULL) {
   stringsAsFactors = FALSE
 )
 
+.account_position_mode_schema <- data.frame(
+  okx    = c("posMode"),
+  formal = c("Position mode"),
+  type   = c("string"),
+  stringsAsFactors = FALSE
+)
+
+.account_fee_type_schema <- data.frame(
+  okx    = c("feeType"),
+  formal = c("Fee type"),
+  type   = c("string"),
+  stringsAsFactors = FALSE
+)
+
+.account_greeks_type_schema <- data.frame(
+  okx    = c("greeksType"),
+  formal = c("Greeks display type"),
+  type   = c("string"),
+  stringsAsFactors = FALSE
+)
+
+.account_auto_flag_schema <- data.frame(
+  okx    = c("autoRepay"),
+  formal = c("Auto repay enabled"),
+  type   = c("logical"),
+  stringsAsFactors = FALSE
+)
+
+.account_auto_loan_schema <- data.frame(
+  okx    = c("autoLoan"),
+  formal = c("Auto loan enabled"),
+  type   = c("logical"),
+  stringsAsFactors = FALSE
+)
+
+.account_level_schema <- data.frame(
+  okx    = c("acctLv"),
+  formal = c("Account mode"),
+  type   = c("string"),
+  stringsAsFactors = FALSE
+)
+
+.account_collateral_assets_schema <- data.frame(
+  okx    = c("type", "ccyList", "collateralEnabled"),
+  formal = c("Type", "Currency list", "Collateral enabled"),
+  type   = c("string", "string", "logical"),
+  stringsAsFactors = FALSE
+)
+
 .api_POST_specs <- list(
   
   #----account_set_leverage----
@@ -141,6 +190,55 @@ set_okxr_options <- function(raw_data = NULL, timeout = NULL) {
       type   = c("string", "string", "string"),
       stringsAsFactors = FALSE
     ),
+    parser_mode = "named"
+  ),
+
+  #----account_set_position_mode----
+  account_set_position_mode = list(
+    okx_path     = "/api/v5/account/set-position-mode",
+    parser_schema = .account_position_mode_schema,
+    parser_mode = "named"
+  ),
+
+  #----account_set_fee_type----
+  account_set_fee_type = list(
+    okx_path     = "/api/v5/account/set-fee-type",
+    parser_schema = .account_fee_type_schema,
+    parser_mode = "named"
+  ),
+
+  #----account_set_greeks----
+  account_set_greeks = list(
+    okx_path     = "/api/v5/account/set-greeks",
+    parser_schema = .account_greeks_type_schema,
+    parser_mode = "named"
+  ),
+
+  #----account_set_auto_repay----
+  account_set_auto_repay = list(
+    okx_path     = "/api/v5/account/set-auto-repay",
+    parser_schema = .account_auto_flag_schema,
+    parser_mode = "named"
+  ),
+
+  #----account_set_auto_loan----
+  account_set_auto_loan = list(
+    okx_path     = "/api/v5/account/set-auto-loan",
+    parser_schema = .account_auto_loan_schema,
+    parser_mode = "named"
+  ),
+
+  #----account_set_account_level----
+  account_set_account_level = list(
+    okx_path     = "/api/v5/account/set-account-level",
+    parser_schema = .account_level_schema,
+    parser_mode = "named"
+  ),
+
+  #----account_set_collateral_assets----
+  account_set_collateral_assets = list(
+    okx_path     = "/api/v5/account/set-collateral-assets",
+    parser_schema = .account_collateral_assets_schema,
     parser_mode = "named"
   ),
   

@@ -680,3 +680,74 @@ test_that("trade POST wrappers build expected request bodies", {
   expect_equal(mass_cancel_body$instFamily, "BTC-USD")
   expect_equal(mass_cancel_body$lockInterval, "500")
 })
+
+test_that("account POST wrappers build expected request bodies", {
+  ns <- asNamespace("okxr")
+  old_posts <- get(".posts", envir = ns)
+  unlockBinding(".posts", ns)
+  on.exit({
+    assign(".posts", old_posts, envir = ns)
+    lockBinding(".posts", ns)
+  }, add = TRUE)
+  assign(
+    ".posts",
+    list(
+      account_set_position_mode = function(body_list, tz, config) body_list,
+      account_set_fee_type = function(body_list, tz, config) body_list,
+      account_set_greeks = function(body_list, tz, config) body_list,
+      account_set_auto_repay = function(body_list, tz, config) body_list,
+      account_set_auto_loan = function(body_list, tz, config) body_list,
+      account_set_account_level = function(body_list, tz, config) body_list,
+      account_set_collateral_assets = function(body_list, tz, config) body_list
+    ),
+    envir = ns
+  )
+
+  cfg <- list(api_key = "key", secret_key = "secret", passphrase = "pass")
+
+  pos_mode_body <- okxr::post_account_set_position_mode(
+    pos_mode = "long_short_mode",
+    config = cfg
+  )
+  expect_equal(pos_mode_body$posMode, "long_short_mode")
+
+  fee_type_body <- okxr::post_account_set_fee_type(
+    fee_type = "1",
+    config = cfg
+  )
+  expect_equal(fee_type_body$feeType, "1")
+
+  greeks_body <- okxr::post_account_set_greeks(
+    greeks_type = "PA",
+    config = cfg
+  )
+  expect_equal(greeks_body$greeksType, "PA")
+
+  auto_repay_body <- okxr::post_account_set_auto_repay(
+    auto_repay = TRUE,
+    config = cfg
+  )
+  expect_identical(auto_repay_body$autoRepay, TRUE)
+
+  auto_loan_body <- okxr::post_account_set_auto_loan(
+    auto_loan = FALSE,
+    config = cfg
+  )
+  expect_identical(auto_loan_body$autoLoan, FALSE)
+
+  acct_lv_body <- okxr::post_account_set_account_level(
+    acct_lv = "3",
+    config = cfg
+  )
+  expect_equal(acct_lv_body$acctLv, "3")
+
+  collateral_body <- okxr::post_account_set_collateral_assets(
+    type = "custom",
+    collateral_enabled = FALSE,
+    ccy_list = c("BTC", "ETH"),
+    config = cfg
+  )
+  expect_equal(collateral_body$type, "custom")
+  expect_identical(collateral_body$collateralEnabled, FALSE)
+  expect_equal(collateral_body$ccyList, c("BTC", "ETH"))
+})

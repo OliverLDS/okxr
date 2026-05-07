@@ -1,6 +1,6 @@
 Package: okxr
 Title: R Interface to the 'OKX' REST API
-Version: 0.4.1
+Version: 0.4.2
 Authors@R: c(
     person('Oliver', 'Zhou', email = 'oliver.yxzhou@gmail.com', role = c('aut', 'cre')),
     person('Lily', 'Li', email = 'lilyli.qc.hk@gmail.com', role = 'aut')

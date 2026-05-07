@@ -9,7 +9,7 @@ copy trading, with shared request signing and schema-based response parsing.
 `okxr` is available on CRAN. Install the stable release from CRAN or use the
 GitHub repository for development versions between CRAN releases.
 
-Current development release: `v0.4.1`
+Current development release: `v0.4.2`
 
 ## Installation
 
@@ -167,6 +167,14 @@ get_copy_trade_current_subpos(config = config)
 | account | GET | `get_account_set_account_switch_precheck()` |
 | account | GET | `get_account_spot_borrow_repay_history()` |
 | account | GET | `get_account_bills()` |
+| account | POST | `post_account_set_leverage()` |
+| account | POST | `post_account_set_position_mode()` |
+| account | POST | `post_account_set_fee_type()` |
+| account | POST | `post_account_set_greeks()` |
+| account | POST | `post_account_set_auto_repay()` |
+| account | POST | `post_account_set_auto_loan()` |
+| account | POST | `post_account_set_account_level()` |
+| account | POST | `post_account_set_collateral_assets()` |
 | asset | GET | `get_asset_balances()` |
 | asset | GET | `get_asset_deposit_history()` |
 | asset | GET | `get_asset_withdrawal_history()` |
@@ -241,6 +249,7 @@ See [NEWS.md](NEWS.md) for release history.
 * [x] Remaining copy-trading GET endpoints and copy-trading parameter completeness fixes for v0.3.5
 * [x] First trade action expansion batch for v0.4.0
 * [x] Advanced trade algo and mass-cancel action coverage for v0.4.1
+* [x] Account configuration action coverage for v0.4.2
 * [ ] Websocket support
 
 ## License

@@ -1,5 +1,18 @@
 # okxr news
 
+## okxr 0.4.2
+
+* Added `post_account_set_position_mode()` for account position-mode changes.
+* Added `post_account_set_fee_type()` and `post_account_set_greeks()` for
+  fee display and Greeks display configuration.
+* Added `post_account_set_auto_repay()` and `post_account_set_auto_loan()`
+  for spot auto-repay and automatic borrowing settings.
+* Added `post_account_set_account_level()` and
+  `post_account_set_collateral_assets()` for account-mode and collateral
+  configuration workflows.
+* Added parser specs and mocked request-body tests for the new account action
+  wrappers.
+
 ## okxr 0.4.1
 
 * Added `post_trade_cancel_algos()` for batch cancellation of supported
