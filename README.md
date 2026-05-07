@@ -9,7 +9,7 @@ copy trading, with shared request signing and schema-based response parsing.
 `okxr` is available on CRAN. Install the stable release from CRAN or use the
 GitHub repository for development versions between CRAN releases.
 
-Current development release: `v0.3.4`
+Current development release: `v0.3.5`
 
 ## Installation
 
@@ -186,12 +186,21 @@ get_copy_trade_current_subpos(config = config)
 | trade | POST | `post_trade_order()` |
 | trade | POST | `post_trade_cancel_order()` |
 | copy trading | GET | `get_copy_trade_my_leaders()` |
+| copy trading | GET | `get_copy_trade_settings()` |
+| copy trading | GET | `get_copy_trade_current_subpos()` |
+| copy trading | GET | `get_copy_trade_historical_subpos()` |
 | copy trading | GET | `get_copy_trade_instruments()` |
 | copy trading | GET | `get_copy_trade_public_config()` |
+| copy trading | GET | `get_copy_trade_public_lead_traders()` |
 | copy trading | GET | `get_copy_trade_public_copy_traders()` |
+| copy trading | GET | `get_copy_trade_public_preference_currency()` |
 | copy trading | GET | `get_copy_trade_public_current_subpositions()` |
+| copy trading | GET | `get_copy_trade_public_subpositions_history()` |
 | copy trading | GET | `get_copy_trade_public_pnl()` |
+| copy trading | GET | `get_copy_trade_public_stats()` |
+| copy trading | GET | `get_copy_trade_public_weekly_pnl()` |
 | copy trading | GET | `get_copy_trade_profit_sharing_details()` |
+| copy trading | GET | `get_copy_trade_total_profit_sharing()` |
 
 ## Release notes
 
@@ -220,6 +229,7 @@ See [NEWS.md](NEWS.md) for release history.
 * [x] Broader account inspection and sub-account GET coverage for v0.3.2
 * [x] Broader trade history, algo-order, asset billing, and convert GET coverage for v0.3.3
 * [x] Broader copy-trading coverage plus expanded asset history filter support for v0.3.4
+* [x] Remaining copy-trading GET endpoints and copy-trading parameter completeness fixes for v0.3.5
 * [ ] Websocket support
 
 ## License

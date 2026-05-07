@@ -274,9 +274,9 @@ set_okxr_options <- function(raw_data = NULL, timeout = NULL) {
   copy_trade_settings = list(
     okx_path     = "/api/v5/copytrading/copy-settings",
     parser_schema       = data.frame(
-      okx    = c("copyMode", "copyState"),
-      formal = c("Copy mode", "Current copy state"),
-      type   = c("string", "string"),
+      okx    = c("ccy", "copyAmt", "copyInstIdType", "copyMgnMode", "copyMode", "copyRatio", "copyState", "copyTotalAmt", "instIds", "slRatio", "slTotalAmt", "subPosCloseType", "tpRatio", "tag"),
+      formal = c("Margin currency", "Copy amount", "Copy instrument selection type", "Copy margin mode", "Copy mode", "Copy ratio", "Current copy state", "Maximum total copy amount", "Instrument list", "Stop-loss ratio", "Total stop-loss amount", "Subposition close type", "Take-profit ratio", "Order tag"),
+      type   = c("string", "numeric", "string", "string", "string", "numeric", "string", "numeric", "string", "numeric", "numeric", "string", "numeric", "string"),
       stringsAsFactors = FALSE
     ),
     parser_mode = "named"
@@ -298,9 +298,9 @@ set_okxr_options <- function(raw_data = NULL, timeout = NULL) {
   copy_trade_current_subpos = list(
     okx_path     = "/api/v5/copytrading/current-subpositions",
     parser_schema       = data.frame(
-      okx    = c("instId", "uniqueCode"),
-      formal = c("Instrument ID", "Lead trader unique code"),
-      type   = c("string", "string"),
+      okx    = c("algoId", "availSubPos", "ccy", "instId", "instType", "lever", "margin", "markPx", "mgnMode", "openAvgPx", "openOrdId", "openTime", "posSide", "slOrdPx", "slTriggerPx", "subPos", "subPosId", "tpOrdPx", "tpTriggerPx", "uniqueCode", "upl", "uplRatio"),
+      formal = c("Stop order ID", "Available subposition size", "Margin currency", "Instrument ID", "Instrument type", "Leverage", "Margin", "Mark price", "Margin mode", "Average open price", "Opening order ID", "Open time", "Position side", "Stop-loss order price", "Stop-loss trigger price", "Subposition size", "Subposition ID", "Take-profit order price", "Take-profit trigger price", "Lead trader unique code", "Unrealized profit and loss", "Unrealized profit and loss ratio"),
+      type   = c("string", "numeric", "string", "string", "string", "numeric", "numeric", "numeric", "string", "numeric", "string", "time", "string", "numeric", "numeric", "numeric", "string", "numeric", "numeric", "string", "numeric", "numeric"),
       stringsAsFactors = FALSE
     ),
     parser_mode = "named"
@@ -310,9 +310,9 @@ set_okxr_options <- function(raw_data = NULL, timeout = NULL) {
   copy_trade_historical_subpos = list(
     okx_path     = "/api/v5/copytrading/subpositions-history",
     parser_schema       = data.frame(
-      okx    = c("instId", "uniqueCode"),
-      formal = c("Instrument ID", "Lead trader unique code"),
-      type   = c("string", "string"),
+      okx    = c("ccy", "closeAvgPx", "closeSubPos", "closeTime", "instId", "instType", "lever", "margin", "markPx", "mgnMode", "openAvgPx", "openOrdId", "openTime", "pnl", "pnlRatio", "posSide", "profitSharingAmt", "subPos", "subPosId", "type", "uniqueCode"),
+      formal = c("Margin currency", "Average close price", "Closed subposition size", "Close time", "Instrument ID", "Instrument type", "Leverage", "Margin", "Mark price", "Margin mode", "Average open price", "Opening order ID", "Open time", "Profit and loss", "Profit and loss ratio", "Position side", "Profit sharing amount", "Subposition size", "Subposition ID", "Close type", "Lead trader unique code"),
+      type   = c("string", "numeric", "numeric", "time", "string", "string", "numeric", "numeric", "numeric", "string", "numeric", "string", "time", "numeric", "numeric", "string", "numeric", "numeric", "string", "string", "string"),
       stringsAsFactors = FALSE
     ),
     parser_mode = "named"
@@ -363,6 +363,19 @@ set_okxr_options <- function(raw_data = NULL, timeout = NULL) {
       okx    = c("ccy", "copyTotalPnl", "copyTraderNumChg", "copyTraderNumChgRatio", "copyTraders"),
       formal = c("Profit currency", "Total copy trader profit and loss", "Copy trader count change", "Copy trader count change ratio", "Copy trader details"),
       type   = c("string", "numeric", "integer", "numeric", "string"),
+      stringsAsFactors = FALSE
+    ),
+    parser_mode = "named"
+  ),
+
+  #----copy_trade_public_lead_traders----
+  copy_trade_public_lead_traders = list(
+    okx_path     = "/api/v5/copytrading/public-lead-traders",
+    auth         = FALSE,
+    parser_schema = data.frame(
+      okx    = c("dataVer", "totalPage", "ranks"),
+      formal = c("Data version", "Total pages", "Lead trader ranks"),
+      type   = c("string", "integer", "string"),
       stringsAsFactors = FALSE
     ),
     parser_mode = "named"
@@ -428,6 +441,19 @@ set_okxr_options <- function(raw_data = NULL, timeout = NULL) {
       okx    = c("beginTs", "pnl", "pnlRatio"),
       formal = c("Week start time", "Profit and loss", "Profit and loss ratio"),
       type   = c("time", "numeric", "numeric"),
+      stringsAsFactors = FALSE
+    ),
+    parser_mode = "named"
+  ),
+
+  #----copy_trade_public_preference_currency----
+  copy_trade_public_preference_currency = list(
+    okx_path     = "/api/v5/copytrading/public-preference-currency",
+    auth         = FALSE,
+    parser_schema = data.frame(
+      okx    = c("ccy", "ratio"),
+      formal = c("Currency", "Preference ratio"),
+      type   = c("string", "numeric"),
       stringsAsFactors = FALSE
     ),
     parser_mode = "named"

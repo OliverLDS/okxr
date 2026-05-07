@@ -1,5 +1,19 @@
 # okxr news
 
+## okxr 0.3.5
+
+* Added `get_copy_trade_public_lead_traders()` and
+  `get_copy_trade_public_preference_currency()` to cover the remaining
+  documented public copy-trading GET endpoints in the current package scope.
+* Expanded `get_copy_trade_settings()` with the documented `inst_type`
+  filter.
+* Expanded `get_copy_trade_current_subpos()` and
+  `get_copy_trade_historical_subpos()` with `inst_type`, `inst_id`,
+  `after`, `before`, and `limit`.
+* Broadened parsed copy-trading schemas for settings and private
+  subposition/history endpoints so the wrappers return more of the documented
+  response fields.
+
 ## okxr 0.3.4
 
 * Added `get_copy_trade_instruments()`, `get_copy_trade_config()`,

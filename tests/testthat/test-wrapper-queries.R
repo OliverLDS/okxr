@@ -63,15 +63,20 @@ test_that("GET wrappers build expected query strings", {
       account_subaccount_max_withdrawal = function(query_string, config, tz) query_string,
       account_set_account_switch_precheck = function(query_string, config, tz) query_string,
       account_spot_borrow_repay_history = function(query_string, config, tz) query_string,
+      copy_trade_settings = function(query_string, config, tz) query_string,
+      copy_trade_current_subpos = function(query_string, config, tz) query_string,
+      copy_trade_historical_subpos = function(query_string, config, tz) query_string,
       copy_trade_instruments = function(query_string, config, tz) query_string,
       copy_trade_config = function(query_string, config, tz) query_string,
       copy_trade_public_config = function(query_string, config, tz) query_string,
       copy_trade_public_copy_traders = function(query_string, config, tz) query_string,
+      copy_trade_public_lead_traders = function(query_string, config, tz) query_string,
       copy_trade_public_current_subpositions = function(query_string, config, tz) query_string,
       copy_trade_public_subpositions_history = function(query_string, config, tz) query_string,
       copy_trade_public_pnl = function(query_string, config, tz) query_string,
       copy_trade_public_stats = function(query_string, config, tz) query_string,
       copy_trade_public_weekly_pnl = function(query_string, config, tz) query_string,
+      copy_trade_public_preference_currency = function(query_string, config, tz) query_string,
       copy_trade_profit_sharing_details = function(query_string, config, tz) query_string,
       copy_trade_unrealized_profit_sharing_details = function(query_string, config, tz) query_string,
       copy_trade_total_profit_sharing = function(query_string, config, tz) query_string,
@@ -228,6 +233,10 @@ test_that("GET wrappers build expected query strings", {
     "?uniqueCode=leader-1&instType=SWAP&limit=5"
   )
   expect_equal(
+    okxr::get_copy_trade_public_lead_traders(inst_type = "SWAP", sort_type = "pnl", state = "1", limit = 5),
+    "?instType=SWAP&sortType=pnl&state=1&limit=5"
+  )
+  expect_equal(
     okxr::get_copy_trade_public_current_subpositions(unique_code = "leader-1", before = "200", limit = 10),
     "?uniqueCode=leader-1&before=200&limit=10"
   )
@@ -247,8 +256,24 @@ test_that("GET wrappers build expected query strings", {
     okxr::get_copy_trade_public_weekly_pnl(unique_code = "leader-1", inst_type = "SWAP"),
     "?uniqueCode=leader-1&instType=SWAP"
   )
+  expect_equal(
+    okxr::get_copy_trade_public_preference_currency(unique_code = "leader-1", inst_type = "SWAP"),
+    "?uniqueCode=leader-1&instType=SWAP"
+  )
 
   cfg <- list(api_key = "key", secret_key = "secret", passphrase = "pass")
+  expect_equal(
+    okxr::get_copy_trade_settings(unique_code = "leader-1", inst_type = "SWAP", config = cfg),
+    "?uniqueCode=leader-1&instType=SWAP"
+  )
+  expect_equal(
+    okxr::get_copy_trade_current_subpos(inst_type = "SWAP", inst_id = "BTC-USDT-SWAP", after = "100", limit = 10, config = cfg),
+    "?instType=SWAP&instId=BTC-USDT-SWAP&after=100&limit=10"
+  )
+  expect_equal(
+    okxr::get_copy_trade_historical_subpos(inst_type = "SWAP", inst_id = "BTC-USDT-SWAP", before = "200", limit = 10, config = cfg),
+    "?instType=SWAP&instId=BTC-USDT-SWAP&before=200&limit=10"
+  )
   expect_equal(
     okxr::get_copy_trade_instruments(inst_type = "SWAP", config = cfg),
     "?instType=SWAP"
