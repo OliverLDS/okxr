@@ -1,6 +1,6 @@
 Package: okxr
 Title: R Interface to the 'OKX' REST API
-Version: 0.4.3
+Version: 0.4.4
 Authors@R: c(
     person('Oliver', 'Zhou', email = 'oliver.yxzhou@gmail.com', role = c('aut', 'cre')),
     person('Lily', 'Li', email = 'lilyli.qc.hk@gmail.com', role = 'aut')
@@ -39,6 +39,7 @@ Collate:
     wrappers_get_account.R
     wrappers_get_trade.R
     wrappers_get_copy_trade.R
+    wrappers_post_asset.R
     wrappers_post_configure.R
     wrappers_post_trade.R
 URL: https://github.com/OliverLDS/okxr

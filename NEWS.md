@@ -1,5 +1,16 @@
 # okxr news
 
+## okxr 0.4.4
+
+* Added `post_asset_transfer()` for signed internal and sub-account asset
+  transfer workflows.
+* Added `post_asset_withdrawal()` and `post_asset_cancel_withdrawal()` for
+  funding-account withdrawal submission and cancellation.
+* Added `post_asset_convert_estimate_quote()` and
+  `post_asset_convert_trade()` for quote-first asset convert workflows.
+* Added parser specs and mocked request-body tests for the new asset action
+  wrappers.
+
 ## okxr 0.4.3
 
 * Added `post_account_position_margin_balance()` for margin add/reduce

@@ -847,3 +847,108 @@ test_that("account operational POST wrappers build expected request bodies", {
   expect_equal(move_body$legs[[1]]$from$posId, "pos-1")
   expect_equal(move_body$legs[[1]]$to$tdMode, "cross")
 })
+
+test_that("asset POST wrappers build expected request bodies", {
+  ns <- asNamespace("okxr")
+  old_posts <- get(".posts", envir = ns)
+  unlockBinding(".posts", ns)
+  on.exit({
+    assign(".posts", old_posts, envir = ns)
+    lockBinding(".posts", ns)
+  }, add = TRUE)
+  assign(
+    ".posts",
+    list(
+      asset_transfer = function(body_list, tz, config) body_list,
+      asset_withdrawal = function(body_list, tz, config) body_list,
+      asset_cancel_withdrawal = function(body_list, tz, config) body_list,
+      asset_convert_estimate_quote = function(body_list, tz, config) body_list,
+      asset_convert_trade = function(body_list, tz, config) body_list
+    ),
+    envir = ns
+  )
+
+  cfg <- list(api_key = "key", secret_key = "secret", passphrase = "pass")
+
+  transfer_body <- okxr::post_asset_transfer(
+    ccy = "USDT",
+    amt = "100",
+    from = "6",
+    to = "18",
+    type = "1",
+    sub_acct = "desk-sub",
+    loan_trans = TRUE,
+    omit_pos_risk = FALSE,
+    client_id = "transfer-1",
+    config = cfg
+  )
+  expect_equal(transfer_body$ccy, "USDT")
+  expect_equal(transfer_body$from, "6")
+  expect_equal(transfer_body$to, "18")
+  expect_identical(transfer_body$loanTrans, TRUE)
+  expect_identical(transfer_body$omitPosRisk, FALSE)
+  expect_equal(transfer_body$clientId, "transfer-1")
+
+  rcvr_info <- list(
+    walletType = "exchange",
+    exchId = "binance",
+    rcvrFirstName = "Lily",
+    rcvrLastName = "Li"
+  )
+  withdrawal_body <- okxr::post_asset_withdrawal(
+    ccy = "USDT",
+    amt = "50",
+    dest = "4",
+    to_addr = "0xabc",
+    chain = "USDT-ERC20",
+    to_addr_type = "1",
+    area_code = "852",
+    rcvr_info = rcvr_info,
+    client_id = "withdraw-1",
+    config = cfg
+  )
+  expect_equal(withdrawal_body$ccy, "USDT")
+  expect_equal(withdrawal_body$toAddr, "0xabc")
+  expect_equal(withdrawal_body$chain, "USDT-ERC20")
+  expect_equal(withdrawal_body$rcvrInfo$exchId, "binance")
+  expect_equal(withdrawal_body$clientId, "withdraw-1")
+
+  cancel_withdrawal_body <- okxr::post_asset_cancel_withdrawal(
+    wd_id = "wd-1",
+    config = cfg
+  )
+  expect_equal(cancel_withdrawal_body$wdId, "wd-1")
+
+  estimate_quote_body <- okxr::post_asset_convert_estimate_quote(
+    base_ccy = "BTC",
+    quote_ccy = "USDT",
+    side = "sell",
+    rfq_sz = "0.1",
+    rfq_sz_ccy = "BTC",
+    cl_q_req_id = "quote-1",
+    tag = "desk1",
+    convert_mode = "cash",
+    config = cfg
+  )
+  expect_equal(estimate_quote_body$baseCcy, "BTC")
+  expect_equal(estimate_quote_body$quoteCcy, "USDT")
+  expect_equal(estimate_quote_body$rfqSz, "0.1")
+  expect_equal(estimate_quote_body$clQReqId, "quote-1")
+
+  convert_trade_body <- okxr::post_asset_convert_trade(
+    quote_id = "quote-id-1",
+    base_ccy = "BTC",
+    quote_ccy = "USDT",
+    side = "sell",
+    sz = "0.1",
+    sz_ccy = "BTC",
+    cl_t_req_id = "trade-1",
+    tag = "desk1",
+    convert_mode = "cash",
+    config = cfg
+  )
+  expect_equal(convert_trade_body$quoteId, "quote-id-1")
+  expect_equal(convert_trade_body$baseCcy, "BTC")
+  expect_equal(convert_trade_body$szCcy, "BTC")
+  expect_equal(convert_trade_body$clTReqId, "trade-1")
+})

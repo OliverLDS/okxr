@@ -221,6 +221,41 @@ set_okxr_options <- function(raw_data = NULL, timeout = NULL) {
   stringsAsFactors = FALSE
 )
 
+.asset_transfer_response_schema <- data.frame(
+  okx    = c("transId", "ccy", "clientId", "from", "amt", "to"),
+  formal = c("Transfer ID", "Currency", "Client ID", "Source account", "Amount", "Destination account"),
+  type   = c("string", "string", "string", "string", "string", "string"),
+  stringsAsFactors = FALSE
+)
+
+.asset_withdrawal_response_schema <- data.frame(
+  okx    = c("amt", "wdId", "ccy", "clientId", "chain"),
+  formal = c("Amount", "Withdrawal ID", "Currency", "Client ID", "Chain"),
+  type   = c("string", "string", "string", "string", "string"),
+  stringsAsFactors = FALSE
+)
+
+.asset_cancel_withdrawal_response_schema <- data.frame(
+  okx    = c("wdId"),
+  formal = c("Withdrawal ID"),
+  type   = c("string"),
+  stringsAsFactors = FALSE
+)
+
+.asset_convert_estimate_quote_schema <- data.frame(
+  okx    = c("quoteTime", "ttlMs", "clQReqId", "quoteId", "baseCcy", "quoteCcy", "side", "origRfqSz", "rfqSz", "rfqSzCcy", "cnvtPx", "baseSz", "quoteSz"),
+  formal = c("Quote time", "Quote TTL in milliseconds", "Client quote request ID", "Quote ID", "Base currency", "Quote currency", "Side", "Original RFQ size", "RFQ size", "RFQ size currency", "Conversion price", "Base size", "Quote size"),
+  type   = c("time", "numeric", "string", "string", "string", "string", "string", "string", "string", "string", "numeric", "numeric", "numeric"),
+  stringsAsFactors = FALSE
+)
+
+.asset_convert_trade_schema <- data.frame(
+  okx    = c("tradeId", "quoteId", "clTReqId", "state", "instId", "baseCcy", "quoteCcy", "side", "fillPx", "fillBaseSz", "fillQuoteSz", "ts"),
+  formal = c("Trade ID", "Quote ID", "Client trade request ID", "State", "Instrument ID", "Base currency", "Quote currency", "Side", "Fill price", "Filled base size", "Filled quote size", "Timestamp"),
+  type   = c("string", "string", "string", "string", "string", "string", "string", "string", "numeric", "numeric", "numeric", "time"),
+  stringsAsFactors = FALSE
+)
+
 .api_POST_specs <- list(
   
   #----account_set_leverage----
@@ -323,6 +358,41 @@ set_okxr_options <- function(raw_data = NULL, timeout = NULL) {
   account_move_positions = list(
     okx_path     = "/api/v5/account/move-positions",
     parser_schema = .account_move_positions_schema,
+    parser_mode = "named"
+  ),
+
+  #----asset_transfer----
+  asset_transfer = list(
+    okx_path     = "/api/v5/asset/transfer",
+    parser_schema = .asset_transfer_response_schema,
+    parser_mode = "named"
+  ),
+
+  #----asset_withdrawal----
+  asset_withdrawal = list(
+    okx_path     = "/api/v5/asset/withdrawal",
+    parser_schema = .asset_withdrawal_response_schema,
+    parser_mode = "named"
+  ),
+
+  #----asset_cancel_withdrawal----
+  asset_cancel_withdrawal = list(
+    okx_path     = "/api/v5/asset/cancel-withdrawal",
+    parser_schema = .asset_cancel_withdrawal_response_schema,
+    parser_mode = "named"
+  ),
+
+  #----asset_convert_estimate_quote----
+  asset_convert_estimate_quote = list(
+    okx_path     = "/api/v5/asset/convert/estimate-quote",
+    parser_schema = .asset_convert_estimate_quote_schema,
+    parser_mode = "named"
+  ),
+
+  #----asset_convert_trade----
+  asset_convert_trade = list(
+    okx_path     = "/api/v5/asset/convert/trade",
+    parser_schema = .asset_convert_trade_schema,
     parser_mode = "named"
   ),
   
