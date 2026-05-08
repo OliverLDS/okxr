@@ -9,15 +9,15 @@
 #' @param schema A \code{data.frame} with \code{okx}, \code{formal}, and
 #'   \code{type} columns. Supported types are time, numeric, integer, string,
 #'   and logical.
-#' @param mode Parsing mode:
-#'   \code{"named"} (default), \code{"positional"}, or \code{"vector"}.
+#' @param mode Parser mode: \code{"named"}, \code{"positional"}, or
+#'   \code{"vector"}.
 #'
 #' @return A function with signature \code{function(res, tz)} where:
 #'   \describe{
 #'     \item{\code{res}}{An \code{httr::response}. The body must decode to a list
 #'       with \code{$code}, \code{$msg}, and \code{$data}.}
-#'     \item{\code{tz}}{Timezone for \code{"time"} fields.
-#'       Millisecond timestamps are converted with \code{as.POSIXct()}.}
+#'     \item{\code{tz}}{Time zone for \code{"time"} fields. Millisecond values
+#'       are converted with \code{as.POSIXct()}.}
 #'   }
 #'   The returned parser yields a \code{data.table} with column names from
 #'   \code{schema$okx} and attaches variable labels as
