@@ -37,11 +37,4 @@ head(bal)
 }
 \seealso{
 [get_account_positions()], [get_account_leverage_info()]
-
-Other okxr-account: 
-\code{\link{get_account_config}()},
-\code{\link{get_account_leverage_info}()},
-\code{\link{get_account_positions_history}()},
-\code{\link{get_account_positions}()}
 }
-\concept{okxr-account}

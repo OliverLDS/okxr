@@ -39,7 +39,6 @@
 #' }
 #'
 #' @seealso [get_trade_orders_pending()], [get_trade_orders_history_7d()]
-#' @family okxr-trade
 #' @note Since okxr 0.1.1
 #' @export
 get_trade_order <- function(inst_id, ord_id = NULL, cl_ord_id = NULL, config, tz = .okx_default_tz) {
@@ -84,7 +83,6 @@ get_trade_order <- function(inst_id, ord_id = NULL, cl_ord_id = NULL, config, tz
 #' }
 #'
 #' @seealso [get_trade_order()], [get_trade_orders_history_7d()]
-#' @family okxr-trade
 #' @note Since okxr 0.1.1
 #' @export
 get_trade_orders_pending <- function(config, tz = .okx_default_tz) {
@@ -120,7 +118,6 @@ get_trade_orders_pending <- function(config, tz = .okx_default_tz) {
 #' }
 #'
 #' @seealso [get_trade_order()], [get_trade_orders_pending()]
-#' @family okxr-trade
 #' @note Since okxr 0.1.2
 #' @export
 get_trade_orders_history_7d <- function(inst_type = "SWAP", config, tz = .okx_default_tz) {

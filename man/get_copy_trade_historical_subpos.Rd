@@ -53,10 +53,4 @@ head(hist)
 }
 \seealso{
 [get_copy_trade_current_subpos()]
-
-Other okxr-copytrading: 
-\code{\link{get_copy_trade_current_subpos}()},
-\code{\link{get_copy_trade_my_leaders}()},
-\code{\link{get_copy_trade_settings}()}
 }
-\concept{okxr-copytrading}

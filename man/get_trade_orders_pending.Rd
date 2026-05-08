@@ -43,9 +43,4 @@ head(df)
 }
 \seealso{
 [get_trade_order()], [get_trade_orders_history_7d()]
-
-Other okxr-trade: 
-\code{\link{get_trade_orders_history_7d}()},
-\code{\link{get_trade_order}()}
 }
-\concept{okxr-trade}

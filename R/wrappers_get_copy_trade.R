@@ -24,7 +24,6 @@
 #' }
 #'
 #' @seealso [get_copy_trade_my_leaders()], [get_copy_trade_current_subpos()]
-#' @family okxr-copytrading
 #' @note Since okxr 0.1.2
 #' @export
 get_copy_trade_settings <- function(unique_code, inst_type = NULL, config, tz = .okx_default_tz, uniqueCode = unique_code, instType = inst_type) {
@@ -57,7 +56,6 @@ get_copy_trade_settings <- function(unique_code, inst_type = NULL, config, tz = 
 #' }
 #'
 #' @seealso [get_copy_trade_settings()], [get_copy_trade_current_subpos()]
-#' @family okxr-copytrading
 #' @note Since okxr 0.1.2
 #' @export
 get_copy_trade_my_leaders <- function(inst_type = NULL, config, tz = .okx_default_tz, instType = inst_type) {
@@ -92,7 +90,6 @@ get_copy_trade_my_leaders <- function(inst_type = NULL, config, tz = .okx_defaul
 #' }
 #'
 #' @seealso [get_copy_trade_historical_subpos()]
-#' @family okxr-copytrading
 #' @note Since okxr 0.1.2
 #' @export
 get_copy_trade_current_subpos <- function(inst_type = NULL, inst_id = NULL, after = NULL, before = NULL, limit = NULL, config, tz = .okx_default_tz) {
@@ -134,7 +131,6 @@ get_copy_trade_current_subpos <- function(inst_type = NULL, inst_id = NULL, afte
 #' }
 #'
 #' @seealso [get_copy_trade_current_subpos()]
-#' @family okxr-copytrading
 #' @note Since okxr 0.1.2
 #' @export
 get_copy_trade_historical_subpos <- function(inst_type = NULL, inst_id = NULL, after = NULL, before = NULL, limit = NULL, config, tz = .okx_default_tz) {

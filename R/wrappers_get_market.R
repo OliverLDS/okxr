@@ -44,7 +44,6 @@
 #' }
 #'
 #' @seealso [get_market_history_candles()], [get_public_mark_price()]
-#' @family okxr-market
 #' @note Since okxr 0.1.1
 #' @export
 get_market_candles <- function(inst_id, bar, limit = 100L, config = NULL, tz = .okx_default_tz, standardize_names = TRUE) {
@@ -88,7 +87,6 @@ get_market_candles <- function(inst_id, bar, limit = 100L, config = NULL, tz = .
 #' }
 #'
 #' @seealso [get_market_candles()]
-#' @family okxr-market
 #' @note Since okxr 0.1.1
 #' @export
 get_market_history_candles <- function(inst_id, bar, before = NULL, limit = 100L, config = NULL, tz = .okx_default_tz, standardize_names = TRUE) {
@@ -132,7 +130,6 @@ get_market_history_candles <- function(inst_id, bar, before = NULL, limit = 100L
 #' }
 #'
 #' @seealso [get_public_instruments()]
-#' @family okxr-market
 #' @note Since okxr 0.1.1
 #' @export
 get_public_mark_price <- function(inst_id, inst_type = "SWAP", config = NULL, tz = .okx_default_tz) {
@@ -418,7 +415,6 @@ get_market_block_tickers <- function(inst_type, inst_family = NULL, config = NUL
 #' }
 #'
 #' @seealso [get_public_mark_price()]
-#' @family okxr-market
 #' @note Since okxr 0.1.2
 #' @export
 get_public_instruments <- function(inst_id = NULL, inst_type = "SWAP", config = NULL, tz = .okx_default_tz) {

@@ -59,10 +59,4 @@ get_market_history_candles(
 }
 \seealso{
 [get_market_candles()]
-
-Other okxr-market: 
-\code{\link{get_market_candles}()},
-\code{\link{get_public_instruments}()},
-\code{\link{get_public_mark_price}()}
 }
-\concept{okxr-market}

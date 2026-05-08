@@ -49,10 +49,4 @@ get_copy_trade_settings(unique_code = "1129E65755274C36", config = cfg)
 }
 \seealso{
 [get_copy_trade_my_leaders()], [get_copy_trade_current_subpos()]
-
-Other okxr-copytrading: 
-\code{\link{get_copy_trade_current_subpos}()},
-\code{\link{get_copy_trade_historical_subpos}()},
-\code{\link{get_copy_trade_my_leaders}()}
 }
-\concept{okxr-copytrading}

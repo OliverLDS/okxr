@@ -25,7 +25,6 @@
 #' }
 #'
 #' @seealso [get_account_positions()], [get_account_leverage_info()]
-#' @family okxr-account
 #' @note Since okxr 0.1.1
 #' @export
 get_account_balance <- function(config, tz = .okx_default_tz) {
@@ -56,7 +55,6 @@ get_account_balance <- function(config, tz = .okx_default_tz) {
 #' }
 #'
 #' @seealso [get_account_balance()], [get_account_positions_history()]
-#' @family okxr-account
 #' @note Since okxr 0.1.1
 #' @export
 get_account_positions <- function(config, tz = .okx_default_tz) {
@@ -87,7 +85,6 @@ get_account_positions <- function(config, tz = .okx_default_tz) {
 #' }
 #'
 #' @seealso [get_account_positions()]
-#' @family okxr-account
 #' @note Since okxr 0.1.1
 #' @export
 get_account_positions_history <- function(config, tz = .okx_default_tz) {
@@ -118,7 +115,6 @@ get_account_positions_history <- function(config, tz = .okx_default_tz) {
 #' }
 #'
 #' @seealso [get_account_balance()], [get_account_leverage_info()]
-#' @family okxr-account
 #' @note Since okxr 0.1.2
 #' @export
 get_account_config <- function(config, tz = .okx_default_tz) {
@@ -153,7 +149,6 @@ get_account_config <- function(config, tz = .okx_default_tz) {
 #' }
 #'
 #' @seealso [get_account_balance()], [get_account_positions()]
-#' @family okxr-account
 #' @note Since okxr 0.1.1
 #' @export
 get_account_leverage_info <- function(inst_id, mgn_mode, config, tz = .okx_default_tz) {

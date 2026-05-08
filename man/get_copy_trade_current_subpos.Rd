@@ -52,10 +52,4 @@ get_copy_trade_current_subpos(config = cfg)
 }
 \seealso{
 [get_copy_trade_historical_subpos()]
-
-Other okxr-copytrading: 
-\code{\link{get_copy_trade_historical_subpos}()},
-\code{\link{get_copy_trade_my_leaders}()},
-\code{\link{get_copy_trade_settings}()}
 }
-\concept{okxr-copytrading}

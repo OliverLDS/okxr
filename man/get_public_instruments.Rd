@@ -51,10 +51,4 @@ get_public_instruments("ETH-USDT-SWAP", inst_type = "SWAP", config = cfg)
 }
 \seealso{
 [get_public_mark_price()]
-
-Other okxr-market: 
-\code{\link{get_market_candles}()},
-\code{\link{get_market_history_candles}()},
-\code{\link{get_public_mark_price}()}
 }
-\concept{okxr-market}

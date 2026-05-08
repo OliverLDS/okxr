@@ -44,9 +44,4 @@ tail(hist)
 }
 \seealso{
 [get_trade_order()], [get_trade_orders_pending()]
-
-Other okxr-trade: 
-\code{\link{get_trade_orders_pending}()},
-\code{\link{get_trade_order}()}
 }
-\concept{okxr-trade}
