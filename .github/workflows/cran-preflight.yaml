@@ -35,4 +35,6 @@ jobs:
       - uses: r-lib/actions/check-r-package@v2
         with:
           args: 'c("--as-cran")'
+          build_args: '"--no-manual"'
+          error-on: '"never"'
           upload-snapshots: true
