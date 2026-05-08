@@ -4,11 +4,15 @@
 \alias{post_trade_amend_batch_orders}
 \title{Amend Multiple Trade Orders}
 \usage{
-post_trade_amend_batch_orders(orders, config, tz = .okx_default_tz)
+post_trade_amend_batch_orders(
+  orders,
+  config,
+  tz = .okx_default_tz
+)
 }
 \arguments{
-\item{orders}{List of amendment specification lists using the snake_case
-argument names from [post_trade_amend_order()].}
+\item{orders}{List of amendment specs using the snake_case names from
+[post_trade_amend_order()].}
 
 \item{config}{A list with API credentials.}
 

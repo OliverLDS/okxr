@@ -36,7 +36,7 @@ post_asset_convert_estimate_quote(
 
 \item{tz}{Timezone used for any timestamp parsing.}
 
-\item{config}{A list containing API credentials.}
+\item{config}{API credential list.}
 }
 \value{
 A `data.frame` describing the estimated conversion quote.

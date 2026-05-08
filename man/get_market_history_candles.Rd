@@ -19,8 +19,8 @@ get_market_history_candles(
 
 \item{bar}{Character. Candlestick granularity, e.g. `"1m"`, `"5m"`, `"1H"`.}
 
-\item{before}{Character or `NULL`. Timestamp string in format
-`"\%Y-\%m-\%d \%H:\%M:\%S"`. If `NULL` (default), fetches most recent history.}
+\item{before}{Character or `NULL`. Timestamp string like
+`"\%Y-\%m-\%d \%H:\%M:\%S"`. If `NULL`, fetch recent history.}
 
 \item{limit}{Integer. Number of bars to retrieve. Default `100L`.}
 
@@ -33,8 +33,8 @@ get_market_history_candles(
 `timestamp`, `open`, `high`, `low`, `close`, `volume`, `volQuote`.}
 }
 \value{
-A `data.frame` of candlestick bars with standardized column names if
-`standardize_names = TRUE`. Timestamps are `POSIXct` in `tz`.
+A `data.frame` of candlestick bars. If `standardize_names = TRUE`,
+column names are normalized. Timestamps are `POSIXct` in `tz`.
 }
 \description{
 Retrieve candlestick data before a specific datetime.

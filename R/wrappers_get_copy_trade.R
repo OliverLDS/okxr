@@ -155,7 +155,11 @@ get_copy_trade_historical_subpos <- function(inst_type = NULL, inst_id = NULL, a
 #'
 #' @return A `data.frame` with one row per instrument and an `enabled` flag.
 #' @export
-get_copy_trade_instruments <- function(inst_type = NULL, config, tz = .okx_default_tz) {
+get_copy_trade_instruments <- function(
+  inst_type = NULL,
+  config,
+  tz = .okx_default_tz
+) {
   query_string <- .okx_build_query(instType = inst_type)
   .gets$copy_trade_instruments(query_string = query_string, tz = tz, config = config)
 }
@@ -184,7 +188,10 @@ get_copy_trade_config <- function(config, tz = .okx_default_tz) {
 #'
 #' @return A `data.frame` with public copy trading configuration fields.
 #' @export
-get_copy_trade_public_config <- function(inst_type = NULL, tz = .okx_default_tz) {
+get_copy_trade_public_config <- function(
+  inst_type = NULL,
+  tz = .okx_default_tz
+) {
   query_string <- .okx_build_query(instType = inst_type)
   .gets$copy_trade_public_config(query_string = query_string, tz = tz, config = NULL)
 }

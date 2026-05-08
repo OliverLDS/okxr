@@ -64,8 +64,8 @@ get_market_candles <- function(inst_id, bar, limit = 100L, config = NULL, tz = .
 #'
 #' @param inst_id Character. Instrument ID, e.g. `"BTC-USDT"`.
 #' @param bar Character. Candlestick granularity, e.g. `"1m"`, `"5m"`, `"1H"`.
-#' @param before Character or `NULL`. Timestamp string in format
-#'   `"\%Y-\%m-\%d \%H:\%M:\%S"`. If `NULL` (default), fetches most recent history.
+#' @param before Character or `NULL`. Timestamp string like
+#'   `"\%Y-\%m-\%d \%H:\%M:\%S"`. If `NULL`, fetch recent history.
 #' @param limit Integer. Number of bars to retrieve. Default `100L`.
 #' @param config Optional list. Public endpoint request options, such as
 #'   `timeout`; credentials are not required.
@@ -74,8 +74,8 @@ get_market_candles <- function(inst_id, bar, limit = 100L, config = NULL, tz = .
 #'   `timestamp`, `open`, `high`, `low`, `close`, `volume`, `volQuote`.
 #'
 #' @return
-#' A `data.frame` of candlestick bars with standardized column names if
-#' `standardize_names = TRUE`. Timestamps are `POSIXct` in `tz`.
+#' A `data.frame` of candlestick bars. If `standardize_names = TRUE`,
+#' column names are normalized. Timestamps are `POSIXct` in `tz`.
 #'
 #' @examples
 #' \dontrun{
@@ -193,7 +193,12 @@ get_market_tickers <- function(inst_type, uly = NULL, inst_family = NULL, config
 #' @return A `data.frame` with JSON-encoded `asks` and `bids` columns plus `ts`.
 #'
 #' @export
-get_market_books <- function(inst_id, sz = NULL, config = NULL, tz = .okx_default_tz) {
+get_market_books <- function(
+  inst_id,
+  sz = NULL,
+  config = NULL,
+  tz = .okx_default_tz
+) {
   query_string <- .okx_build_query(instId = inst_id, sz = sz)
   .gets$market_books(query_string = query_string, config = config, tz = tz)
 }
@@ -211,7 +216,12 @@ get_market_books <- function(inst_id, sz = NULL, config = NULL, tz = .okx_defaul
 #' @return A `data.frame` with recent public trades.
 #'
 #' @export
-get_market_trades <- function(inst_id, limit = NULL, config = NULL, tz = .okx_default_tz) {
+get_market_trades <- function(
+  inst_id,
+  limit = NULL,
+  config = NULL,
+  tz = .okx_default_tz
+) {
   query_string <- .okx_build_query(instId = inst_id, limit = limit)
   .gets$market_trades(query_string = query_string, config = config, tz = tz)
 }
@@ -324,7 +334,11 @@ get_market_exchange_rate <- function(config = NULL, tz = .okx_default_tz) {
 #'   `components`.
 #'
 #' @export
-get_market_index_components <- function(index, config = NULL, tz = .okx_default_tz) {
+get_market_index_components <- function(
+  index,
+  config = NULL,
+  tz = .okx_default_tz
+) {
   query_string <- .okx_build_query(index = index)
   .gets$market_index_components(query_string = query_string, config = config, tz = tz)
 }
@@ -340,7 +354,10 @@ get_market_index_components <- function(index, config = NULL, tz = .okx_default_
 #' @return A one-row `data.frame` with `volUsd`, `volCny`, and `ts`.
 #'
 #' @export
-get_market_platform_24_volume <- function(config = NULL, tz = .okx_default_tz) {
+get_market_platform_24_volume <- function(
+  config = NULL,
+  tz = .okx_default_tz
+) {
   .gets$market_platform_24_volume(query_string = "", config = config, tz = tz)
 }
 
@@ -356,7 +373,11 @@ get_market_platform_24_volume <- function(config = NULL, tz = .okx_default_tz) {
 #' @return A one-row `data.frame` with block trading volume fields.
 #'
 #' @export
-get_market_block_ticker <- function(inst_id, config = NULL, tz = .okx_default_tz) {
+get_market_block_ticker <- function(
+  inst_id,
+  config = NULL,
+  tz = .okx_default_tz
+) {
   query_string <- .okx_build_query(instId = inst_id)
   .gets$market_block_ticker(query_string = query_string, config = config, tz = tz)
 }
@@ -435,7 +456,11 @@ get_public_instruments <- function(inst_id = NULL, inst_type = "SWAP", config = 
 #' @return A one-column `data.frame` with `uly`.
 #'
 #' @export
-get_public_underlying <- function(inst_type, config = NULL, tz = .okx_default_tz) {
+get_public_underlying <- function(
+  inst_type,
+  config = NULL,
+  tz = .okx_default_tz
+) {
   query_string <- .okx_build_query(instType = inst_type)
   .gets$public_underlying(query_string = query_string, config = config, tz = tz)
 }
@@ -452,7 +477,11 @@ get_public_underlying <- function(inst_type, config = NULL, tz = .okx_default_tz
 #' @return A `data.frame` containing the current funding rate fields returned by OKX.
 #'
 #' @export
-get_public_funding_rate <- function(inst_id, config = NULL, tz = .okx_default_tz) {
+get_public_funding_rate <- function(
+  inst_id,
+  config = NULL,
+  tz = .okx_default_tz
+) {
   query_string <- .okx_build_query(instId = inst_id)
   .gets$public_funding_rate(query_string = query_string, config = config, tz = tz)
 }
@@ -527,7 +556,11 @@ get_public_time <- function(config = NULL, tz = .okx_default_tz) {
 #' @return A `data.frame` with price limit fields.
 #'
 #' @export
-get_public_price_limit <- function(inst_id, config = NULL, tz = .okx_default_tz) {
+get_public_price_limit <- function(
+  inst_id,
+  config = NULL,
+  tz = .okx_default_tz
+) {
   query_string <- .okx_build_query(instId = inst_id)
   .gets$public_price_limit(query_string = query_string, config = config, tz = tz)
 }
@@ -879,7 +912,11 @@ get_public_premium_history <- function(inst_id, after = NULL, before = NULL, bar
 #'   side, volatility, and timestamps.
 #'
 #' @export
-get_public_block_trades <- function(inst_id, config = NULL, tz = .okx_default_tz) {
+get_public_block_trades <- function(
+  inst_id,
+  config = NULL,
+  tz = .okx_default_tz
+) {
   query_string <- .okx_build_query(instId = inst_id)
   .gets$public_block_trades(query_string = query_string, config = config, tz = tz)
 }

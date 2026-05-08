@@ -22,7 +22,7 @@
 #'   where supported by OKX.
 #' @param client_id Optional client-supplied transfer request ID.
 #' @param tz Timezone used for any timestamp parsing.
-#' @param config A list containing API credentials.
+#' @param config API credential list.
 #'
 #' @return A `data.frame` describing the submitted transfer request.
 #' @export
@@ -58,7 +58,7 @@ post_asset_transfer <- function(ccy, amt, from, to, type = "0", sub_acct = NULL,
 #' @param rcvr_info Optional named list in the documented `rcvrInfo` shape.
 #' @param client_id Optional client-supplied withdrawal request ID.
 #' @param tz Timezone used for any timestamp parsing.
-#' @param config A list containing API credentials.
+#' @param config API credential list.
 #'
 #' @return A `data.frame` describing the submitted withdrawal request.
 #' @export
@@ -83,7 +83,7 @@ post_asset_withdrawal <- function(ccy, amt, dest, to_addr, chain = NULL, to_addr
 #'
 #' @param wd_id Withdrawal request ID.
 #' @param tz Timezone used for any timestamp parsing.
-#' @param config A list containing API credentials.
+#' @param config API credential list.
 #'
 #' @return A `data.frame` confirming the cancelled withdrawal ID.
 #' @export
@@ -108,7 +108,7 @@ post_asset_cancel_withdrawal <- function(wd_id, tz = .okx_default_tz, config) {
 #' @param tag Optional request tag.
 #' @param convert_mode Optional OKX convert mode.
 #' @param tz Timezone used for any timestamp parsing.
-#' @param config A list containing API credentials.
+#' @param config API credential list.
 #'
 #' @return A `data.frame` describing the estimated conversion quote.
 #' @export
@@ -140,7 +140,7 @@ post_asset_convert_estimate_quote <- function(base_ccy, quote_ccy, side, rfq_sz,
 #' @param tag Optional request tag.
 #' @param convert_mode Optional OKX convert mode.
 #' @param tz Timezone used for any timestamp parsing.
-#' @param config A list containing API credentials.
+#' @param config API credential list.
 #'
 #' @return A `data.frame` describing the executed conversion trade.
 #' @export

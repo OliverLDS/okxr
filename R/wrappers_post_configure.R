@@ -7,7 +7,8 @@
 #' @param mgn_mode Margin mode: \code{"cross"} or \code{"isolated"}.
 #' @param pos_side Optional. Position side: \code{"long"} or \code{"short"}. Required for isolated mode.
 #' @param tz Timezone used for any timestamp parsing (default: \code{"Asia/Hong_Kong"}).
-#' @param config A list containing API credentials: \code{api_key}, \code{secret_key}, and \code{passphrase}.
+#' @param config API credential list with keys `api_key`, `secret_key`,
+#'   and `passphrase`.
 #'
 #' @return A \code{data.frame} with leverage update confirmation (including instrument ID and leverage settings).
 #'
@@ -30,7 +31,11 @@ post_account_set_leverage <- function(inst_id, lever, mgn_mode, pos_side = NULL,
 #'
 #' @return A `data.frame` confirming the applied position mode.
 #' @export
-post_account_set_position_mode <- function(pos_mode, tz = .okx_default_tz, config) {
+post_account_set_position_mode <- function(
+  pos_mode,
+  tz = .okx_default_tz,
+  config
+) {
   .posts$account_set_position_mode(
     body_list = list(posMode = pos_mode),
     tz = tz,
@@ -66,7 +71,11 @@ post_account_set_fee_type <- function(fee_type, tz = .okx_default_tz, config) {
 #'
 #' @return A `data.frame` confirming the applied Greeks display type.
 #' @export
-post_account_set_greeks <- function(greeks_type, tz = .okx_default_tz, config) {
+post_account_set_greeks <- function(
+  greeks_type,
+  tz = .okx_default_tz,
+  config
+) {
   .posts$account_set_greeks(
     body_list = list(greeksType = greeks_type),
     tz = tz,
@@ -84,7 +93,11 @@ post_account_set_greeks <- function(greeks_type, tz = .okx_default_tz, config) {
 #'
 #' @return A `data.frame` confirming the applied auto-repay setting.
 #' @export
-post_account_set_auto_repay <- function(auto_repay, tz = .okx_default_tz, config) {
+post_account_set_auto_repay <- function(
+  auto_repay,
+  tz = .okx_default_tz,
+  config
+) {
   .posts$account_set_auto_repay(
     body_list = list(autoRepay = isTRUE(auto_repay)),
     tz = tz,
@@ -102,7 +115,11 @@ post_account_set_auto_repay <- function(auto_repay, tz = .okx_default_tz, config
 #'
 #' @return A `data.frame` confirming the applied auto-loan setting.
 #' @export
-post_account_set_auto_loan <- function(auto_loan = TRUE, tz = .okx_default_tz, config) {
+post_account_set_auto_loan <- function(
+  auto_loan = TRUE,
+  tz = .okx_default_tz,
+  config
+) {
   .posts$account_set_auto_loan(
     body_list = list(autoLoan = isTRUE(auto_loan)),
     tz = tz,
@@ -120,7 +137,11 @@ post_account_set_auto_loan <- function(auto_loan = TRUE, tz = .okx_default_tz, c
 #'
 #' @return A `data.frame` confirming the applied account level.
 #' @export
-post_account_set_account_level <- function(acct_lv, tz = .okx_default_tz, config) {
+post_account_set_account_level <- function(
+  acct_lv,
+  tz = .okx_default_tz,
+  config
+) {
   .posts$account_set_account_level(
     body_list = list(acctLv = acct_lv),
     tz = tz,

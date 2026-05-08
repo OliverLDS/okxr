@@ -4,7 +4,11 @@
 \alias{get_account_set_account_switch_precheck}
 \title{Precheck account mode switch}
 \usage{
-get_account_set_account_switch_precheck(acct_lv, config, tz = .okx_default_tz)
+get_account_set_account_switch_precheck(
+  acct_lv,
+  config,
+  tz = .okx_default_tz
+)
 }
 \arguments{
 \item{acct_lv}{Character or numeric. Target account mode.}

@@ -22,8 +22,8 @@ get_account_trade_fee(
 \item{inst_family}{Character or `NULL`. Instrument family for futures, swaps,
 or options.}
 
-\item{group_id}{Character or `NULL`. Trading fee group ID. Only one of
-`group_id` and `inst_id`/`inst_family` should be supplied.}
+\item{group_id}{Character or `NULL`. Trading fee group ID.
+Supply either `group_id` or `inst_id`/`inst_family`, not both.}
 
 \item{config}{List. API credentials/config.}
 

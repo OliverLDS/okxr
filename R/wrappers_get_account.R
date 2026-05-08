@@ -151,7 +151,12 @@ get_account_config <- function(config, tz = .okx_default_tz) {
 #' @seealso [get_account_balance()], [get_account_positions()]
 #' @note Since okxr 0.1.1
 #' @export
-get_account_leverage_info <- function(inst_id, mgn_mode, config, tz = .okx_default_tz) {
+get_account_leverage_info <- function(
+  inst_id,
+  mgn_mode,
+  config,
+  tz = .okx_default_tz
+) {
   query_string <- .okx_build_query(instId = inst_id, mgnMode = mgn_mode)
   .gets$account_leverage_info(query_string = query_string, config = config, tz = tz)
 }
@@ -269,7 +274,11 @@ get_account_instruments <- function(inst_type, uly = NULL, inst_family = NULL, i
 #'   position payloads are returned as JSON strings in `balData` and `posData`.
 #'
 #' @export
-get_account_position_risk <- function(inst_type = NULL, config, tz = .okx_default_tz) {
+get_account_position_risk <- function(
+  inst_type = NULL,
+  config,
+  tz = .okx_default_tz
+) {
   query_string <- .okx_build_query(instType = inst_type)
   .gets$account_position_risk(query_string = query_string, config = config, tz = tz)
 }
@@ -352,8 +361,8 @@ get_account_max_avail_size <- function(inst_id, td_mode, ccy = NULL, reduce_only
 #' @param inst_id Character or `NULL`. Instrument ID for spot or margin.
 #' @param inst_family Character or `NULL`. Instrument family for futures, swaps,
 #'   or options.
-#' @param group_id Character or `NULL`. Trading fee group ID. Only one of
-#'   `group_id` and `inst_id`/`inst_family` should be supplied.
+#' @param group_id Character or `NULL`. Trading fee group ID.
+#'   Supply either `group_id` or `inst_id`/`inst_family`, not both.
 #' @param config List. API credentials/config.
 #' @param tz Character. Time zone for parsing timestamps. Default `"Asia/Hong_Kong"`.
 #'
@@ -383,7 +392,11 @@ get_account_trade_fee <- function(inst_type, inst_id = NULL, inst_family = NULL,
 #' @return A `data.frame` with `ccy` and `interestRate`.
 #'
 #' @export
-get_account_interest_rate <- function(ccy = NULL, config, tz = .okx_default_tz) {
+get_account_interest_rate <- function(
+  ccy = NULL,
+  config,
+  tz = .okx_default_tz
+) {
   query_string <- .okx_build_query(ccy = ccy)
   .gets$account_interest_rate(query_string = query_string, config = config, tz = tz)
 }
@@ -503,7 +516,11 @@ get_account_interest_accrued <- function(type = NULL, ccy = NULL, inst_id = NULL
 #' @return A `data.frame` with per-currency maximum withdrawal values.
 #'
 #' @export
-get_account_max_withdrawal <- function(ccy = NULL, config, tz = .okx_default_tz) {
+get_account_max_withdrawal <- function(
+  ccy = NULL,
+  config,
+  tz = .okx_default_tz
+) {
   query_string <- .okx_build_query(ccy = ccy)
   .gets$account_max_withdrawal(query_string = query_string, config = config, tz = tz)
 }
@@ -610,7 +627,11 @@ get_account_collateral_assets <- function(ccy = NULL, collateral_enabled = NULL,
 #' @return A `data.frame` with MMP configuration fields.
 #'
 #' @export
-get_account_mmp_config <- function(inst_family = NULL, config, tz = .okx_default_tz) {
+get_account_mmp_config <- function(
+  inst_family = NULL,
+  config,
+  tz = .okx_default_tz
+) {
   query_string <- .okx_build_query(instFamily = inst_family)
   .gets$account_mmp_config(query_string = query_string, config = config, tz = tz)
 }
@@ -659,7 +680,11 @@ get_account_move_positions_history <- function(block_td_id = NULL, client_id = N
 #' @return A one-row `data.frame` with JSON-encoded unmatched information.
 #'
 #' @export
-get_account_precheck_set_delta_neutral <- function(stgy_type, config, tz = .okx_default_tz) {
+get_account_precheck_set_delta_neutral <- function(
+  stgy_type,
+  config,
+  tz = .okx_default_tz
+) {
   query_string <- .okx_build_query(stgyType = stgy_type)
   .gets$account_precheck_set_delta_neutral(query_string = query_string, config = config, tz = tz)
 }
@@ -696,7 +721,11 @@ get_account_bills_history_archive <- function(year, quarter, type = NULL, config
 #'   `details` are JSON-encoded.
 #'
 #' @export
-get_account_subaccount_balances <- function(sub_acct, config, tz = .okx_default_tz) {
+get_account_subaccount_balances <- function(
+  sub_acct,
+  config,
+  tz = .okx_default_tz
+) {
   query_string <- .okx_build_query(subAcct = sub_acct)
   .gets$account_subaccount_balances(query_string = query_string, config = config, tz = tz)
 }
@@ -733,7 +762,11 @@ get_account_subaccount_max_withdrawal <- function(sub_acct, ccy = NULL, config, 
 #'   unmatched-information structures are JSON-encoded.
 #'
 #' @export
-get_account_set_account_switch_precheck <- function(acct_lv, config, tz = .okx_default_tz) {
+get_account_set_account_switch_precheck <- function(
+  acct_lv,
+  config,
+  tz = .okx_default_tz
+) {
   query_string <- .okx_build_query(acctLv = acct_lv)
   .gets$account_set_account_switch_precheck(query_string = query_string, config = config, tz = tz)
 }

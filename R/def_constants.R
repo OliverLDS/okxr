@@ -7,7 +7,7 @@ NULL
 #' Convenience wrapper to set global options for okxr, such as whether to
 #' return raw data instead of parsed data.
 #'
-#' @param raw_data Logical. Whether functions should return raw data (default = FALSE).
+#' @param raw_data Logical. If `TRUE`, return raw API `data`.
 #'   If `NULL`, the current value is left unchanged.
 #' @param timeout Numeric. HTTP request timeout in seconds. If `NULL`, the
 #'   current value is left unchanged.

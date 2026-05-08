@@ -4,7 +4,11 @@
 \alias{get_account_subaccount_balances}
 \title{Get sub-account trading balances}
 \usage{
-get_account_subaccount_balances(sub_acct, config, tz = .okx_default_tz)
+get_account_subaccount_balances(
+  sub_acct,
+  config,
+  tz = .okx_default_tz
+)
 }
 \arguments{
 \item{sub_acct}{Character. Sub-account name.}

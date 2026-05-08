@@ -4,7 +4,11 @@
 \alias{get_market_block_ticker}
 \title{Get block ticker}
 \usage{
-get_market_block_ticker(inst_id, config = NULL, tz = .okx_default_tz)
+get_market_block_ticker(
+  inst_id,
+  config = NULL,
+  tz = .okx_default_tz
+)
 }
 \arguments{
 \item{inst_id}{Character. Instrument ID.}

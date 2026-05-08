@@ -11,7 +11,7 @@ post_asset_cancel_withdrawal(wd_id, tz = .okx_default_tz, config)
 
 \item{tz}{Timezone used for any timestamp parsing.}
 
-\item{config}{A list containing API credentials.}
+\item{config}{API credential list.}
 }
 \value{
 A `data.frame` confirming the cancelled withdrawal ID.

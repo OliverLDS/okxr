@@ -39,7 +39,7 @@ post_asset_convert_trade(
 
 \item{tz}{Timezone used for any timestamp parsing.}
 
-\item{config}{A list containing API credentials.}
+\item{config}{API credential list.}
 }
 \value{
 A `data.frame` describing the executed conversion trade.

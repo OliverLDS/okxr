@@ -270,7 +270,11 @@ post_trade_batch_orders <- function(orders, config, tz = .okx_default_tz) {
 #'
 #' @return A `data.frame` with one row per cancellation result.
 #' @export
-post_trade_cancel_batch_orders <- function(orders, config, tz = .okx_default_tz) {
+post_trade_cancel_batch_orders <- function(
+  orders,
+  config,
+  tz = .okx_default_tz
+) {
   .okx_assert_non_empty_list(orders, "orders")
   body_list <- lapply(
     seq_along(orders),
@@ -347,14 +351,18 @@ post_trade_amend_order <- function(inst_id, ord_id = NULL, cl_ord_id = NULL, req
 #'
 #' Submit multiple amendment requests in one request.
 #'
-#' @param orders List of amendment specification lists using the snake_case
-#'   argument names from [post_trade_amend_order()].
+#' @param orders List of amendment specs using the snake_case names from
+#'   [post_trade_amend_order()].
 #' @param config A list with API credentials.
 #' @param tz Timezone for parsing response timestamps.
 #'
 #' @return A `data.frame` with one row per amendment result.
 #' @export
-post_trade_amend_batch_orders <- function(orders, config, tz = .okx_default_tz) {
+post_trade_amend_batch_orders <- function(
+  orders,
+  config,
+  tz = .okx_default_tz
+) {
   .okx_assert_non_empty_list(orders, "orders")
   body_list <- lapply(
     seq_along(orders),
@@ -429,7 +437,12 @@ post_trade_order_precheck <- function(inst_id, td_mode, side, ord_type, sz, ccy 
 #'
 #' @return A `data.frame` with the configured trigger time and tag.
 #' @export
-post_trade_cancel_all_after <- function(time_out, tag = NULL, config, tz = .okx_default_tz) {
+post_trade_cancel_all_after <- function(
+  time_out,
+  tag = NULL,
+  config,
+  tz = .okx_default_tz
+) {
   body_list <- .okx_compact_body(list(timeOut = as.character(time_out), tag = tag))
   .posts$trade_cancel_all_after(body_list = body_list, tz = tz, config = config)
 }

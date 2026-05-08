@@ -4,7 +4,11 @@
 \alias{get_market_index_components}
 \title{Get index components}
 \usage{
-get_market_index_components(index, config = NULL, tz = .okx_default_tz)
+get_market_index_components(
+  index,
+  config = NULL,
+  tz = .okx_default_tz
+)
 }
 \arguments{
 \item{index}{Character. Index identifier, e.g. `"BTC-USD"`.}

@@ -127,7 +127,11 @@ get_asset_deposit_address <- function(ccy, config, tz = .okx_default_tz) {
 #'
 #' @return A \code{data.frame} with non-tradable asset rows.
 #' @export
-get_asset_non_tradable_assets <- function(ccy = NULL, config, tz = .okx_default_tz) {
+get_asset_non_tradable_assets <- function(
+  ccy = NULL,
+  config,
+  tz = .okx_default_tz
+) {
   query_string <- .okx_build_query(ccy = ccy)
   .gets$asset_non_tradable_assets(query_string = query_string, tz = tz, config = config)
 }
@@ -143,7 +147,11 @@ get_asset_non_tradable_assets <- function(ccy = NULL, config, tz = .okx_default_
 #'
 #' @return A \code{data.frame} with valuation summary rows.
 #' @export
-get_asset_asset_valuation <- function(ccy = NULL, config, tz = .okx_default_tz) {
+get_asset_asset_valuation <- function(
+  ccy = NULL,
+  config,
+  tz = .okx_default_tz
+) {
   query_string <- .okx_build_query(ccy = ccy)
   .gets$asset_asset_valuation(query_string = query_string, tz = tz, config = config)
 }

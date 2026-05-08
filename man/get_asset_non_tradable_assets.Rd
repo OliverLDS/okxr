@@ -4,7 +4,11 @@
 \alias{get_asset_non_tradable_assets}
 \title{Get non-tradable assets}
 \usage{
-get_asset_non_tradable_assets(ccy = NULL, config, tz = .okx_default_tz)
+get_asset_non_tradable_assets(
+  ccy = NULL,
+  config,
+  tz = .okx_default_tz
+)
 }
 \arguments{
 \item{ccy}{Character or `NULL`. Currency filter.}
