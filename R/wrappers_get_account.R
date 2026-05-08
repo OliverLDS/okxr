@@ -362,7 +362,7 @@ get_account_max_avail_size <- function(inst_id, td_mode, ccy = NULL, reduce_only
 #' @param inst_family Character or `NULL`. Instrument family for futures, swaps,
 #'   or options.
 #' @param group_id Character or `NULL`. Trading fee group ID.
-#'   Supply either `group_id` or `inst_id`/`inst_family`, not both.
+#'   Do not combine with `inst_id` or `inst_family`.
 #' @param config List. API credentials/config.
 #' @param tz Character. Time zone for parsing timestamps. Default `"Asia/Hong_Kong"`.
 #'

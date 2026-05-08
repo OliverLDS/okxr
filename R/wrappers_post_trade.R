@@ -235,9 +235,8 @@ post_trade_close_position <- function(inst_id, mgn_mode, pos_side, tz = .okx_def
 #'
 #' Submit multiple trade orders in one request.
 #'
-#' @param orders List of order specification lists using the same snake_case
-#'   field names as [post_trade_order()], for example `inst_id`, `td_mode`,
-#'   `side`, `ord_type`, and `sz`.
+#' @param orders List of order specs using the snake_case names from
+#'   [post_trade_order()].
 #' @param config A list with API credentials.
 #' @param tz Timezone for parsing response timestamps.
 #'
@@ -351,7 +350,7 @@ post_trade_amend_order <- function(inst_id, ord_id = NULL, cl_ord_id = NULL, req
 #'
 #' Submit multiple amendment requests in one request.
 #'
-#' @param orders List of amendment specs using the snake_case names from
+#' @param orders List of amendment specs using the names from
 #'   [post_trade_amend_order()].
 #' @param config A list with API credentials.
 #' @param tz Timezone for parsing response timestamps.

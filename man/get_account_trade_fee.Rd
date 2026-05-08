@@ -23,7 +23,7 @@ get_account_trade_fee(
 or options.}
 
 \item{group_id}{Character or `NULL`. Trading fee group ID.
-Supply either `group_id` or `inst_id`/`inst_family`, not both.}
+Do not combine with `inst_id` or `inst_family`.}
 
 \item{config}{List. API credentials/config.}
 

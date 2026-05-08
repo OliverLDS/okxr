@@ -11,7 +11,7 @@ post_trade_amend_batch_orders(
 )
 }
 \arguments{
-\item{orders}{List of amendment specs using the snake_case names from
+\item{orders}{List of amendment specs using the names from
 [post_trade_amend_order()].}
 
 \item{config}{A list with API credentials.}
