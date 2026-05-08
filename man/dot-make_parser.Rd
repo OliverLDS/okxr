@@ -7,16 +7,12 @@
 .make_parser(schema, mode = c("named", "positional", "vector"))
 }
 \arguments{
-\item{schema}{A \code{data.frame} describing the response fields with columns:
-\describe{
-  \item{\code{okx}}{Field name in the raw JSON response (used as output column names).}
-  \item{\code{formal}}{Human-readable label (stored in \code{attr(, "var_labels")}).}
-  \item{\code{type}}{Field type. Use \code{"time"}, \code{"numeric"},
-    \code{"integer"}, \code{"string"}, or \code{"logical"}.}
-}}
+\item{schema}{A \code{data.frame} with \code{okx}, \code{formal}, and
+\code{type} columns. Supported types are time, numeric, integer, string,
+and logical.}
 
-\item{mode}{Parsing mode. Use \code{"named"}, \code{"positional"},
-or \code{"vector"}.}
+\item{mode}{Parsing mode:
+\code{"named"} (default), \code{"positional"}, or \code{"vector"}.}
 }
 \value{
 A function with signature \code{function(res, tz)} where:
@@ -24,7 +20,7 @@ A function with signature \code{function(res, tz)} where:
     \item{\code{res}}{An \code{httr::response}. The body must decode to a list
       with \code{$code}, \code{$msg}, and \code{$data}.}
     \item{\code{tz}}{Timezone for \code{"time"} fields.
-      Millisecond values are converted with \code{as.POSIXct()}.}
+      Millisecond timestamps are converted with \code{as.POSIXct()}.}
   }
   The returned parser yields a \code{data.table} with column names from
   \code{schema$okx} and attaches variable labels as

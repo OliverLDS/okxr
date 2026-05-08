@@ -6,13 +6,9 @@
 #' (\code{"positional"}) endpoints. For \code{"named"} endpoints returning a
 #' single object, the parser wraps it as a one-row table.
 #'
-#' @param schema A \code{data.frame} describing the response fields with columns:
-#'   \describe{
-#'     \item{\code{okx}}{Field name in the raw JSON response (used as output column names).}
-#'     \item{\code{formal}}{Human-readable label (stored in \code{attr(, "var_labels")}).}
-#'     \item{\code{type}}{One of \code{"time"}, \code{"numeric"},
-#'       \code{"integer"}, \code{"string"}, or \code{"logical"}.}
-#'   }
+#' @param schema A \code{data.frame} with \code{okx}, \code{formal}, and
+#'   \code{type} columns. Supported types are time, numeric, integer, string,
+#'   and logical.
 #' @param mode Parsing mode:
 #'   \code{"named"} (default), \code{"positional"}, or \code{"vector"}.
 #'
