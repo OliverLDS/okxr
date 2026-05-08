@@ -4,6 +4,8 @@
 #' including market data, account information, asset metadata, order-book trade
 #' queries, trading actions, and copy-trading endpoints.
 #'
+#' @rawRd \if{latex}{\sloppy\setlength{\emergencystretch}{3em}}
+#'
 #' @details
 #' Public market and public reference endpoints can be called without
 #' credentials. Private account, asset, trade, and copy-trading endpoints require

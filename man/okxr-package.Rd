@@ -41,3 +41,4 @@ Authors:
 
 }
 \keyword{package}
+\if{latex}{\sloppy\setlength{\emergencystretch}{3em}}
