@@ -38,3 +38,10 @@ jobs:
           build_args: '"--no-manual"'
           error-on: '"never"'
           upload-snapshots: true
+
+      - name: Upload CRAN preflight check directory
+        uses: actions/upload-artifact@v4
+        with:
+          name: cran-preflight-check
+          path: check/okxr.Rcheck
+          if-no-files-found: error
