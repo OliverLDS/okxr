@@ -1,25 +1,18 @@
 ## R CMD check results
 
-Local `R CMD check --no-manual`:
+Local checks:
 
-0 errors | 0 warnings | 0 notes
+* `devtools::test()`: 0 failures, 0 warnings, 0 skipped, 243 passed
+* `R CMD build .`: completed successfully and built `okxr_0.4.5.tar.gz`
 
-GitHub Actions `R-CMD-check` on commit
-`c20d1b318251eb20f9f2000b6664d60b8fbdae0c`:
+GitHub Actions `R-CMD-check` on `main`:
 
-0 errors | 0 warnings | 0 notes
+* Status: success
 
-GitHub Actions `CRAN preflight` on commit
-`c20d1b318251eb20f9f2000b6664d60b8fbdae0c`:
+GitHub Actions manual `CRAN preflight` on `main`:
 
-0 errors | 0 warnings | 0 notes
-
-The local `R CMD check --as-cran` command was also run. Package checks passed,
-but the local environment could not complete CRAN incoming URL checks because DNS
-resolution was unavailable, and could not build the PDF manual because
-`pdflatex` is not installed. The GitHub Actions CRAN preflight run covers those
-environment-dependent checks in an environment with internet access and LaTeX
-support.
+* Status: success under informational warning policy
+* Runs `R CMD check --as-cran` on Ubuntu latest with R devel and TinyTeX
 
 ## Test environments
 
@@ -28,24 +21,31 @@ support.
   R release
 * GitHub Actions manual CRAN preflight, Ubuntu latest, R devel
 
+## Known PDF manual diagnostic
+
+R-devel GitHub Actions shows a PDF manual warning from `rerunfilecheck`:
+
+```text
+File `Rd2.out' has changed. Rerun to get outlines right.
+```
+
+The same manual build log shows the second LaTeX pass resolves it:
+
+```text
+File `Rd2.out' has not changed.
+```
+
+No Rd syntax, line-width, usage, or documentation mismatch issues remain.
+
 ## Submission notes
 
-This is a CRAN resubmission that addresses reviewer feedback on DESCRIPTION and
-Rd documentation.
+This release updates the CRAN version from 0.2.4 to 0.4.5. It expands read-only
+endpoint coverage, adds signed trade/account/asset action wrappers, and hardens
+client-side validation for mutating request bodies.
 
-The following changes were made in response to the CRAN review:
-
-* Added a web reference for the OKX API to the `Description` field in
-  `DESCRIPTION`.
-* Added a documented return value for `set_okxr_options()`.
-* Removed examples from unexported internal helper functions.
-
-Use `CRAN-SUBMISSION.md` as the final release checklist.
-
-The package wraps selected 'OKX' REST API endpoints. Runnable examples and tests
-do not require live credentials, do not call live trading endpoints, and do not
-perform account side effects.
+Runnable examples and tests do not require live credentials, do not call live
+trading endpoints, and do not perform account side effects.
 
 ## Reverse dependencies
 
-There are no reverse dependencies because this package is not yet on CRAN.
+There are no known reverse dependencies.
