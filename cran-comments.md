@@ -2,14 +2,15 @@
 
 Local checks:
 
-* `devtools::test()`: 0 failures, 0 warnings, 0 skipped, 243 passed
-* `R CMD build .`: completed successfully and built `okxr_0.4.5.tar.gz`
+* `devtools::test()`: 0 failures, 0 warnings, 0 skipped, 253 passed
+* `R CMD build .`: completed successfully and built `okxr_0.4.6.tar.gz`
+* `LC_ALL=C R CMD check okxr_0.4.6.tar.gz --no-manual`: Status OK
 
-GitHub Actions `R-CMD-check` on `main`:
+GitHub Actions `R-CMD-check` on `main` for the previous release:
 
 * Status: success
 
-GitHub Actions manual `CRAN preflight` on `main`:
+GitHub Actions manual `CRAN preflight` on `main` for the previous release:
 
 * Status: success under informational warning policy
 * Runs `R CMD check --as-cran` on Ubuntu latest with R devel and TinyTeX
@@ -39,9 +40,10 @@ No Rd syntax, line-width, usage, or documentation mismatch issues remain.
 
 ## Submission notes
 
-This release updates the CRAN version from 0.2.4 to 0.4.5. It expands read-only
-endpoint coverage, adds signed trade/account/asset action wrappers, and hardens
-client-side validation for mutating request bodies.
+This release updates the package version from 0.4.5 to 0.4.6. It adds OKX
+compatibility updates for the current package scope, including the new REST
+base URL, RPI migration support, chase algo order support, asset bill
+`thirdPartyType` filters, and parser fields added by recent OKX API changes.
 
 Runnable examples and tests do not require live credentials, do not call live
 trading endpoints, and do not perform account side effects.

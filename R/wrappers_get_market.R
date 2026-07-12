@@ -203,6 +203,31 @@ get_market_books <- function(
   .gets$market_books(query_string = query_string, config = config, tz = tz)
 }
 
+#' Get RPI order book
+#'
+#' Retrieve the RPI order book for an instrument.
+#'
+#' @param inst_id Character. Instrument ID, e.g. `"BTC-USDT-SWAP"`.
+#' @param sz Integer or `NULL`. Order book depth. If `NULL`, OKX uses its
+#'   endpoint default.
+#' @param config Optional list. Public endpoint request options, such as
+#'   `timeout`; credentials are not required.
+#' @param tz Character. Time zone for parsing timestamps. Default `"Asia/Hong_Kong"`.
+#'
+#' @return A `data.frame` with JSON-encoded `asks` and `bids` columns plus
+#'   timestamp and sequence metadata when returned by OKX.
+#'
+#' @export
+get_market_books_rpi <- function(
+  inst_id,
+  sz = NULL,
+  config = NULL,
+  tz = .okx_default_tz
+) {
+  query_string <- .okx_build_query(instId = inst_id, sz = sz)
+  .gets$market_books_rpi(query_string = query_string, config = config, tz = tz)
+}
+
 #' Get recent public trades
 #'
 #' Retrieve recent public trades for an instrument.

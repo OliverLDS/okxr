@@ -9,7 +9,7 @@ copy trading, with shared request signing and schema-based response parsing.
 `okxr` is available on CRAN. Install the stable release from CRAN or use the
 GitHub repository for development versions between CRAN releases.
 
-Current development release: `v0.4.5`
+Current development release: `v0.4.6`
 
 ## Installation
 
@@ -122,6 +122,7 @@ get_copy_trade_current_subpos(config = config)
 | --- | --- | --- |
 | market | GET | `get_market_candles()` |
 | market | GET | `get_market_tickers()` |
+| market | GET | `get_market_books_rpi()` |
 | market | GET | `get_market_trades()` |
 | market | GET | `get_market_mark_price_candles()` |
 | market | GET | `get_market_index_tickers()` |
@@ -209,6 +210,7 @@ get_copy_trade_current_subpos(config = config)
 | trade | POST | `post_trade_amend_order()` |
 | trade | POST | `post_trade_amend_batch_orders()` |
 | trade | POST | `post_trade_order_precheck()` |
+| trade | POST | `post_trade_order_algo()` |
 | trade | POST | `post_trade_cancel_all_after()` |
 | trade | POST | `post_trade_cancel_algos()` |
 | trade | POST | `post_trade_amend_algos()` |
@@ -264,6 +266,7 @@ See [NEWS.md](NEWS.md) for release history.
 * [x] Account operational action coverage for v0.4.3
 * [x] Asset transfer, withdrawal, and convert action coverage for v0.4.4
 * [x] POST wrapper validation and cancellation parameter completeness for v0.4.5
+* [x] OKX compatibility patch for base URL, RPI migration, chase algo orders, asset bill filters, and parser fields for v0.4.6
 * [ ] Websocket support
 
 ## License

@@ -52,9 +52,10 @@ set_okxr_options <- function(raw_data = NULL, timeout = NULL) {
 #' compose full URLs as `paste0(.okx_base_url, okx_path)`.
 #'
 #' @details
-#' This package assumes the public production host. If you intend to support
-#' alternative environments (e.g., sandbox), consider injecting a config value
-#' at runtime rather than modifying this constant.
+#' This package assumes the public production host. OKX currently recommends
+#' `https://openapi.okx.com` for REST requests. If you intend to support
+#' alternative environments, pass a `base_url` config value at runtime rather
+#' than modifying this constant.
 #'
 #' @format A length-one character vector.
 #' @seealso [`.api_GET_specs`], [`.api_POST_specs`]
@@ -62,7 +63,7 @@ set_okxr_options <- function(raw_data = NULL, timeout = NULL) {
 #' @note Since okxr 0.1.1
 #' @keywords internal
 #' @noRd
-.okx_base_url <- "https://www.okx.com"
+.okx_base_url <- "https://openapi.okx.com"
 
 #----.API_POST_SPECS----
 
@@ -127,6 +128,13 @@ set_okxr_options <- function(raw_data = NULL, timeout = NULL) {
   okx    = c("algoId", "algoClOrdId", "reqId", "sCode", "sMsg"),
   formal = c("Algo ID", "Client-supplied Algo ID", "Client request ID", "Code of the execution result", "Execution message"),
   type   = c("string", "string", "string", "string", "string"),
+  stringsAsFactors = FALSE
+)
+
+.trade_algo_order_response_schema <- data.frame(
+  okx    = c("algoId", "algoClOrdId", "sCode", "sMsg"),
+  formal = c("Algo ID", "Client-supplied Algo ID", "Code of the execution result", "Execution message"),
+  type   = c("string", "string", "string", "string"),
   stringsAsFactors = FALSE
 )
 
@@ -400,9 +408,9 @@ set_okxr_options <- function(raw_data = NULL, timeout = NULL) {
   trade_order = list(
     okx_path     = "/api/v5/trade/order",
     parser_schema       = data.frame(
-      okx    = c("ts", "ordId", "clOrdId", "sCode"),
-      formal = c("Timestamp", "Order ID", "Client Order ID", "Code of the execution result"),
-      type   = c("time", "string", "string", "string"),
+      okx    = c("ts", "ordId", "clOrdId", "sCode", "sMsg"),
+      formal = c("Timestamp", "Order ID", "Client Order ID", "Code of the execution result", "Execution message"),
+      type   = c("time", "string", "string", "string", "string"),
       stringsAsFactors = FALSE
     ),
     parser_mode = "named"
@@ -484,6 +492,13 @@ set_okxr_options <- function(raw_data = NULL, timeout = NULL) {
     parser_mode = "named"
   ),
 
+  #----trade_order_algo----
+  trade_order_algo = list(
+    okx_path     = "/api/v5/trade/order-algo",
+    parser_schema = .trade_algo_order_response_schema,
+    parser_mode = "named"
+  ),
+
   #----trade_mass_cancel----
   trade_mass_cancel = list(
     okx_path     = "/api/v5/trade/mass-cancel",
@@ -557,9 +572,9 @@ set_okxr_options <- function(raw_data = NULL, timeout = NULL) {
   trade_order = list(
     okx_path     = "/api/v5/trade/order",
     parser_schema       = data.frame(
-      okx    = c("cTime", "ordId", "clOrdId", "tag", "instId", "ordType", "px", "sz", "side", "posSide", "tdMode", "accFillSz", "fillPx", "fillSz", "fillTime", "avgPx", "state", "lever"),
-      formal = c("Creation time", "Order ID", "Client Order ID", "Order tag", "Instrument ID", "Order type", "Price", "Quantity to buy or sell", "Order side", "Position side", "Trade mode", "Accumulated fill quantity", "Last filled price", "Last filled quantity", "Last filled time", "Average filled price", "State", "Leverage"),
-      type   = c("time", "string", "string", "string", "string", "string", "numeric", "numeric", "string", "string", "string", "numeric", "numeric", "numeric", "time", "numeric", "string", "numeric"),
+      okx    = c("cTime", "ordId", "clOrdId", "tag", "instId", "ordType", "px", "sz", "side", "posSide", "tdMode", "accFillSz", "fillPx", "fillSz", "fillTime", "avgPx", "state", "lever", "outcome", "rpiTakerAccess"),
+      formal = c("Creation time", "Order ID", "Client Order ID", "Order tag", "Instrument ID", "Order type", "Price", "Quantity to buy or sell", "Order side", "Position side", "Trade mode", "Accumulated fill quantity", "Last filled price", "Last filled quantity", "Last filled time", "Average filled price", "State", "Leverage", "Event-contract outcome", "RPI taker access"),
+      type   = c("time", "string", "string", "string", "string", "string", "numeric", "numeric", "string", "string", "string", "numeric", "numeric", "numeric", "time", "numeric", "string", "numeric", "string", "string"),
       stringsAsFactors = FALSE
     ),
     parser_mode = "named"
@@ -569,9 +584,9 @@ set_okxr_options <- function(raw_data = NULL, timeout = NULL) {
   trade_orders_pending = list(
     okx_path     = "/api/v5/trade/orders-pending",
     parser_schema       = data.frame(
-      okx    = c("cTime", "ordId", "clOrdId", "tag", "instId", "ordType", "px", "sz", "side", "posSide", "tdMode", "accFillSz", "fillPx", "fillSz", "fillTime", "avgPx", "state", "lever"),
-      formal = c("Creation time", "Order ID", "Client Order ID", "Order tag", "Instrument ID", "Order type", "Price", "Quantity to buy or sell", "Order side", "Position side", "Trade mode", "Accumulated fill quantity", "Last filled price", "Last filled quantity", "Last filled time", "Average filled price", "State", "Leverage"),
-      type   = c("time", "string", "string", "string", "string", "string", "numeric", "numeric", "string", "string", "string", "numeric", "numeric", "numeric", "time", "numeric", "string", "numeric"),
+      okx    = c("cTime", "ordId", "clOrdId", "tag", "instId", "ordType", "px", "sz", "side", "posSide", "tdMode", "accFillSz", "fillPx", "fillSz", "fillTime", "avgPx", "state", "lever", "outcome", "rpiTakerAccess"),
+      formal = c("Creation time", "Order ID", "Client Order ID", "Order tag", "Instrument ID", "Order type", "Price", "Quantity to buy or sell", "Order side", "Position side", "Trade mode", "Accumulated fill quantity", "Last filled price", "Last filled quantity", "Last filled time", "Average filled price", "State", "Leverage", "Event-contract outcome", "RPI taker access"),
+      type   = c("time", "string", "string", "string", "string", "string", "numeric", "numeric", "string", "string", "string", "numeric", "numeric", "numeric", "time", "numeric", "string", "numeric", "string", "string"),
       stringsAsFactors = FALSE
     ),
     parser_mode = "named"
@@ -581,9 +596,9 @@ set_okxr_options <- function(raw_data = NULL, timeout = NULL) {
   trade_orders_history_7d = list(
     okx_path     = "/api/v5/trade/orders-history",
     parser_schema       = data.frame(
-      okx    = c("cTime", "ordId", "clOrdId", "tag", "instId", "ordType", "px", "sz", "side", "posSide", "tdMode", "accFillSz", "fillPx", "fillSz", "fillTime", "avgPx", "state", "lever"),
-      formal = c("Creation time", "Order ID", "Client Order ID", "Order tag", "Instrument ID", "Order type", "Price", "Quantity to buy or sell", "Order side", "Position side", "Trade mode", "Accumulated fill quantity", "Last filled price", "Last filled quantity", "Last filled time", "Average filled price", "State", "Leverage"),
-      type   = c("time", "string", "string", "string", "string", "string", "numeric", "numeric", "string", "string", "string", "numeric", "numeric", "numeric", "time", "numeric", "string", "numeric"),
+      okx    = c("cTime", "ordId", "clOrdId", "tag", "instId", "ordType", "px", "sz", "side", "posSide", "tdMode", "accFillSz", "fillPx", "fillSz", "fillTime", "avgPx", "state", "lever", "outcome", "rpiTakerAccess"),
+      formal = c("Creation time", "Order ID", "Client Order ID", "Order tag", "Instrument ID", "Order type", "Price", "Quantity to buy or sell", "Order side", "Position side", "Trade mode", "Accumulated fill quantity", "Last filled price", "Last filled quantity", "Last filled time", "Average filled price", "State", "Leverage", "Event-contract outcome", "RPI taker access"),
+      type   = c("time", "string", "string", "string", "string", "string", "numeric", "numeric", "string", "string", "string", "numeric", "numeric", "numeric", "time", "numeric", "string", "numeric", "string", "string"),
       stringsAsFactors = FALSE
     ),
     parser_mode = "named"
@@ -932,9 +947,9 @@ set_okxr_options <- function(raw_data = NULL, timeout = NULL) {
     okx_path = "/api/v5/account/instruments",
     parser_schema = data.frame(
       check.names = FALSE,
-      okx    = c("instType", "instId", "uly", "instFamily", "baseCcy", "quoteCcy", "settleCcy", "ctVal", "ctMult", "ctValCcy", "listTime", "openType", "expTime", "lever", "tickSz", "lotSz", "minSz", "ctType", "state"),
-      formal = c("Instrument type", "Instrument ID", "Underlying", "Instrument family", "Base currency", "Quote currency", "Settlement and margin currency", "Contract value", "Contract multiplier", "Contract value currency", "Listing time", "Open type", "Expiry time", "Max Leverage", "Tick size", "Lot size", "Minimum order size", "Contract type", "Instrument status"),
-      type   = c("string", "string", "string", "string", "string", "string", "string", "numeric", "numeric", "numeric", "time", "string", "time", "numeric", "numeric", "numeric", "numeric", "string", "string"),
+      okx    = c("instType", "instId", "uly", "instFamily", "baseCcy", "quoteCcy", "settleCcy", "ctVal", "ctMult", "ctValCcy", "listTime", "openType", "expTime", "lever", "tickSz", "lotSz", "minSz", "ctType", "state", "maxPlatOICoinLmt", "initPxLmtPct", "floatPxLmtPct", "maxPxLmtPct", "capStrike", "hitDir"),
+      formal = c("Instrument type", "Instrument ID", "Underlying", "Instrument family", "Base currency", "Quote currency", "Settlement and margin currency", "Contract value", "Contract multiplier", "Contract value currency", "Listing time", "Open type", "Expiry time", "Max Leverage", "Tick size", "Lot size", "Minimum order size", "Contract type", "Instrument status", "Maximum platform open-interest coin limit", "Initial price-limit percentage", "Floating price-limit percentage", "Maximum price-limit percentage", "Event-contract cap strike", "Event-contract hit direction"),
+      type   = c("string", "string", "string", "string", "string", "string", "string", "numeric", "numeric", "numeric", "time", "string", "time", "numeric", "numeric", "numeric", "numeric", "string", "string", "numeric", "numeric", "numeric", "numeric", "numeric", "string"),
       stringsAsFactors = FALSE
     ),
     parser_mode = "named"
@@ -1369,6 +1384,19 @@ set_okxr_options <- function(raw_data = NULL, timeout = NULL) {
     parser_mode = "named"
   ),
 
+  #----market_books_rpi----
+  market_books_rpi = list(
+    okx_path     = "/api/v5/market/books-rpi",
+    parser_schema       = data.frame(
+      check.names = FALSE,
+      okx    = c("asks", "bids", "ts", "seqId", "prevSeqId"),
+      formal = c("Ask levels", "Bid levels", "Order book generation time", "Sequence ID", "Previous sequence ID"),
+      type   = c("string", "string", "time", "string", "string"),
+      stringsAsFactors = FALSE
+    ),
+    parser_mode = "named"
+  ),
+
   #----market_trades----
   market_trades = list(
     okx_path     = "/api/v5/market/trades",
@@ -1569,9 +1597,9 @@ set_okxr_options <- function(raw_data = NULL, timeout = NULL) {
     okx_path = "/api/v5/public/instruments",
     parser_schema = data.frame(
       check.names = FALSE,
-      okx    = c("instType", "instId", "uly", "instFamily", "baseCcy", "quoteCcy", "settleCcy", "ctVal", "ctMult", "ctValCcy", "listTime", "openType", "expTime", "lever", "tickSz", "lotSz", "minSz", "ctType", "state"),
-      formal = c("Instrument type", "Instrument ID", "Underlying", "Instrument family", "Base currency", "Quote currency", "Settlement and margin currency", "Contract value", "Contract multiplier", "Contract value currency", "Listing time", "Open type", "Expiry time", "Max Leverage", "Tick size", "Lot size", "Minimum order size", "Contract type", "Instrument status"),
-      type   = c("string", "string", "string", "string", "string", "string", "string", "numeric", "numeric", "numeric", "time", "string", "time", "numeric", "numeric", "numeric", "numeric", "string", "string"),
+      okx    = c("instType", "instId", "uly", "instFamily", "baseCcy", "quoteCcy", "settleCcy", "ctVal", "ctMult", "ctValCcy", "listTime", "openType", "expTime", "lever", "tickSz", "lotSz", "minSz", "ctType", "state", "maxPlatOICoinLmt", "initPxLmtPct", "floatPxLmtPct", "maxPxLmtPct", "capStrike", "hitDir"),
+      formal = c("Instrument type", "Instrument ID", "Underlying", "Instrument family", "Base currency", "Quote currency", "Settlement and margin currency", "Contract value", "Contract multiplier", "Contract value currency", "Listing time", "Open type", "Expiry time", "Max Leverage", "Tick size", "Lot size", "Minimum order size", "Contract type", "Instrument status", "Maximum platform open-interest coin limit", "Initial price-limit percentage", "Floating price-limit percentage", "Maximum price-limit percentage", "Event-contract cap strike", "Event-contract hit direction"),
+      type   = c("string", "string", "string", "string", "string", "string", "string", "numeric", "numeric", "numeric", "time", "string", "time", "numeric", "numeric", "numeric", "numeric", "string", "string", "numeric", "numeric", "numeric", "numeric", "numeric", "string"),
       stringsAsFactors = FALSE
     ),
     parser_mode = "named"
@@ -1944,9 +1972,9 @@ set_okxr_options <- function(raw_data = NULL, timeout = NULL) {
 )
 
 .trade_algo_schema <- data.frame(
-  okx = c("algoId", "algoClOrdId", "instType", "instId", "ordType", "state", "side", "posSide", "tdMode", "sz", "cTime", "uTime", "attachAlgoOrds", "linkedOrd", "triggerParams", "failCode"),
-  formal = c("Algo order ID", "Client algo order ID", "Instrument type", "Instrument ID", "Algo order type", "Algo order state", "Order side", "Position side", "Trade mode", "Order size", "Creation time", "Update time", "Attached algo orders", "Linked order detail", "Trigger parameters", "Failure code"),
-  type = c("string", "string", "string", "string", "string", "string", "string", "string", "string", "numeric", "time", "time", "string", "string", "string", "string"),
+  okx = c("algoId", "algoClOrdId", "instType", "instId", "ordType", "state", "side", "posSide", "tdMode", "sz", "cTime", "uTime", "attachAlgoOrds", "linkedOrd", "triggerParams", "failCode", "advanceOrdType", "advChaseParams", "subAlgoIdList"),
+  formal = c("Algo order ID", "Client algo order ID", "Instrument type", "Instrument ID", "Algo order type", "Algo order state", "Order side", "Position side", "Trade mode", "Order size", "Creation time", "Update time", "Attached algo orders", "Linked order detail", "Trigger parameters", "Failure code", "Advanced order type", "Advanced chase parameters", "Sub algo ID list"),
+  type = c("string", "string", "string", "string", "string", "string", "string", "string", "string", "numeric", "time", "time", "string", "string", "string", "string", "string", "string", "string"),
   stringsAsFactors = FALSE
 )
 
@@ -2002,9 +2030,9 @@ set_okxr_options <- function(raw_data = NULL, timeout = NULL) {
 )
 
 .asset_bills_schema <- data.frame(
-  okx = c("billId", "ccy", "clientId", "balChg", "bal", "type", "notes", "ts"),
-  formal = c("Bill ID", "Currency", "Client ID", "Balance change", "Balance", "Bill type", "Notes", "Creation time"),
-  type = c("string", "string", "string", "numeric", "numeric", "string", "string", "time"),
+  okx = c("billId", "ccy", "clientId", "balChg", "bal", "type", "thirdPartyType", "notes", "ts"),
+  formal = c("Bill ID", "Currency", "Client ID", "Balance change", "Balance", "Bill type", "Third-party type", "Notes", "Creation time"),
+  type = c("string", "string", "string", "numeric", "numeric", "string", "string", "string", "time"),
   stringsAsFactors = FALSE
 )
 
@@ -2080,6 +2108,7 @@ set_okxr_options <- function(raw_data = NULL, timeout = NULL) {
   "market_ticker",
   "market_tickers",
   "market_books",
+  "market_books_rpi",
   "market_trades",
   "market_history_trades",
   "market_option_instrument_family_trades",
