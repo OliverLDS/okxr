@@ -138,6 +138,70 @@ set_okxr_options <- function(raw_data = NULL, timeout = NULL) {
   stringsAsFactors = FALSE
 )
 
+.instrument_schema <- data.frame(
+  check.names = FALSE,
+  okx = c(
+    "instType", "instId", "uly", "instFamily", "baseCcy", "quoteCcy",
+    "settleCcy", "ctVal", "ctMult", "ctValCcy", "listTime", "openType",
+    "expTime", "lever", "tickSz", "lotSz", "minSz", "ctType", "state",
+    "alias", "ruleType", "instCategory", "seriesId", "maxPlatOILmt",
+    "maxPlatOICoinLmt", "longPosRemainingQuota", "shortPosRemainingQuota",
+    "initPxLmtPct", "floatPxLmtPct", "maxPxLmtPct", "elp", "capStrike",
+    "hitDir"
+  ),
+  formal = c(
+    "Instrument type", "Instrument ID", "Underlying", "Instrument family",
+    "Base currency", "Quote currency", "Settlement and margin currency",
+    "Contract value", "Contract multiplier", "Contract value currency",
+    "Listing time", "Open type", "Expiry time", "Max Leverage", "Tick size",
+    "Lot size", "Minimum order size", "Contract type", "Instrument status",
+    "Contract alias", "Trading rule type", "Instrument category", "Series ID",
+    "Maximum platform open-interest USD limit",
+    "Maximum platform open-interest coin limit",
+    "Remaining long position opening quota",
+    "Remaining short position opening quota", "Initial price-limit percentage",
+    "Floating price-limit percentage", "Maximum price-limit percentage",
+    "ELP maker permission", "Event-contract cap strike",
+    "Event-contract hit direction"
+  ),
+  type = c(
+    "string", "string", "string", "string", "string", "string", "string",
+    "numeric", "numeric", "string", "time", "string", "time", "numeric",
+    "numeric", "numeric", "numeric", "string", "string", "string", "string",
+    "string", "string", "numeric", "numeric", "numeric", "numeric",
+    "numeric", "numeric", "numeric", "string", "string", "string"
+  ),
+  stringsAsFactors = FALSE
+)
+
+.event_contract_series_schema <- data.frame(
+  okx = c("seriesId", "freq", "title", "category", "settlement"),
+  formal = c("Series ID", "Frequency", "Series title", "Category", "Settlement information"),
+  type = c("string", "string", "string", "string", "string"),
+  stringsAsFactors = FALSE
+)
+
+.event_contract_events_schema <- data.frame(
+  okx = c("seriesId", "eventId", "fixTime", "expTime", "state"),
+  formal = c("Series ID", "Event ID", "Fixing time", "Expiration time", "Event state"),
+  type = c("string", "string", "time", "time", "string"),
+  stringsAsFactors = FALSE
+)
+
+.event_contract_markets_schema <- data.frame(
+  okx = c("seriesId", "eventId", "instId", "listTime", "fixTime", "expTime", "state", "disputed", "outcome", "floorStrike", "capStrike", "hitDir", "settleValue"),
+  formal = c("Series ID", "Event ID", "Instrument ID", "Listing time", "Fixing time", "Expiration time", "Market state", "Disputed", "Market outcome", "Floor strike", "Cap strike", "Hit direction", "Settlement value"),
+  type = c("string", "string", "string", "time", "time", "time", "string", "logical", "string", "numeric", "string", "string", "numeric"),
+  stringsAsFactors = FALSE
+)
+
+.mm_instrument_types_schema <- data.frame(
+  okx = c("instId", "instType", "pairType"),
+  formal = c("Instrument ID", "Instrument type", "MM Program classification type"),
+  type = c("string", "string", "string"),
+  stringsAsFactors = FALSE
+)
+
 .account_position_mode_schema <- data.frame(
   okx    = c("posMode"),
   formal = c("Position mode"),
@@ -408,9 +472,9 @@ set_okxr_options <- function(raw_data = NULL, timeout = NULL) {
   trade_order = list(
     okx_path     = "/api/v5/trade/order",
     parser_schema       = data.frame(
-      okx    = c("ts", "ordId", "clOrdId", "sCode", "sMsg"),
-      formal = c("Timestamp", "Order ID", "Client Order ID", "Code of the execution result", "Execution message"),
-      type   = c("time", "string", "string", "string", "string"),
+      okx    = c("ts", "ordId", "clOrdId", "sCode", "sMsg", "subCode"),
+      formal = c("Timestamp", "Order ID", "Client Order ID", "Code of the execution result", "Execution message", "Execution sub-code"),
+      type   = c("time", "string", "string", "string", "string", "string"),
       stringsAsFactors = FALSE
     ),
     parser_mode = "named"
@@ -439,9 +503,9 @@ set_okxr_options <- function(raw_data = NULL, timeout = NULL) {
   trade_batch_orders = list(
     okx_path     = "/api/v5/trade/batch-orders",
     parser_schema = data.frame(
-      okx    = c("ts", "ordId", "clOrdId", "tag", "sCode", "sMsg"),
-      formal = c("Timestamp", "Order ID", "Client Order ID", "Order tag", "Code of the execution result", "Execution message"),
-      type   = c("time", "string", "string", "string", "string", "string"),
+      okx    = c("ts", "ordId", "clOrdId", "tag", "sCode", "sMsg", "subCode"),
+      formal = c("Timestamp", "Order ID", "Client Order ID", "Order tag", "Code of the execution result", "Execution message", "Execution sub-code"),
+      type   = c("time", "string", "string", "string", "string", "string", "string"),
       stringsAsFactors = FALSE
     ),
     parser_mode = "named"
@@ -945,13 +1009,7 @@ set_okxr_options <- function(raw_data = NULL, timeout = NULL) {
   #----account_instruments----
   account_instruments = list(
     okx_path = "/api/v5/account/instruments",
-    parser_schema = data.frame(
-      check.names = FALSE,
-      okx    = c("instType", "instId", "uly", "instFamily", "baseCcy", "quoteCcy", "settleCcy", "ctVal", "ctMult", "ctValCcy", "listTime", "openType", "expTime", "lever", "tickSz", "lotSz", "minSz", "ctType", "state", "maxPlatOICoinLmt", "initPxLmtPct", "floatPxLmtPct", "maxPxLmtPct", "capStrike", "hitDir"),
-      formal = c("Instrument type", "Instrument ID", "Underlying", "Instrument family", "Base currency", "Quote currency", "Settlement and margin currency", "Contract value", "Contract multiplier", "Contract value currency", "Listing time", "Open type", "Expiry time", "Max Leverage", "Tick size", "Lot size", "Minimum order size", "Contract type", "Instrument status", "Maximum platform open-interest coin limit", "Initial price-limit percentage", "Floating price-limit percentage", "Maximum price-limit percentage", "Event-contract cap strike", "Event-contract hit direction"),
-      type   = c("string", "string", "string", "string", "string", "string", "string", "numeric", "numeric", "numeric", "time", "string", "time", "numeric", "numeric", "numeric", "numeric", "string", "string", "numeric", "numeric", "numeric", "numeric", "numeric", "string"),
-      stringsAsFactors = FALSE
-    ),
+    parser_schema = .instrument_schema,
     parser_mode = "named"
   ),
 
@@ -999,9 +1057,9 @@ set_okxr_options <- function(raw_data = NULL, timeout = NULL) {
     okx_path = "/api/v5/account/trade-fee",
     parser_schema = data.frame(
       check.names = FALSE,
-      okx    = c("level", "feeGroup", "delivery", "exercise", "instType", "ts", "taker", "maker", "takerU", "makerU", "takerUSDC", "makerUSDC", "ruleType", "category", "fiat", "settle"),
-      formal = c("Fee rate level", "Fee groups", "Delivery fee rate", "Exercise fee rate", "Instrument type", "Data return time", "Taker fee rate", "Maker fee rate", "USDT-margined taker fee rate", "USDT-margined maker fee rate", "USDC or USD stablecoin taker fee rate", "USDC or USD stablecoin maker fee rate", "Trading rule type", "Currency category", "Deprecated fiat fee detail", "Settlement fee rate"),
-      type   = c("string", "string", "numeric", "numeric", "string", "time", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "string", "string", "string", "numeric"),
+      okx    = c("level", "feeGroup", "delivery", "exercise", "instType", "ts", "taker", "maker", "takerU", "makerU", "takerUSDC", "makerUSDC", "ruleType", "category", "fiat", "settle", "elpMaker"),
+      formal = c("Fee rate level", "Fee groups", "Delivery fee rate", "Exercise fee rate", "Instrument type", "Data return time", "Taker fee rate", "Maker fee rate", "USDT-margined taker fee rate", "USDT-margined maker fee rate", "USDC or USD stablecoin taker fee rate", "USDC or USD stablecoin maker fee rate", "Trading rule type", "Currency category", "Deprecated fiat fee detail", "Settlement fee rate", "ELP maker fee rate"),
+      type   = c("string", "string", "numeric", "numeric", "string", "time", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "string", "string", "string", "numeric", "numeric"),
       stringsAsFactors = FALSE
     ),
     parser_mode = "named"
@@ -1595,13 +1653,35 @@ set_okxr_options <- function(raw_data = NULL, timeout = NULL) {
   #----public_instruments----
   public_instruments = list(
     okx_path = "/api/v5/public/instruments",
-    parser_schema = data.frame(
-      check.names = FALSE,
-      okx    = c("instType", "instId", "uly", "instFamily", "baseCcy", "quoteCcy", "settleCcy", "ctVal", "ctMult", "ctValCcy", "listTime", "openType", "expTime", "lever", "tickSz", "lotSz", "minSz", "ctType", "state", "maxPlatOICoinLmt", "initPxLmtPct", "floatPxLmtPct", "maxPxLmtPct", "capStrike", "hitDir"),
-      formal = c("Instrument type", "Instrument ID", "Underlying", "Instrument family", "Base currency", "Quote currency", "Settlement and margin currency", "Contract value", "Contract multiplier", "Contract value currency", "Listing time", "Open type", "Expiry time", "Max Leverage", "Tick size", "Lot size", "Minimum order size", "Contract type", "Instrument status", "Maximum platform open-interest coin limit", "Initial price-limit percentage", "Floating price-limit percentage", "Maximum price-limit percentage", "Event-contract cap strike", "Event-contract hit direction"),
-      type   = c("string", "string", "string", "string", "string", "string", "string", "numeric", "numeric", "numeric", "time", "string", "time", "numeric", "numeric", "numeric", "numeric", "string", "string", "numeric", "numeric", "numeric", "numeric", "numeric", "string"),
-      stringsAsFactors = FALSE
-    ),
+    parser_schema = .instrument_schema,
+    parser_mode = "named"
+  ),
+
+  #----public_event_contract_series----
+  public_event_contract_series = list(
+    okx_path = "/api/v5/public/event-contract/series",
+    parser_schema = .event_contract_series_schema,
+    parser_mode = "named"
+  ),
+
+  #----public_event_contract_events----
+  public_event_contract_events = list(
+    okx_path = "/api/v5/public/event-contract/events",
+    parser_schema = .event_contract_events_schema,
+    parser_mode = "named"
+  ),
+
+  #----public_event_contract_markets----
+  public_event_contract_markets = list(
+    okx_path = "/api/v5/public/event-contract/markets",
+    parser_schema = .event_contract_markets_schema,
+    parser_mode = "named"
+  ),
+
+  #----public_mm_instrument_types----
+  public_mm_instrument_types = list(
+    okx_path = "/api/v5/public/mm-instrument-types",
+    parser_schema = .mm_instrument_types_schema,
     parser_mode = "named"
   ),
 
@@ -1636,9 +1716,9 @@ set_okxr_options <- function(raw_data = NULL, timeout = NULL) {
     okx_path = "/api/v5/public/funding-rate",
     parser_schema = data.frame(
       check.names = FALSE,
-      okx    = c("instId", "formulaType", "fundingRate", "fundingTime", "nextFundingTime", "minFundingRate", "maxFundingRate", "interestRate", "impactValue", "premium", "ts"),
-      formal = c("Instrument ID", "Formula type", "Current funding rate", "Settlement time", "Forecasted funding time for the next period", "The lower limit of the funding rate", "The upper limit of the funding rate", "Interest rate", "Depth weighted amount", "Premium index", "Data return time"),
-      type   = c("string", "string", "numeric", "time", "time", "numeric", "numeric", "numeric", "numeric", "numeric", "time"),
+      okx    = c("instType", "instId", "formulaType", "fundingRate", "fundingTime", "nextFundingTime", "minFundingRate", "maxFundingRate", "interestRate", "impactValue", "premium", "ts"),
+      formal = c("Instrument type", "Instrument ID", "Formula type", "Current funding rate", "Settlement time", "Forecasted funding time for the next period", "The lower limit of the funding rate", "The upper limit of the funding rate", "Interest rate", "Depth weighted amount", "Premium index", "Data return time"),
+      type   = c("string", "string", "string", "numeric", "time", "time", "numeric", "numeric", "numeric", "numeric", "numeric", "time"),
       stringsAsFactors = FALSE
     ),
     parser_mode = "named"
@@ -1649,9 +1729,9 @@ set_okxr_options <- function(raw_data = NULL, timeout = NULL) {
     okx_path = "/api/v5/public/funding-rate-history",
     parser_schema = data.frame(
       check.names = FALSE,
-      okx    = c("instId", "formulaType", "fundingRate", "realizedRate", "fundingTime", "method"),
-      formal = c("Instrument ID", "Formula type", "Predicted funding rate", "Actual funding rate", "Settlement time", "Funding rate mechanism"),
-      type   = c("string", "string", "numeric", "numeric", "time", "string"),
+      okx    = c("instType", "instId", "formulaType", "fundingRate", "realizedRate", "fundingTime", "method"),
+      formal = c("Instrument type", "Instrument ID", "Formula type", "Predicted funding rate", "Actual funding rate", "Settlement time", "Funding rate mechanism"),
+      type   = c("string", "string", "string", "numeric", "numeric", "time", "string"),
       stringsAsFactors = FALSE
     ),
     parser_mode = "named"
@@ -2125,6 +2205,10 @@ set_okxr_options <- function(raw_data = NULL, timeout = NULL) {
   "market_candles",
   "market_history_candles",
   "public_instruments",
+  "public_event_contract_series",
+  "public_event_contract_events",
+  "public_event_contract_markets",
+  "public_mm_instrument_types",
   "public_underlying",
   "public_estimated_price",
   "public_delivery_exercise_history",

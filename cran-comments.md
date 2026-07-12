@@ -2,9 +2,9 @@
 
 Local checks:
 
-* `devtools::test()`: 0 failures, 0 warnings, 0 skipped, 253 passed
-* `R CMD build .`: completed successfully and built `okxr_0.4.6.tar.gz`
-* `LC_ALL=C R CMD check okxr_0.4.6.tar.gz --no-manual`: Status OK
+* `devtools::test()`: 0 failures, 0 warnings, 0 skipped, 262 passed
+* `R CMD build .`: completed successfully and built `okxr_0.4.7.tar.gz`
+* `LC_ALL=C R CMD check okxr_0.4.7.tar.gz --no-manual`: Status OK
 
 GitHub Actions `R-CMD-check` on `main` for the previous release:
 
@@ -40,10 +40,12 @@ No Rd syntax, line-width, usage, or documentation mismatch issues remain.
 
 ## Submission notes
 
-This release updates the package version from 0.4.5 to 0.4.6. It adds OKX
-compatibility updates for the current package scope, including the new REST
-base URL, RPI migration support, chase algo order support, asset bill
-`thirdPartyType` filters, and parser fields added by recent OKX API changes.
+This release updates the package version from 0.4.6 to 0.4.7. It completes
+additional 2026 OKX compatibility updates for the current package scope,
+including event-contract public data wrappers, MM instrument-type classification
+lookup, event-series filters for instrument queries, ELP and slippage request
+parameters, bill-type aliasing, and parser fields added by recent OKX API
+changes.
 
 Runnable examples and tests do not require live credentials, do not call live
 trading endpoints, and do not perform account side effects.

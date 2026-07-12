@@ -9,7 +9,7 @@ copy trading, with shared request signing and schema-based response parsing.
 `okxr` is available on CRAN. Install the stable release from CRAN or use the
 GitHub repository for development versions between CRAN releases.
 
-Current development release: `v0.4.6`
+Current development release: `v0.4.7`
 
 ## Installation
 
@@ -129,6 +129,10 @@ get_copy_trade_current_subpos(config = config)
 | market | GET | `get_market_index_candles()` |
 | market | GET | `get_market_index_components()` |
 | public | GET | `get_public_time()` |
+| public | GET | `get_public_event_contract_series()` |
+| public | GET | `get_public_event_contract_events()` |
+| public | GET | `get_public_event_contract_markets()` |
+| public | GET | `get_public_mm_instrument_types()` |
 | public | GET | `get_public_underlying()` |
 | public | GET | `get_public_estimated_price()` |
 | public | GET | `get_public_estimated_settlement_info()` |
@@ -144,6 +148,7 @@ get_copy_trade_current_subpos(config = config)
 | public | GET | `get_public_option_trades()` |
 | account | GET | `get_account_balance()` |
 | account | GET | `get_account_instruments()` |
+| account | GET | `get_account_bill_types()` |
 | account | GET | `get_account_subtypes()` |
 | account | GET | `get_account_adjust_leverage_info()` |
 | account | GET | `get_account_position_risk()` |
@@ -267,6 +272,7 @@ See [NEWS.md](NEWS.md) for release history.
 * [x] Asset transfer, withdrawal, and convert action coverage for v0.4.4
 * [x] POST wrapper validation and cancellation parameter completeness for v0.4.5
 * [x] OKX compatibility patch for base URL, RPI migration, chase algo orders, asset bill filters, and parser fields for v0.4.6
+* [x] 2026 compatibility-completion patch for event contracts, MM instrument types, instrument metadata, ELP, slippage, bill types, and parser fields for v0.4.7
 * [ ] Websocket support
 
 ## License

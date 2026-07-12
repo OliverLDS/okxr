@@ -23,6 +23,11 @@ test_that("GET wrappers build expected query strings", {
       market_index_candles = function(query_string, config, tz) query_string,
       market_history_index_candles = function(query_string, config, tz) query_string,
       market_books_rpi = function(query_string, config, tz) query_string,
+      public_instruments = function(query_string, config, tz) query_string,
+      public_event_contract_series = function(query_string, config, tz) query_string,
+      public_event_contract_events = function(query_string, config, tz) query_string,
+      public_event_contract_markets = function(query_string, config, tz) query_string,
+      public_mm_instrument_types = function(query_string, config, tz) query_string,
       public_underlying = function(query_string, config, tz) query_string,
       public_estimated_price = function(query_string, config, tz) query_string,
       public_delivery_exercise_history = function(query_string, config, tz) query_string,
@@ -170,6 +175,26 @@ test_that("GET wrappers build expected query strings", {
     "?instId=BTC-USDT-SWAP&sz=5"
   )
   expect_equal(
+    okxr::get_public_instruments(inst_type = "EVENTS", series_id = "BTC-ABOVE-DAILY"),
+    "?instType=EVENTS&seriesId=BTC-ABOVE-DAILY"
+  )
+  expect_equal(
+    okxr::get_public_event_contract_series(series_id = "BTC-ABOVE-DAILY"),
+    "?seriesId=BTC-ABOVE-DAILY"
+  )
+  expect_equal(
+    okxr::get_public_event_contract_events(series_id = "BTC-ABOVE-DAILY", state = "live", limit = 20),
+    "?seriesId=BTC-ABOVE-DAILY&state=live&limit=20"
+  )
+  expect_equal(
+    okxr::get_public_event_contract_markets(series_id = "BTC-ABOVE-DAILY", event_id = "EVT", inst_id = "INST", state = "live"),
+    "?seriesId=BTC-ABOVE-DAILY&eventId=EVT&instId=INST&state=live"
+  )
+  expect_equal(
+    okxr::get_public_mm_instrument_types(inst_type = "SWAP", inst_id = "BTC-USDT-SWAP"),
+    "?instType=SWAP&instId=BTC-USDT-SWAP"
+  )
+  expect_equal(
     okxr::get_public_underlying(inst_type = "FUTURES"),
     "?instType=FUTURES"
   )
@@ -308,11 +333,15 @@ test_that("GET wrappers build expected query strings", {
     "?region=united_states&importance=3"
   )
   expect_equal(
-    okxr::get_account_instruments(inst_type = "SPOT", inst_id = "BTC-USDT", config = cfg),
-    "?instType=SPOT&instId=BTC-USDT"
+    okxr::get_account_instruments(inst_type = "EVENTS", inst_id = "BTC-ABOVE-DAILY-260224-1600-65000", series_id = "BTC-ABOVE-DAILY", config = cfg),
+    "?instType=EVENTS&instId=BTC-ABOVE-DAILY-260224-1600-65000&seriesId=BTC-ABOVE-DAILY"
   )
   expect_equal(
     okxr::get_account_subtypes(type = "1,2", config = cfg),
+    "?type=1%2C2"
+  )
+  expect_equal(
+    okxr::get_account_bill_types(type = "1,2", config = cfg),
     "?type=1%2C2"
   )
   expect_equal(
@@ -556,14 +585,18 @@ test_that("post_trade_order preserves supplied client order id", {
     ord_type = "market",
     sz = "1",
     cl_ord_id = "custom-id",
+    is_elp_taker_access = TRUE,
     rpi_taker_access = TRUE,
     rpi_px_round = "0.01",
+    slippage_pct = "0.01",
     config = cfg
   )
 
   expect_equal(body$clOrdId, "custom-id")
+  expect_equal(body$isElpTakerAccess, "true")
   expect_equal(body$rpiTakerAccess, "true")
   expect_equal(body$rpiPxRound, "0.01")
+  expect_equal(body$slippagePct, "0.01")
 })
 
 test_that("trade POST wrappers reject malformed identifier and batch inputs", {
@@ -720,10 +753,12 @@ test_that("trade POST wrappers build expected request bodies", {
     px = "2.15",
     sz = "2",
     reduce_only = TRUE,
+    slippage_pct = "0.02",
     config = cfg
   )
   expect_equal(precheck_body$reduceOnly, "true")
   expect_equal(precheck_body$ordType, "limit")
+  expect_equal(precheck_body$slippagePct, "0.02")
 
   order_algo_body <- okxr::post_trade_order_algo(
     inst_id = "BTC-USDT-SWAP",

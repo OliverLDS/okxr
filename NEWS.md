@@ -1,5 +1,14 @@
 # okxr news
 
+## okxr 0.4.7
+
+* Added event-contract public data wrappers for series, events, and markets,
+  plus MM instrument-type classification lookup.
+* Added remaining 2026 compatibility request parameters for instrument queries,
+  ELP access, spot-market slippage tolerance, and account bill-type lookup.
+* Expanded parser schemas for instrument metadata, order sub-codes, event
+  contract metadata, and newer trade/account response fields.
+
 ## okxr 0.4.6
 
 * Updated the default OKX REST host to `https://openapi.okx.com`.

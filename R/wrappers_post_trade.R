@@ -28,7 +28,8 @@
   outcome = NULL,
   is_elp_taker_access = NULL,
   rpi_taker_access = NULL,
-  rpi_px_round = NULL
+  rpi_px_round = NULL,
+  slippage_pct = NULL
 ) {
   .okx_compact_body(list(
     instId = inst_id,
@@ -54,7 +55,8 @@
     outcome = outcome,
     isElpTakerAccess = if (is.null(is_elp_taker_access)) NULL else tolower(as.character(is_elp_taker_access)),
     rpiTakerAccess = if (is.null(rpi_taker_access)) NULL else tolower(as.character(rpi_taker_access)),
-    rpiPxRound = rpi_px_round
+    rpiPxRound = rpi_px_round,
+    slippagePct = slippage_pct
   ))
 }
 
@@ -201,9 +203,13 @@
 #' @param tgt_ccy Optional. Quote currency (e.g., \code{"base"}, \code{"quote"}).
 #' @param cl_ord_id Optional. Custom client order ID (auto-generated if NULL).
 #' @param tag Optional. Tag used for identifying the strategy or bot.
+#' @param is_elp_taker_access Optional logical. Whether IOC orders may take ELP
+#'   liquidity.
 #' @param rpi_taker_access Optional logical. Whether the order can take RPI
 #'   liquidity.
 #' @param rpi_px_round Optional RPI price rounding mode.
+#' @param slippage_pct Optional maximum acceptable slippage for SPOT and margin
+#'   market orders.
 #' @param config A list with API credentials: \code{api_key}, \code{secret_key}, \code{passphrase}.
 #' @param tz Timezone for parsing any timestamps (default: \code{"Asia/Hong_Kong"}).
 #'
@@ -222,8 +228,10 @@ post_trade_order <- function(
   tgt_ccy = NULL,
   cl_ord_id = NULL,
   tag = NULL,
+  is_elp_taker_access = NULL,
   rpi_taker_access = NULL,
   rpi_px_round = NULL,
+  slippage_pct = NULL,
   config,
   tz = .okx_default_tz
 ) {
@@ -243,8 +251,10 @@ post_trade_order <- function(
     tgt_ccy = tgt_ccy,
     cl_ord_id = cl_ord_id,
     tag = tag,
+    is_elp_taker_access = is_elp_taker_access,
     rpi_taker_access = rpi_taker_access,
-    rpi_px_round = rpi_px_round
+    rpi_px_round = rpi_px_round,
+    slippage_pct = slippage_pct
   )
 
   .posts$trade_order(body_list = body_list, tz = tz, config = config)
@@ -462,12 +472,16 @@ post_trade_amend_batch_orders <- function(
 #' @param attach_algo_ords Optional attached TP/SL list.
 #' @param speed_bump Optional event-contract speed bump.
 #' @param outcome Optional event-contract outcome.
+#' @param is_elp_taker_access Optional logical. Whether IOC orders may take ELP
+#'   liquidity.
+#' @param slippage_pct Optional maximum acceptable slippage for SPOT and margin
+#'   market orders.
 #' @param config A list with API credentials.
 #' @param tz Timezone for parsing response timestamps.
 #'
 #' @return A `data.frame` with projected account metrics after the precheck.
 #' @export
-post_trade_order_precheck <- function(inst_id, td_mode, side, ord_type, sz, ccy = NULL, cl_ord_id = NULL, tag = NULL, pos_side = NULL, px = NULL, reduce_only = NULL, tgt_ccy = NULL, attach_algo_ords = NULL, speed_bump = NULL, outcome = NULL, config, tz = .okx_default_tz) {
+post_trade_order_precheck <- function(inst_id, td_mode, side, ord_type, sz, ccy = NULL, cl_ord_id = NULL, tag = NULL, pos_side = NULL, px = NULL, reduce_only = NULL, tgt_ccy = NULL, attach_algo_ords = NULL, speed_bump = NULL, outcome = NULL, is_elp_taker_access = NULL, slippage_pct = NULL, config, tz = .okx_default_tz) {
   body_list <- .okx_trade_order_body(
     inst_id = inst_id,
     td_mode = td_mode,
@@ -483,7 +497,9 @@ post_trade_order_precheck <- function(inst_id, td_mode, side, ord_type, sz, ccy 
     tgt_ccy = tgt_ccy,
     attach_algo_ords = attach_algo_ords,
     speed_bump = speed_bump,
-    outcome = outcome
+    outcome = outcome,
+    is_elp_taker_access = is_elp_taker_access,
+    slippage_pct = slippage_pct
   )
   .posts$trade_order_precheck(body_list = body_list, tz = tz, config = config)
 }
