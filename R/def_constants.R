@@ -146,8 +146,8 @@ set_okxr_options <- function(raw_data = NULL, timeout = NULL) {
     "expTime", "lever", "tickSz", "lotSz", "minSz", "ctType", "state",
     "alias", "ruleType", "instCategory", "seriesId", "maxPlatOILmt",
     "maxPlatOICoinLmt", "longPosRemainingQuota", "shortPosRemainingQuota",
-    "initPxLmtPct", "floatPxLmtPct", "maxPxLmtPct", "elp", "capStrike",
-    "hitDir"
+    "initPxLmtPct", "floatPxLmtPct", "maxPxLmtPct", "elp", "rpi",
+    "rpiMinLevel", "rpiMinPxBand", "preMktSwTime", "capStrike", "hitDir"
   ),
   formal = c(
     "Instrument type", "Instrument ID", "Underlying", "Instrument family",
@@ -161,7 +161,9 @@ set_okxr_options <- function(raw_data = NULL, timeout = NULL) {
     "Remaining long position opening quota",
     "Remaining short position opening quota", "Initial price-limit percentage",
     "Floating price-limit percentage", "Maximum price-limit percentage",
-    "ELP maker permission", "Event-contract cap strike",
+    "Deprecated ELP maker permission", "RPI maker permission",
+    "RPI minimum price-level spacing", "RPI minimum price-band spacing",
+    "Pre-market switch time", "Event-contract cap strike",
     "Event-contract hit direction"
   ),
   type = c(
@@ -169,7 +171,8 @@ set_okxr_options <- function(raw_data = NULL, timeout = NULL) {
     "numeric", "numeric", "string", "time", "string", "time", "numeric",
     "numeric", "numeric", "numeric", "string", "string", "string", "string",
     "string", "string", "numeric", "numeric", "numeric", "numeric",
-    "numeric", "numeric", "numeric", "string", "string", "string"
+    "numeric", "numeric", "numeric", "string", "string", "numeric",
+    "numeric", "time", "string", "string"
   ),
   stringsAsFactors = FALSE
 )
@@ -1057,9 +1060,9 @@ set_okxr_options <- function(raw_data = NULL, timeout = NULL) {
     okx_path = "/api/v5/account/trade-fee",
     parser_schema = data.frame(
       check.names = FALSE,
-      okx    = c("level", "feeGroup", "delivery", "exercise", "instType", "ts", "taker", "maker", "takerU", "makerU", "takerUSDC", "makerUSDC", "ruleType", "category", "fiat", "settle", "elpMaker"),
-      formal = c("Fee rate level", "Fee groups", "Delivery fee rate", "Exercise fee rate", "Instrument type", "Data return time", "Taker fee rate", "Maker fee rate", "USDT-margined taker fee rate", "USDT-margined maker fee rate", "USDC or USD stablecoin taker fee rate", "USDC or USD stablecoin maker fee rate", "Trading rule type", "Currency category", "Deprecated fiat fee detail", "Settlement fee rate", "ELP maker fee rate"),
-      type   = c("string", "string", "numeric", "numeric", "string", "time", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "string", "string", "string", "numeric", "numeric"),
+      okx    = c("level", "feeGroup", "delivery", "exercise", "instType", "ts", "taker", "maker", "takerU", "makerU", "takerUSDC", "makerUSDC", "ruleType", "category", "fiat", "settle", "elpMaker", "rpiMaker"),
+      formal = c("Fee rate level", "Fee groups", "Delivery fee rate", "Exercise fee rate", "Instrument type", "Data return time", "Taker fee rate", "Maker fee rate", "USDT-margined taker fee rate", "USDT-margined maker fee rate", "USDC or USD stablecoin taker fee rate", "USDC or USD stablecoin maker fee rate", "Trading rule type", "Currency category", "Deprecated fiat fee detail", "Settlement fee rate", "Deprecated ELP maker fee rate", "RPI maker fee rate"),
+      type   = c("string", "string", "numeric", "numeric", "string", "time", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "string", "string", "string", "numeric", "numeric", "numeric"),
       stringsAsFactors = FALSE
     ),
     parser_mode = "named"
@@ -2073,6 +2076,28 @@ set_okxr_options <- function(raw_data = NULL, timeout = NULL) {
 .api_GET_specs$trade_orders_algo_history <- list(
   okx_path = "/api/v5/trade/orders-algo-history",
   parser_schema = .trade_algo_schema,
+  parser_mode = "named"
+)
+
+.api_GET_specs$user_glp_today_performance <- list(
+  okx_path = "/api/v5/users/glp/today-performance",
+  parser_schema = data.frame(
+    okx = c("dataReady", "dataDate", "account", "programs"),
+    formal = c("Data ready", "Data snapshot date", "Account identity", "GLP program performance"),
+    type = c("logical", "string", "string", "string"),
+    stringsAsFactors = FALSE
+  ),
+  parser_mode = "named"
+)
+
+.api_GET_specs$user_glp_historical_performance <- list(
+  okx_path = "/api/v5/users/glp/historical-performance",
+  parser_schema = data.frame(
+    okx = c("date", "volume", "share"),
+    formal = c("Performance date", "GLP volume performance", "GLP market-share performance"),
+    type = c("string", "string", "string"),
+    stringsAsFactors = FALSE
+  ),
   parser_mode = "named"
 )
 

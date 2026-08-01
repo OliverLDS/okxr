@@ -9,7 +9,7 @@ copy trading, with shared request signing and schema-based response parsing.
 `okxr` is available on CRAN. Install the stable release from CRAN or use the
 GitHub repository for development versions between CRAN releases.
 
-Current development release: `v0.4.7`
+Current development release: `v0.4.8`
 
 ## Installation
 
@@ -148,6 +148,8 @@ get_copy_trade_current_subpos(config = config)
 | public | GET | `get_public_option_trades()` |
 | account | GET | `get_account_balance()` |
 | account | GET | `get_account_instruments()` |
+| user | GET | `get_user_glp_today_performance()` |
+| user | GET | `get_user_glp_historical_performance()` |
 | account | GET | `get_account_bill_types()` |
 | account | GET | `get_account_subtypes()` |
 | account | GET | `get_account_adjust_leverage_info()` |

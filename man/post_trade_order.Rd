@@ -47,13 +47,14 @@ post_trade_order(
 
 \item{tag}{Optional. Tag used for identifying the strategy or bot.}
 
-\item{is_elp_taker_access}{Optional logical. Whether IOC orders may take ELP
-liquidity.}
+\item{is_elp_taker_access}{Deprecated optional logical. Use
+`rpi_taker_access`; supplying both is an error.}
 
 \item{rpi_taker_access}{Optional logical. Whether the order can take RPI
 liquidity.}
 
-\item{rpi_px_round}{Optional RPI price rounding mode.}
+\item{rpi_px_round}{Optional logical. Whether an invalid RPI maker price is
+rounded to the nearest valid non-crossing price.}
 
 \item{slippage_pct}{Optional maximum acceptable slippage for SPOT and margin
 market orders.}

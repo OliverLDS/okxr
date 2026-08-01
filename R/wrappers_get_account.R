@@ -263,6 +263,55 @@ get_account_instruments <- function(inst_type, uly = NULL, inst_family = NULL, i
   .gets$account_instruments(query_string = query_string, config = config, tz = tz)
 }
 
+#' Get GLP performance for today
+#'
+#' Retrieve the current-day and month-to-date Global Liquidity Program (GLP)
+#' performance snapshot for the authenticated market-maker account.
+#'
+#' @param config List. API credentials/config with read permission.
+#' @param tz Character. Time zone for parsing response timestamps. Default
+#'   `"Asia/Hong_Kong"`.
+#'
+#' @return A `data.frame` with data availability and date fields. The nested
+#' `account` and `programs` API objects are retained as JSON strings.
+#'
+#' @export
+get_user_glp_today_performance <- function(config, tz = .okx_default_tz) {
+  .gets$user_glp_today_performance(query_string = "", config = config, tz = tz)
+}
+
+#' Get historical GLP performance
+#'
+#' Retrieve daily Global Liquidity Program (GLP) performance for one program.
+#'
+#' @param program Character. GLP program: `"SPOT"`, `"PERP"`, or `"FUT_NTO"`.
+#' @param begin Character or numeric. Optional inclusive Unix time in
+#'   milliseconds.
+#' @param end Character or numeric. Optional inclusive Unix time in
+#'   milliseconds.
+#' @param limit Integer or `NULL`. Optional maximum number of rows, up to 100.
+#' @param config List. API credentials/config with read permission.
+#' @param tz Character. Time zone for parsing response timestamps. Default
+#'   `"Asia/Hong_Kong"`.
+#'
+#' @return A `data.frame` with the GLP performance date. Nested `volume` and
+#' `share` objects are retained as JSON strings.
+#'
+#' @export
+get_user_glp_historical_performance <- function(program, begin = NULL, end = NULL, limit = NULL, config, tz = .okx_default_tz) {
+  query_string <- .okx_build_query(
+    program = program,
+    begin = begin,
+    end = end,
+    limit = limit
+  )
+  .gets$user_glp_historical_performance(
+    query_string = query_string,
+    config = config,
+    tz = tz
+  )
+}
+
 #' Get account and position risk snapshot
 #'
 #' Retrieve account-level adjusted equity together with same-snapshot balance

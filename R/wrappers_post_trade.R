@@ -31,6 +31,24 @@
   rpi_px_round = NULL,
   slippage_pct = NULL
 ) {
+  if (!is.null(is_elp_taker_access) && !is.null(rpi_taker_access)) {
+    stop(
+      "Supply only `rpi_taker_access`; `is_elp_taker_access` is deprecated.",
+      call. = FALSE
+    )
+  }
+  if (!is.null(is_elp_taker_access)) {
+    warning(
+      "`is_elp_taker_access` is deprecated; use `rpi_taker_access` instead.",
+      call. = FALSE
+    )
+  }
+  if (!is.null(speed_bump)) {
+    warning(
+      "`speed_bump` is deprecated and ignored by OKX; it will not be sent.",
+      call. = FALSE
+    )
+  }
   .okx_compact_body(list(
     instId = inst_id,
     tdMode = td_mode,
@@ -51,7 +69,7 @@
     attachAlgoOrds = attach_algo_ords,
     pxUsd = px_usd,
     pxVol = px_vol,
-    speedBump = speed_bump,
+    speedBump = NULL,
     outcome = outcome,
     isElpTakerAccess = if (is.null(is_elp_taker_access)) NULL else tolower(as.character(is_elp_taker_access)),
     rpiTakerAccess = if (is.null(rpi_taker_access)) NULL else tolower(as.character(rpi_taker_access)),
@@ -73,8 +91,15 @@
   px_amend_type = NULL,
   attach_algo_ords = NULL,
   speed_bump = NULL,
-  rpi_taker_access = NULL
+  rpi_taker_access = NULL,
+  rpi_px_round = NULL
 ) {
+  if (!is.null(speed_bump)) {
+    warning(
+      "`speed_bump` is deprecated and ignored by OKX; it will not be sent.",
+      call. = FALSE
+    )
+  }
   .okx_compact_body(list(
     instId = inst_id,
     ordId = ord_id,
@@ -87,8 +112,9 @@
     newPxVol = new_px_vol,
     pxAmendType = px_amend_type,
     attachAlgoOrds = attach_algo_ords,
-    speedBump = speed_bump,
-    rpiTakerAccess = if (is.null(rpi_taker_access)) NULL else tolower(as.character(rpi_taker_access))
+    speedBump = NULL,
+    rpiTakerAccess = if (is.null(rpi_taker_access)) NULL else tolower(as.character(rpi_taker_access)),
+    rpiPxRound = rpi_px_round
   ))
 }
 
@@ -112,6 +138,12 @@
 ) {
   if (identical(advance_ord_type, "chase") && is.null(adv_chase_params)) {
     stop("`adv_chase_params` is required when `advance_ord_type` is 'chase'.", call. = FALSE)
+  }
+  if (identical(advance_ord_type, "chase") && !is.list(adv_chase_params)) {
+    stop("`adv_chase_params` must be a list for chase algo orders.", call. = FALSE)
+  }
+  if (identical(advance_ord_type, "chase") && !is.null(order_px)) {
+    stop("`order_px` cannot be used with chase algo orders.", call. = FALSE)
   }
   if (identical(advance_ord_type, "chase") && !is.null(attach_algo_ords)) {
     stop("`attach_algo_ords` cannot be used with chase algo orders.", call. = FALSE)
@@ -203,11 +235,12 @@
 #' @param tgt_ccy Optional. Quote currency (e.g., \code{"base"}, \code{"quote"}).
 #' @param cl_ord_id Optional. Custom client order ID (auto-generated if NULL).
 #' @param tag Optional. Tag used for identifying the strategy or bot.
-#' @param is_elp_taker_access Optional logical. Whether IOC orders may take ELP
-#'   liquidity.
+#' @param is_elp_taker_access Deprecated optional logical. Use
+#'   `rpi_taker_access`; supplying both is an error.
 #' @param rpi_taker_access Optional logical. Whether the order can take RPI
 #'   liquidity.
-#' @param rpi_px_round Optional RPI price rounding mode.
+#' @param rpi_px_round Optional logical. Whether an invalid RPI maker price is
+#'   rounded to the nearest valid non-crossing price.
 #' @param slippage_pct Optional maximum acceptable slippage for SPOT and margin
 #'   market orders.
 #' @param config A list with API credentials: \code{api_key}, \code{secret_key}, \code{passphrase}.
@@ -376,15 +409,17 @@ post_trade_cancel_batch_orders <- function(
 #' @param new_px_vol Optional new option order implied volatility price.
 #' @param px_amend_type Optional price amendment mode.
 #' @param attach_algo_ords Optional attached TP/SL amendment list.
-#' @param speed_bump Optional event-contract speed bump.
+#' @param speed_bump Deprecated. Ignored by OKX and not sent by `okxr`.
 #' @param rpi_taker_access Optional logical. Whether the amended order can take
 #'   RPI liquidity.
+#' @param rpi_px_round Optional logical. Whether an invalid RPI maker price is
+#'   rounded to the nearest valid non-crossing price.
 #' @param config A list with API credentials.
 #' @param tz Timezone for parsing response timestamps.
 #'
 #' @return A `data.frame` describing the amendment request result.
 #' @export
-post_trade_amend_order <- function(inst_id, ord_id = NULL, cl_ord_id = NULL, req_id = NULL, new_sz = NULL, new_px = NULL, cxl_on_fail = NULL, new_px_usd = NULL, new_px_vol = NULL, px_amend_type = NULL, attach_algo_ords = NULL, speed_bump = NULL, rpi_taker_access = NULL, config, tz = .okx_default_tz) {
+post_trade_amend_order <- function(inst_id, ord_id = NULL, cl_ord_id = NULL, req_id = NULL, new_sz = NULL, new_px = NULL, cxl_on_fail = NULL, new_px_usd = NULL, new_px_vol = NULL, px_amend_type = NULL, attach_algo_ords = NULL, speed_bump = NULL, rpi_taker_access = NULL, rpi_px_round = NULL, config, tz = .okx_default_tz) {
   .okx_assert_exactly_one_present(ord_id, cl_ord_id, names = c("ord_id", "cl_ord_id"))
   .okx_assert_any_field_present(
     list(
@@ -396,9 +431,10 @@ post_trade_amend_order <- function(inst_id, ord_id = NULL, cl_ord_id = NULL, req
       px_amend_type = px_amend_type,
       attach_algo_ords = attach_algo_ords,
       speed_bump = speed_bump,
-      rpi_taker_access = rpi_taker_access
+      rpi_taker_access = rpi_taker_access,
+      rpi_px_round = rpi_px_round
     ),
-    c("new_sz", "new_px", "cxl_on_fail", "new_px_usd", "new_px_vol", "px_amend_type", "attach_algo_ords", "speed_bump", "rpi_taker_access"),
+    c("new_sz", "new_px", "cxl_on_fail", "new_px_usd", "new_px_vol", "px_amend_type", "attach_algo_ords", "speed_bump", "rpi_taker_access", "rpi_px_round"),
     "amendment request"
   )
   body_list <- .okx_trade_amend_body(
@@ -414,7 +450,8 @@ post_trade_amend_order <- function(inst_id, ord_id = NULL, cl_ord_id = NULL, req
     px_amend_type = px_amend_type,
     attach_algo_ords = attach_algo_ords,
     speed_bump = speed_bump,
-    rpi_taker_access = rpi_taker_access
+    rpi_taker_access = rpi_taker_access,
+    rpi_px_round = rpi_px_round
   )
   .posts$trade_amend_order(body_list = body_list, tz = tz, config = config)
 }
@@ -444,7 +481,7 @@ post_trade_amend_batch_orders <- function(
       .okx_assert_exactly_one_present(order$ord_id, order$cl_ord_id, names = c("ord_id", "cl_ord_id"))
       .okx_assert_any_field_present(
         order,
-        c("new_sz", "new_px", "cxl_on_fail", "new_px_usd", "new_px_vol", "px_amend_type", "attach_algo_ords", "speed_bump", "rpi_taker_access"),
+        c("new_sz", "new_px", "cxl_on_fail", "new_px_usd", "new_px_vol", "px_amend_type", "attach_algo_ords", "speed_bump", "rpi_taker_access", "rpi_px_round"),
         paste0("orders[[", i, "]]")
       )
       do.call(.okx_trade_amend_body, order)
@@ -470,10 +507,10 @@ post_trade_amend_batch_orders <- function(
 #' @param reduce_only Optional logical reduce-only flag.
 #' @param tgt_ccy Optional target currency mode.
 #' @param attach_algo_ords Optional attached TP/SL list.
-#' @param speed_bump Optional event-contract speed bump.
+#' @param speed_bump Deprecated. Ignored by OKX and not sent by `okxr`.
 #' @param outcome Optional event-contract outcome.
-#' @param is_elp_taker_access Optional logical. Whether IOC orders may take ELP
-#'   liquidity.
+#' @param is_elp_taker_access Deprecated optional logical. The RPI access
+#'   parameter does not apply to this endpoint.
 #' @param slippage_pct Optional maximum acceptable slippage for SPOT and margin
 #'   market orders.
 #' @param config A list with API credentials.
@@ -523,7 +560,9 @@ post_trade_order_precheck <- function(inst_id, td_mode, side, ord_type, sz, ccy 
 #' @param trigger_px_type Optional trigger price type.
 #' @param advance_ord_type Optional advanced order type, e.g. `"chase"`.
 #' @param adv_chase_params Optional list of chase-order parameters required
-#'   when `advance_ord_type = "chase"`.
+#'   when `advance_ord_type = "chase"`. Use the OKX field names such as
+#'   `chaseType`, `chaseVal`, `maxChaseType`, and `maxChaseVal`; the maximum
+#'   chase fields must be supplied together.
 #' @param attach_algo_ords Optional attached TP/SL list. Not valid with chase
 #'   algo orders.
 #' @param config A list with API credentials.

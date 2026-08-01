@@ -53,6 +53,8 @@ test_that("GET wrappers build expected query strings", {
       account_max_size = function(query_string, config, tz) query_string,
       account_max_avail_size = function(query_string, config, tz) query_string,
       account_trade_fee = function(query_string, config, tz) query_string,
+      user_glp_today_performance = function(query_string, config, tz) query_string,
+      user_glp_historical_performance = function(query_string, config, tz) query_string,
       account_interest_rate = function(query_string, config, tz) query_string,
       account_interest_accrued = function(query_string, config, tz) query_string,
       account_max_withdrawal = function(query_string, config, tz) query_string,
@@ -380,6 +382,16 @@ test_that("GET wrappers build expected query strings", {
     "?instType=SPOT&instId=BTC-USDT"
   )
   expect_equal(
+    okxr::get_user_glp_today_performance(config = cfg),
+    ""
+  )
+  expect_equal(
+    okxr::get_user_glp_historical_performance(
+      program = "SPOT", begin = "1", end = "2", limit = 31, config = cfg
+    ),
+    "?program=SPOT&begin=1&end=2&limit=31"
+  )
+  expect_equal(
     okxr::get_account_interest_rate(ccy = "BTC", config = cfg),
     "?ccy=BTC"
   )
@@ -585,18 +597,47 @@ test_that("post_trade_order preserves supplied client order id", {
     ord_type = "market",
     sz = "1",
     cl_ord_id = "custom-id",
-    is_elp_taker_access = TRUE,
     rpi_taker_access = TRUE,
-    rpi_px_round = "0.01",
+    rpi_px_round = TRUE,
     slippage_pct = "0.01",
     config = cfg
   )
 
   expect_equal(body$clOrdId, "custom-id")
-  expect_equal(body$isElpTakerAccess, "true")
   expect_equal(body$rpiTakerAccess, "true")
-  expect_equal(body$rpiPxRound, "0.01")
+  expect_true(body$rpiPxRound)
   expect_equal(body$slippagePct, "0.01")
+})
+
+test_that("trade wrappers enforce RPI migration rules", {
+  cfg <- list(api_key = "key", secret_key = "secret", passphrase = "pass")
+
+  expect_error(
+    okxr::post_trade_order(
+      inst_id = "BTC-USDT", td_mode = "cash", side = "buy", ord_type = "limit",
+      sz = "1", px = "1", is_elp_taker_access = TRUE,
+      rpi_taker_access = TRUE, config = cfg
+    ),
+    "Supply only `rpi_taker_access`"
+  )
+  expect_warning(
+    body <- okxr:::.okx_trade_amend_body(
+      inst_id = "BTC-USDT", ord_id = "1", speed_bump = "1"
+    ),
+    "deprecated and ignored"
+  )
+  expect_false("speedBump" %in% names(body))
+})
+
+test_that("chase algo orders reject fixed execution prices", {
+  expect_error(
+    okxr:::.okx_trade_order_algo_body(
+      inst_id = "BTC-USDT-SWAP", td_mode = "cross", side = "buy",
+      ord_type = "trigger", trigger_px = "1", order_px = "1",
+      advance_ord_type = "chase", adv_chase_params = list(chaseType = "distance")
+    ),
+    "`order_px` cannot be used"
+  )
 })
 
 test_that("trade POST wrappers reject malformed identifier and batch inputs", {
@@ -728,22 +769,25 @@ test_that("trade POST wrappers build expected request bodies", {
     new_sz = "2",
     cxl_on_fail = TRUE,
     rpi_taker_access = TRUE,
+    rpi_px_round = TRUE,
     config = cfg
   )
   expect_equal(amend_body$reqId, "amend-1")
   expect_equal(amend_body$cxlOnFail, "true")
   expect_equal(amend_body$rpiTakerAccess, "true")
+  expect_true(amend_body$rpiPxRound)
 
   amend_batch_body <- okxr::post_trade_amend_batch_orders(
     orders = list(
       list(inst_id = "BTC-USDT", ord_id = "123", new_sz = "2"),
-      list(inst_id = "BTC-USDT", cl_ord_id = "client-2", new_px = "2.20", rpi_taker_access = FALSE)
+      list(inst_id = "BTC-USDT", cl_ord_id = "client-2", new_px = "2.20", rpi_taker_access = FALSE, rpi_px_round = TRUE)
     ),
     config = cfg
   )
   expect_equal(amend_batch_body[[1]]$newSz, "2")
   expect_equal(amend_batch_body[[2]]$newPx, "2.20")
   expect_equal(amend_batch_body[[2]]$rpiTakerAccess, "false")
+  expect_true(amend_batch_body[[2]]$rpiPxRound)
 
   precheck_body <- okxr::post_trade_order_precheck(
     inst_id = "BTC-USDT",

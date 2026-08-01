@@ -1,5 +1,15 @@
 # okxr news
 
+## okxr 0.4.8
+
+* Added authenticated GLP performance wrappers for current and historical
+  market-maker performance.
+* Updated schemas for the RPI migration: RPI permissions, spacing thresholds,
+  fee rates, and pre-market X-Perp switch times are now retained.
+* Deprecated legacy ELP taker access and the ignored `speed_bump` argument.
+  Requests now reject simultaneous ELP and RPI taker-access fields.
+* Clarified chase-order parameter requirements in the exported documentation.
+
 ## okxr 0.4.7
 
 * Added event-contract public data wrappers for series, events, and markets,

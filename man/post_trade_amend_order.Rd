@@ -18,6 +18,7 @@ post_trade_amend_order(
   attach_algo_ords = NULL,
   speed_bump = NULL,
   rpi_taker_access = NULL,
+  rpi_px_round = NULL,
   config,
   tz = .okx_default_tz
 )
@@ -46,10 +47,13 @@ amendment fails.}
 
 \item{attach_algo_ords}{Optional attached TP/SL amendment list.}
 
-\item{speed_bump}{Optional event-contract speed bump.}
+\item{speed_bump}{Deprecated. Ignored by OKX and not sent by `okxr`.}
 
 \item{rpi_taker_access}{Optional logical. Whether the amended order can take
 RPI liquidity.}
+
+\item{rpi_px_round}{Optional logical. Whether an invalid RPI maker price is
+rounded to the nearest valid non-crossing price.}
 
 \item{config}{A list with API credentials.}
 

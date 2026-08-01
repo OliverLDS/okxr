@@ -55,7 +55,9 @@ post_trade_order_algo(
 \item{advance_ord_type}{Optional advanced order type, e.g. `"chase"`.}
 
 \item{adv_chase_params}{Optional list of chase-order parameters required
-when `advance_ord_type = "chase"`.}
+when `advance_ord_type = "chase"`. Use the OKX field names such as
+`chaseType`, `chaseVal`, `maxChaseType`, and `maxChaseVal`; the maximum
+chase fields must be supplied together.}
 
 \item{attach_algo_ords}{Optional attached TP/SL list. Not valid with chase
 algo orders.}

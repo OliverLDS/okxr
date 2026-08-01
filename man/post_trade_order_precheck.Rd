@@ -53,12 +53,12 @@ post_trade_order_precheck(
 
 \item{attach_algo_ords}{Optional attached TP/SL list.}
 
-\item{speed_bump}{Optional event-contract speed bump.}
+\item{speed_bump}{Deprecated. Ignored by OKX and not sent by `okxr`.}
 
 \item{outcome}{Optional event-contract outcome.}
 
-\item{is_elp_taker_access}{Optional logical. Whether IOC orders may take ELP
-liquidity.}
+\item{is_elp_taker_access}{Deprecated optional logical. The RPI access
+parameter does not apply to this endpoint.}
 
 \item{slippage_pct}{Optional maximum acceptable slippage for SPOT and margin
 market orders.}

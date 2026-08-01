@@ -88,3 +88,8 @@ test_that(".make_parser keeps missing fields as typed missing values", {
   expect_true(is.na(parsed$data_dt$count))
   expect_true(is.na(parsed$data_dt$name))
 })
+
+test_that("current instrument and fee schemas retain RPI fields", {
+  expect_true(all(c("rpi", "rpiMinLevel", "rpiMinPxBand", "preMktSwTime") %in% okxr:::.instrument_schema$okx))
+  expect_true("rpiMaker" %in% okxr:::.api_GET_specs$account_trade_fee$parser_schema$okx)
+})

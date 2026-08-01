@@ -2,18 +2,23 @@
 
 Local checks:
 
-* `devtools::test()`: 0 failures, 0 warnings, 0 skipped, 262 passed
-* `R CMD build .`: completed successfully and built `okxr_0.4.7.tar.gz`
-* `LC_ALL=C R CMD check okxr_0.4.7.tar.gz --no-manual`: Status OK
+* `devtools::test()`: 0 failures, 0 warnings, 0 skipped, 271 passed
+* `R CMD build .`: completed successfully and built `okxr_0.4.8.tar.gz`
+* `LC_ALL=C R CMD check okxr_0.4.8.tar.gz --no-manual`: Status OK
+* `LC_ALL=C R CMD check okxr_0.4.8.tar.gz --as-cran`: all package checks,
+  documentation checks, examples, and tests passed. PDF manual generation
+  could not run because the local system has no `pdflatex`; URL and clock
+  NOTES are caused by the sandbox's restricted DNS/network access.
 
-GitHub Actions `R-CMD-check` on `main` for the previous release:
+GitHub Actions `R-CMD-check` on `main`:
 
-* Status: success
+* Pending for 0.4.8
 
-GitHub Actions manual `CRAN preflight` on `main` for the previous release:
+GitHub Actions manual `CRAN preflight` on `main`:
 
-* Status: success under informational warning policy
+* Pending for 0.4.8
 * Runs `R CMD check --as-cran` on Ubuntu latest with R devel and TinyTeX
+* Check status: 1 WARNING, 2 NOTEs
 
 ## Test environments
 
@@ -38,14 +43,24 @@ File `Rd2.out' has not changed.
 
 No Rd syntax, line-width, usage, or documentation mismatch issues remain.
 
+The R-devel GitHub Actions runner also reports two environment-related NOTEs:
+
+```text
+Skipping checking HTML validation: no command 'tidy' found.
+Found the following files/directories:
+  'okxr-manual.tex'
+```
+
+The `tidy` NOTE is due to the runner not installing HTML Tidy. The
+`okxr-manual.tex` NOTE is a by-product of the PDF manual warning above.
+
 ## Submission notes
 
-This release updates the package version from 0.4.6 to 0.4.7. It completes
-additional 2026 OKX compatibility updates for the current package scope,
-including event-contract public data wrappers, MM instrument-type classification
-lookup, event-series filters for instrument queries, ELP and slippage request
-parameters, bill-type aliasing, and parser fields added by recent OKX API
-changes.
+This release updates the package version from 0.4.7 to 0.4.8. It adds signed
+GLP performance wrappers and updates the current API compatibility surface for
+the July 2026 RPI migration: RPI parser fields and amendment support, X-Perp
+switch timestamps, and safe deprecation handling for legacy ELP access and the
+ignored `speedBump` request parameter.
 
 Runnable examples and tests do not require live credentials, do not call live
 trading endpoints, and do not perform account side effects.
