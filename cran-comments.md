@@ -12,11 +12,15 @@ Local checks:
 
 GitHub Actions `R-CMD-check` on `main`:
 
-* Pending for 0.4.8
+* Status: success
+* Run: 30701670257
+* Commit: cb9d419 (`release: v0.4.8`)
 
 GitHub Actions manual `CRAN preflight` on `main`:
 
-* Pending for 0.4.8
+* Workflow status: success
+* Run: 30701671507
+* Commit: cb9d419 (`release: v0.4.8`)
 * Runs `R CMD check --as-cran` on Ubuntu latest with R devel and TinyTeX
 * Check status: 1 WARNING, 2 NOTEs
 
@@ -29,7 +33,10 @@ GitHub Actions manual `CRAN preflight` on `main`:
 
 ## Known PDF manual diagnostic
 
-R-devel GitHub Actions shows a PDF manual warning from `rerunfilecheck`:
+The CRAN preflight retains a PDF manual warning, while the same run's manual
+without index is successful. The workflow log does not retain the detailed
+LaTeX output as an artifact. A previous R-devel preflight identified the
+warning as `rerunfilecheck` output:
 
 ```text
 File `Rd2.out' has changed. Rerun to get outlines right.
