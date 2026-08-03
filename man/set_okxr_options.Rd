@@ -4,7 +4,12 @@
 \alias{set_okxr_options}
 \title{Set or get okxr options}
 \usage{
-set_okxr_options(raw_data = NULL, timeout = NULL)
+set_okxr_options(
+  raw_data = NULL,
+  timeout = NULL,
+  max_retries = NULL,
+  retry_base_delay = NULL
+)
 }
 \arguments{
 \item{raw_data}{Logical. If `TRUE`, return raw API `data`.
@@ -12,15 +17,22 @@ If `NULL`, the current value is left unchanged.}
 
 \item{timeout}{Numeric. HTTP request timeout in seconds. If `NULL`, the
 current value is left unchanged.}
+
+\item{max_retries}{Non-negative integer. Number of retries for HTTP 429 and
+5xx responses, or transient transport failures. Defaults to `0`.}
+
+\item{retry_base_delay}{Non-negative numeric. Initial retry delay in seconds;
+subsequent retries use exponential backoff. Defaults to `1`.}
 }
 \value{
 An invisible named list with the current package options:
-  `raw_data` (logical) and `timeout` (numeric seconds). This return value
+  `raw_data` (logical), `timeout` (numeric seconds), `max_retries`, and
+  `retry_base_delay`. This return value
   can be used to inspect the effective option state after updating it.
 }
 \description{
 Convenience wrapper to set global options for okxr, such as whether to
-return raw data instead of parsed data.
+return raw data instead of parsed data and retry transient requests.
 }
 \examples{
 old <- getOption("okxr.raw_data")

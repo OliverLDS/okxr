@@ -14,7 +14,7 @@
 #' }
 #' @keywords internal
 .make_get_function <- function(api) {
-  parser <- .make_parser(api$parser_schema, mode = api$parser_mode %||% "named")
+  parser <- .make_parser(api$parser_schema, mode = api$parser_mode %||% "named", endpoint = api$okx_path)
   auth <- api$auth %||% TRUE
 
   function(query_string, tz, config, raw_data = getOption("okxr.raw_data", FALSE)) {

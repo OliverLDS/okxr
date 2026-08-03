@@ -1,0 +1,21 @@
+{
+  "reviewed_at": "2026-08-03",
+  "source": "https://www.okx.com/docs-v5/log_en/",
+  "changes": [
+    {
+      "date": "2026-07-28",
+      "identifier": "rpi-migration",
+      "required_fields": ["rpi", "rpiMinLevel", "rpiMinPxBand", "rpiMaker"]
+    },
+    {
+      "date": "2026-07-23",
+      "identifier": "glp-performance",
+      "required_endpoints": ["user_glp_today_performance", "user_glp_historical_performance"]
+    },
+    {
+      "date": "2026-07-16",
+      "identifier": "pre-market-xperp",
+      "required_fields": ["preMktSwTime"]
+    }
+  ]
+}

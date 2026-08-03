@@ -69,6 +69,12 @@ test_that(".okx_request_timeout validates timeout sources", {
   expect_error(okxr:::.okx_request_timeout(list(timeout = "bad")), "positive")
 })
 
+test_that("retry settings validate option and config values", {
+  expect_equal(okxr:::.okx_retry_settings(list(max_retries = 2, retry_base_delay = 0.5)), list(max_retries = 2L, retry_base_delay = 0.5))
+  expect_error(okxr:::.okx_retry_settings(list(max_retries = -1)), "non-negative integer")
+  expect_error(okxr:::.okx_retry_settings(list(retry_base_delay = -1)), "non-negative number")
+})
+
 test_that(".build_request can build unsigned public requests without config", {
   req <- okxr:::.build_request(
     httr_method = "GET",
@@ -105,19 +111,40 @@ test_that(".execute_get_action handles unsigned success, HTTP error, and request
     GET = function(url, ...) mock_http_response(status_code = 500L),
     .package = "httr"
   )
-  expect_warning(
-    expect_null(okxr:::.execute_get_action("/api/v5/public/time", "", auth = FALSE)),
-    "Request failed: 500"
+  error <- expect_error(
+    okxr:::.execute_get_action("/api/v5/public/time", "", auth = FALSE),
+    class = "okxr_api_error"
   )
+  expect_equal(error$status_code, 500L)
+  expect_equal(error$endpoint, "/api/v5/public/time")
 
   testthat::local_mocked_bindings(
     GET = function(url, ...) stop("timeout"),
     .package = "httr"
   )
-  expect_warning(
-    expect_null(okxr:::.execute_get_action("/api/v5/public/time", "", auth = FALSE)),
-    "timeout"
+  error <- expect_error(okxr:::.execute_get_action("/api/v5/public/time", "", auth = FALSE), class = "okxr_api_error")
+  expect_equal(error$error_type, "network")
+  expect_match(error$okx_msg, "timeout")
+})
+
+test_that("GET retries transient responses and respects Retry-After", {
+  calls <- 0L
+  testthat::local_mocked_bindings(
+    GET = function(url, ...) {
+      calls <<- calls + 1L
+      if (calls == 1L) return(mock_http_response(429L, headers = list(`retry-after` = "0")))
+      mock_http_response()
+    },
+    .package = "httr"
   )
+
+  res <- okxr:::.execute_get_action(
+    "/api/v5/public/time", "", auth = FALSE,
+    config = list(max_retries = 1, retry_base_delay = 0)
+  )
+  expect_s3_class(res, "response")
+  expect_equal(calls, 2L)
+  expect_equal(okxr:::.okx_retry_after(mock_http_response(429L, headers = list(`retry-after` = "3"))), 3)
 })
 
 test_that(".execute_get_action validates credentials for private requests before HTTP", {
@@ -156,17 +183,19 @@ test_that(".execute_post_action handles success, HTTP error, and request error",
     POST = function(url, ..., body = NULL, encode = NULL) mock_http_response(status_code = 429L),
     .package = "httr"
   )
-  expect_warning(
-    expect_null(okxr:::.execute_post_action("/api/v5/trade/order", list(), cfg)),
-    "Request failed: 429"
+  error <- expect_error(
+    okxr:::.execute_post_action("/api/v5/trade/order", list(), cfg),
+    class = "okxr_api_error"
   )
+  expect_equal(error$status_code, 429L)
 
   testthat::local_mocked_bindings(
     POST = function(url, ..., body = NULL, encode = NULL) stop("connection failed"),
     .package = "httr"
   )
-  expect_warning(
-    expect_null(okxr:::.execute_post_action("/api/v5/trade/order", list(), cfg)),
-    "connection failed"
+  error <- expect_error(
+    okxr:::.execute_post_action("/api/v5/trade/order", list(), cfg),
+    class = "okxr_api_error"
   )
+  expect_match(error$okx_msg, "connection failed")
 })

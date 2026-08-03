@@ -1,5 +1,22 @@
 # okxr news
 
+## okxr 0.5.0
+
+* Added structured `okxr_api_error` conditions for transport, HTTP, API, and
+  response-parsing failures, preserving the endpoint, HTTP status, OKX code,
+  OKX message, and request ID where available.
+* **Breaking change:** failed requests now raise `okxr_api_error` instead of
+  warning and returning `NULL`. Use `tryCatch(..., okxr_api_error = ...)` when
+  callers need to handle a failed request and continue.
+* Added opt-in retry/backoff controls for transient request failures and HTTP
+  rate limits, including support for the `Retry-After` response header.
+* Added `okx_paginate()` for cursor-based GET wrappers with duplicate removal
+  and non-advancing cursor protection.
+* Named parser responses now retain unknown API fields in an `extra` JSON
+  column, reducing schema drift between OKX API releases and package updates.
+* CRAN preflight now uploads its complete `okxr.Rcheck` directory. Added an
+  OKX changelog review checklist and a July 2026 compatibility fixture.
+
 ## okxr 0.4.8
 
 * Added authenticated GLP performance wrappers for current and historical

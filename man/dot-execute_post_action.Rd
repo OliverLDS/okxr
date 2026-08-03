@@ -14,7 +14,7 @@
 \item{config}{List with API credentials.}
 }
 \value{
-An `httr` response object, or `NULL` if the request fails.
+An `httr` response object. Failures raise an `okxr_api_error`.
 }
 \description{
 Perform a signed POST call to the OKX API.

@@ -1,4 +1,4 @@
-mock_okx_response <- function(data, code = "0", msg = "") {
+mock_okx_response <- function(data, code = "0", msg = "", headers = list()) {
   body <- jsonlite::toJSON(
     list(code = code, msg = msg, data = data),
     auto_unbox = TRUE,
@@ -9,8 +9,8 @@ mock_okx_response <- function(data, code = "0", msg = "") {
     list(
       url = "https://www.okx.com/mock",
       status_code = 200L,
-      headers = list(`content-type` = "application/json"),
-      all_headers = list(list(headers = list(`content-type` = "application/json"))),
+      headers = c(list(`content-type` = "application/json"), headers),
+      all_headers = list(list(headers = c(list(`content-type` = "application/json"), headers))),
       cookies = data.frame(),
       content = charToRaw(body),
       date = Sys.time(),
@@ -20,13 +20,13 @@ mock_okx_response <- function(data, code = "0", msg = "") {
   )
 }
 
-mock_http_response <- function(status_code = 200L, body = list(code = "0", msg = "", data = list())) {
+mock_http_response <- function(status_code = 200L, body = list(code = "0", msg = "", data = list()), headers = list()) {
   structure(
     list(
       url = "https://www.okx.com/mock",
       status_code = status_code,
-      headers = list(`content-type` = "application/json"),
-      all_headers = list(list(headers = list(`content-type` = "application/json"))),
+      headers = c(list(`content-type` = "application/json"), headers),
+      all_headers = list(list(headers = c(list(`content-type` = "application/json"), headers))),
       cookies = data.frame(),
       content = charToRaw(jsonlite::toJSON(body, auto_unbox = TRUE, null = "null")),
       date = Sys.time(),

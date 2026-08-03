@@ -14,7 +14,7 @@
 #' }
 #' @keywords internal
 .make_post_function <- function(api) {
-  parser <- .make_parser(api$parser_schema, mode = api$parser_mode %||% "named")
+  parser <- .make_parser(api$parser_schema, mode = api$parser_mode %||% "named", endpoint = api$okx_path)
 
   function(body_list, tz, config, raw_data = getOption("okxr.raw_data", FALSE)) {
     res <- .execute_post_action(api$okx_path, body_list, config)

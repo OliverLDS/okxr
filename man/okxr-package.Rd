@@ -23,10 +23,12 @@ header. Request timeout defaults to 10 seconds and can be set globally with
 By default, wrappers return parsed `data.table` objects. Use
 `set_okxr_options(raw_data = TRUE)` to return raw API `data` payloads instead.
 
-Network failures, request timeouts, OKX error responses, or empty API `data`
-payloads may return `NULL` with a warning. Live API examples are intentionally
-non-running because they require credentials, network access, and may have
-account-specific side effects.
+Empty API `data` payloads return `NULL`. Network failures, HTTP failures, and
+OKX error responses raise an `okxr_api_error` condition with `status_code`,
+`okx_code`, `okx_msg`, `endpoint`, and `request_id` fields. Retry support is
+opt-in through `set_okxr_options(max_retries = ...)` or per-request config.
+Live API examples are intentionally non-running because they require
+credentials, network access, and may have account-specific side effects.
 }
 \seealso{
 [set_okxr_options()], [get_market_candles()], [post_trade_order()]

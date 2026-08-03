@@ -11,6 +11,7 @@
 #'   and logical.
 #' @param mode Parser mode: \code{"named"}, \code{"positional"}, or
 #'   \code{"vector"}.
+#' @param endpoint Character endpoint path recorded on API error conditions.
 #'
 #' @return A function with signature \code{function(res, tz)} where:
 #'   \describe{
@@ -20,10 +21,11 @@
 #'       are converted with \code{as.POSIXct()}.}
 #'   }
 #'   The returned parser yields a \code{data.table} with column names from
-#'   \code{schema$okx} and attaches variable labels as
+#'   \code{schema$okx}, plus an \code{extra} JSON column for unrecognised named
+#'   response fields, and attaches variable labels as
 #'   \code{attr(DT, "var_labels")} (a named character vector \code{formal} by \code{okx}).
-#'   Returns \code{NULL} if the API \code{code} is not \code{"0"} or if \code{$data}
-#'   is empty.
+#'   Returns \code{NULL} if \code{$data} is empty. API and parsing failures
+#'   raise an \code{okxr_api_error} condition.
 #'
 #' @details
 #' \itemize{
@@ -39,13 +41,13 @@
 #'   \item \strong{Attributes}: \code{attr(DT, "var_labels")} maps \code{okx} to \code{formal}.
 #' }
 #'
-#' @section Errors & warnings:
-#' If \code{parsed$code != "0"}, a warning with \code{parsed$msg} is emitted and
-#' \code{NULL} is returned.
+#' @section Errors:
+#' If \code{parsed$code != "0"}, an \code{okxr_api_error} condition preserves
+#' the HTTP status, OKX code and message, endpoint, and request ID.
 #' @importFrom httr content
 #' @importFrom data.table as.data.table
 #' @keywords internal
-.make_parser <- function(schema, mode = c("named", "positional", "vector")) {
+.make_parser <- function(schema, mode = c("named", "positional", "vector"), endpoint = NA_character_) {
   mode <- match.arg(mode)
 
   function(res, tz) {
@@ -53,20 +55,36 @@
       return(NULL)
     }
 
-    parsed <- tryCatch(
-      httr::content(res, as = "parsed", type = "application/json"),
-      error = function(err) {
-        warning("Response parsing failed: ", conditionMessage(err), call. = FALSE)
-        NULL
-      }
-    )
-    if (is.null(parsed)) {
-      return(NULL)
+    parsed <- tryCatch(httr::content(res, as = "parsed", type = "application/json"), error = identity)
+    if (inherits(parsed, "error")) {
+      .okx_abort_api_error(
+        endpoint = endpoint,
+        status_code = httr::status_code(res),
+        okx_msg = paste0("Response parsing failed: ", conditionMessage(parsed)),
+        request_id = .okx_response_header(res, c("x-request-id", "request-id")),
+        error_type = "parsing",
+        parent = parsed
+      )
     }
 
-    if (parsed$code != "0") {
-      warning("Request failed: ", parsed$msg %||% "unknown OKX API error", call. = FALSE)
-      return(NULL)
+    if (!is.list(parsed) || is.null(parsed$code)) {
+      .okx_abort_api_error(
+        endpoint = endpoint,
+        status_code = httr::status_code(res),
+        okx_msg = "Response parsing failed: missing OKX response code.",
+        request_id = .okx_response_header(res, c("x-request-id", "request-id")),
+        error_type = "parsing"
+      )
+    }
+
+    if (!identical(as.character(parsed$code), "0")) {
+      .okx_abort_api_error(
+        endpoint = endpoint,
+        status_code = httr::status_code(res),
+        okx_code = as.character(parsed$code),
+        okx_msg = parsed$msg %||% "unknown OKX API error",
+        request_id = .okx_response_header(res, c("x-request-id", "request-id"))
+      )
     }
 
     data_list <- parsed$data
@@ -166,9 +184,22 @@
     }
 
     cols <- stats::setNames(lapply(seq_along(okx_keys), .extract_column), okx_keys)
+    if (mode == "named") {
+      cols$extra <- vapply(
+        data_list,
+        function(entry) {
+          unknown <- entry[setdiff(names(entry), okx_keys)]
+          if (length(unknown) == 0L) return(NA_character_)
+          as.character(jsonlite::toJSON(unknown, auto_unbox = TRUE, null = "null"))
+        },
+        character(1)
+      )
+    }
     DT <- data.table::as.data.table(cols)
 
-    attr(DT, "var_labels") <- stats::setNames(col_names, okx_keys)
+    labels <- stats::setNames(col_names, okx_keys)
+    if (mode == "named") labels <- c(labels, extra = "Unrecognised OKX response fields (JSON)")
+    attr(DT, "var_labels") <- labels
     list(
       data_raw = data_list,
       data_dt = DT

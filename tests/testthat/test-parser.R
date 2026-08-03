@@ -48,17 +48,20 @@ test_that(".make_parser handles API failures, empty data, and list-valued fields
   )
   parser <- okxr:::.make_parser(schema, mode = "named")
 
-  expect_warning(
-    expect_null(parser(mock_okx_response(list(), code = "51000", msg = "bad"), tz = "UTC")),
-    "bad"
+  error <- expect_error(
+    parser(mock_okx_response(list(), code = "51000", msg = "bad", headers = list(`x-request-id` = "req-1")), tz = "UTC"),
+    class = "okxr_api_error"
   )
+  expect_equal(error$okx_code, "51000")
+  expect_equal(error$okx_msg, "bad")
+  expect_equal(error$request_id, "req-1")
   expect_null(parser(mock_okx_response(list()), tz = "UTC"))
 
   parsed <- parser(mock_okx_response(list(list(asks = list(list("1", "2"))))), tz = "UTC")
   expect_match(parsed$data_dt$asks, "\\[")
 })
 
-test_that(".make_parser warns and returns NULL for malformed responses", {
+test_that(".make_parser raises a structured error for malformed responses", {
   schema <- data.frame(
     okx = "px",
     formal = "Price",
@@ -67,10 +70,9 @@ test_that(".make_parser warns and returns NULL for malformed responses", {
   )
   parser <- okxr:::.make_parser(schema, mode = "named")
 
-  expect_warning(
-    expect_null(parser(mock_text_response("{not-json"), tz = "UTC")),
-    "Response parsing failed"
-  )
+  error <- expect_error(parser(mock_text_response("{not-json"), tz = "UTC"), class = "okxr_api_error")
+  expect_equal(error$error_type, "parsing")
+  expect_match(error$okx_msg, "Response parsing failed")
 })
 
 test_that(".make_parser keeps missing fields as typed missing values", {
@@ -87,6 +89,16 @@ test_that(".make_parser keeps missing fields as typed missing values", {
   expect_equal(parsed$data_dt$px, 12.5)
   expect_true(is.na(parsed$data_dt$count))
   expect_true(is.na(parsed$data_dt$name))
+})
+
+test_that(".make_parser retains unknown named fields in extra", {
+  schema <- data.frame(okx = "px", formal = "Price", type = "numeric", stringsAsFactors = FALSE)
+  parser <- okxr:::.make_parser(schema, mode = "named")
+  parsed <- parser(mock_okx_response(list(list(px = "12.5", futureField = "kept"))), tz = "UTC")
+
+  expect_equal(parsed$data_dt$px, 12.5)
+  expect_match(parsed$data_dt$extra, "futureField")
+  expect_equal(attr(parsed$data_dt, "var_labels")[["extra"]], "Unrecognised OKX response fields (JSON)")
 })
 
 test_that("current instrument and fee schemas retain RPI fields", {

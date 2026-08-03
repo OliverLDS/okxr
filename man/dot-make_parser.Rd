@@ -4,7 +4,11 @@
 \alias{.make_parser}
 \title{Build a typed OKX JSON response parser (named or positional) to data.table}
 \usage{
-.make_parser(schema, mode = c("named", "positional", "vector"))
+.make_parser(
+  schema,
+  mode = c("named", "positional", "vector"),
+  endpoint = NA_character_
+)
 }
 \arguments{
 \item{schema}{A \code{data.frame} with \code{okx}, \code{formal}, and
@@ -13,6 +17,8 @@ and logical.}
 
 \item{mode}{Parser mode: \code{"named"}, \code{"positional"}, or
 \code{"vector"}.}
+
+\item{endpoint}{Character endpoint path recorded on API error conditions.}
 }
 \value{
 A function with signature \code{function(res, tz)} where:
@@ -23,10 +29,11 @@ A function with signature \code{function(res, tz)} where:
       are converted with \code{as.POSIXct()}.}
   }
   The returned parser yields a \code{data.table} with column names from
-  \code{schema$okx} and attaches variable labels as
+  \code{schema$okx}, plus an \code{extra} JSON column for unrecognised named
+  response fields, and attaches variable labels as
   \code{attr(DT, "var_labels")} (a named character vector \code{formal} by \code{okx}).
-  Returns \code{NULL} if the API \code{code} is not \code{"0"} or if \code{$data}
-  is empty.
+  Returns \code{NULL} if \code{$data} is empty. API and parsing failures
+  raise an \code{okxr_api_error} condition.
 }
 \description{
 Constructs and returns a parser function that converts an OKX REST API JSON
@@ -49,10 +56,10 @@ single object, the parser wraps it as a one-row table.
   \item \strong{Attributes}: \code{attr(DT, "var_labels")} maps \code{okx} to \code{formal}.
 }
 }
-\section{Errors & warnings}{
+\section{Errors}{
 
-If \code{parsed$code != "0"}, a warning with \code{parsed$msg} is emitted and
-\code{NULL} is returned.
+If \code{parsed$code != "0"}, an \code{okxr_api_error} condition preserves
+the HTTP status, OKX code and message, endpoint, and request ID.
 }
 
 \keyword{internal}

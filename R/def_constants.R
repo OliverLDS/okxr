@@ -5,14 +5,19 @@ NULL
 #'
 #' @description
 #' Convenience wrapper to set global options for okxr, such as whether to
-#' return raw data instead of parsed data.
+#' return raw data instead of parsed data and retry transient requests.
 #'
 #' @param raw_data Logical. If `TRUE`, return raw API `data`.
 #'   If `NULL`, the current value is left unchanged.
 #' @param timeout Numeric. HTTP request timeout in seconds. If `NULL`, the
 #'   current value is left unchanged.
+#' @param max_retries Non-negative integer. Number of retries for HTTP 429 and
+#'   5xx responses, or transient transport failures. Defaults to `0`.
+#' @param retry_base_delay Non-negative numeric. Initial retry delay in seconds;
+#'   subsequent retries use exponential backoff. Defaults to `1`.
 #' @return An invisible named list with the current package options:
-#'   `raw_data` (logical) and `timeout` (numeric seconds). This return value
+#'   `raw_data` (logical), `timeout` (numeric seconds), `max_retries`, and
+#'   `retry_base_delay`. This return value
 #'   can be used to inspect the effective option state after updating it.
 #'
 #' @examples
@@ -24,7 +29,7 @@ NULL
 #'
 #' set_okxr_options()  # check current values
 #' @export
-set_okxr_options <- function(raw_data = NULL, timeout = NULL) {
+set_okxr_options <- function(raw_data = NULL, timeout = NULL, max_retries = NULL, retry_base_delay = NULL) {
   if (!is.null(raw_data)) {
     if (!is.logical(raw_data) || length(raw_data) != 1L)
       stop("`raw_data` must be a single TRUE or FALSE value.", call. = FALSE)
@@ -39,9 +44,27 @@ set_okxr_options <- function(raw_data = NULL, timeout = NULL) {
     options(okxr.timeout = timeout)
   }
 
+  if (!is.null(max_retries)) {
+    if (!is.numeric(max_retries) || length(max_retries) != 1L || is.na(max_retries) ||
+        max_retries < 0 || max_retries != as.integer(max_retries)) {
+      stop("`max_retries` must be a single non-negative integer.", call. = FALSE)
+    }
+    options(okxr.max_retries = as.integer(max_retries))
+  }
+
+  if (!is.null(retry_base_delay)) {
+    if (!is.numeric(retry_base_delay) || length(retry_base_delay) != 1L ||
+        is.na(retry_base_delay) || retry_base_delay < 0) {
+      stop("`retry_base_delay` must be a single non-negative number.", call. = FALSE)
+    }
+    options(okxr.retry_base_delay = retry_base_delay)
+  }
+
   invisible(list(
     raw_data = getOption("okxr.raw_data", FALSE),
-    timeout = getOption("okxr.timeout", .okx_default_timeout)
+    timeout = getOption("okxr.timeout", .okx_default_timeout),
+    max_retries = getOption("okxr.max_retries", .okx_default_max_retries),
+    retry_base_delay = getOption("okxr.retry_base_delay", .okx_default_retry_base_delay)
   ))
 }
 

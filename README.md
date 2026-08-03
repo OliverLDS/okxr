@@ -9,7 +9,7 @@ copy trading, with shared request signing and schema-based response parsing.
 `okxr` is available on CRAN. Install the stable release from CRAN or use the
 GitHub repository for development versions between CRAN releases.
 
-Current development release: `v0.4.8`
+Current development release: `v0.5.0`
 
 ## Installation
 
@@ -33,6 +33,8 @@ devtools::install_github("OliverLDS/okxr")
 * Shared internal GET/POST generators backed by endpoint specs
 * User-facing wrappers for account, asset, market, trade, and copy-trading APIs
 * Configurable raw vs parsed return mode via `set_okxr_options()`
+* Structured `okxr_api_error` conditions with endpoint and request metadata
+* Opt-in retries for transient HTTP failures and reusable cursor pagination
 
 ## Setup
 
@@ -58,7 +60,9 @@ config <- list(
   secret_key = Sys.getenv("OKX_SECRET_KEY"),
   passphrase = Sys.getenv("OKX_PASSPHRASE"),
   demo = TRUE,
-  timeout = 10
+  timeout = 10,
+  max_retries = 2,
+  retry_base_delay = 1
 )
 ```
 
@@ -68,10 +72,33 @@ By default, wrappers return parsed `data.table` objects with typed columns and
 variable labels where schemas are defined. Use `set_okxr_options(raw_data = TRUE)`
 to return the raw OKX `data` payload instead.
 
-Network failures, request timeouts, OKX error responses, or empty API `data`
-payloads may return `NULL` with a warning. Request timeout defaults to 10
-seconds and can be set globally with `set_okxr_options(timeout = 15)` or per
-request with `config$timeout`.
+Empty API `data` payloads return `NULL`. Network failures, HTTP failures, and
+OKX error responses raise an `okxr_api_error` condition. It retains
+`status_code`, `okx_code`, `okx_msg`, `endpoint`, and `request_id`, so callers
+can use `tryCatch()` for recovery or logging. Named API responses include an
+`extra` JSON column when OKX returns fields that are newer than the local schema.
+
+Request timeout defaults to 10 seconds. Retries are disabled by default; enable
+them globally with `set_okxr_options(max_retries = 2)` or per request with
+`config$max_retries`. Retries apply to HTTP 429/5xx and transport failures, with
+exponential backoff and `Retry-After` support.
+
+## Migrating to 0.5.0
+
+Before `0.5.0`, failed requests emitted a warning and returned `NULL`. They now
+raise an `okxr_api_error` so applications cannot silently confuse a failed
+request with an empty OKX response. Use `tryCatch()` when continuing after a
+request failure is appropriate:
+
+```r
+balance <- tryCatch(
+  get_account_balance(config = config),
+  okxr_api_error = function(error) {
+    message("OKX request failed for ", error$endpoint, ": ", error$okx_msg)
+    NULL
+  }
+)
+```
 
 ## Examples
 
@@ -114,6 +141,18 @@ post_trade_order(
 ```r
 get_copy_trade_my_leaders(config = config)
 get_copy_trade_current_subpos(config = config)
+```
+
+### Cursor pagination
+
+```r
+bills <- okx_paginate(
+  get_account_bills,
+  cursor_column = "billId",
+  inst_type = "SWAP",
+  limit = 100,
+  config = config
+)
 ```
 
 ## Wrapper categories
