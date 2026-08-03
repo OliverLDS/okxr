@@ -9,10 +9,32 @@ Local checks:
 
 GitHub Actions manual `CRAN preflight` on `main`:
 
-* To be run for the final `0.5.0` commit on Ubuntu latest with R devel and
-  TinyTeX.
-* The workflow uploads `okxr.Rcheck` regardless of check outcome so the PDF
-  manual log can be inspected directly.
+* Workflow status: success
+* Run: 30790886419
+* Commit: 6647744 (`release: v0.5.0`)
+* Runs `R CMD check --as-cran` on Ubuntu latest with R devel and TinyTeX.
+* All package, Rd, example, and test checks passed. The workflow uploads
+  `okxr.Rcheck` regardless of check outcome.
+
+## Known PDF manual diagnostic
+
+The R-devel/TinyTeX preflight reports one PDF-manual WARNING from the first
+LaTeX pass:
+
+```text
+Package rerunfilecheck Warning: File `Rd2.out' has changed.
+Rerun to get outlines right.
+```
+
+The captured second pass resolves it:
+
+```text
+Package rerunfilecheck Info: File `Rd2.out' has not changed.
+```
+
+The manual-without-index check passes. The remaining two NOTEs are the runner
+not having `tidy` and the resulting `okxr-manual.tex` file. No Rd syntax,
+line-width, usage, documentation mismatch, example, or test issue remains.
 
 ## Test environments
 
